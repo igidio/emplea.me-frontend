@@ -1,16 +1,22 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "nuxt": "^3.12.4",
-    "vue": "latest"
-  }
+	"name": "nuxt-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"prepare": "husky",
+		"commitlint": "commitlint --edit"
+	},
+	"dependencies": {
+		"nuxt": "^3.12.4",
+		"vue": "latest"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^19.4.0",
+		"@commitlint/config-conventional": "^19.2.2"
+	}
 }
