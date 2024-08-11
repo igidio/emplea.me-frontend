@@ -1,23 +1,28 @@
 <template>
-	<div>
+	<div class="flex flex-col gap-4 w-screen">
 		<h3>Bienvenido de vuelta</h3>
 
 		<UCard>
-			<UInput
-				v-model="usernameOrEmail"
-				placeholder="Nombre de usuario o correo electrónico"
-			/>
-			<UInput v-model="password" placeholder="Contraseña" />
-			<UButton block>Iniciar sesión</UButton>
-			<a href="">¿Olvidaste tu contraseña?</a>
-			<UCheckbox v-model="rememberMe" name="remember-me" label="Recuérdame" />
+			<div class="flex flex-col gap-4">
+				<UInput
+					v-model="usernameOrEmail"
+					variant="big"
+					placeholder="Nombre de usuario o correo electrónico"
+				/>
+				<UInput v-model="password" variant="big" placeholder="Contraseña" />
+				<UButton block color="primary" variant="big">Iniciar sesión</UButton>
+				<a href="">¿Olvidaste tu contraseña?</a>
+				<UCheckbox v-model="rememberMe" name="remember-me" label="Recuérdame" />
+			</div>
 		</UCard>
-	</div>
 
-	<div>
-		También puedes probar:
-		<UButton>Ingresar con Google</UButton>
-		<UButton>Ingresar con LinkedIn</UButton>
+		<div class="flex flex-col gap-4">
+			También puedes probar:
+			<div class="flex flex-row gap-3 w-full">
+				<UButton color="primary" class="grow">Ingresar con Google</UButton>
+				<UButton color="primary" class="grow">Ingresar con LinkedIn</UButton>
+			</div>
+		</div>
 	</div>
 </template>
 
