@@ -1,5 +1,5 @@
 <template>
-	<div>
-		<NuxtPage></NuxtPage>
-	</div>
+	<NuxtLayout :name="'unauthenticated'">
+		<NuxtPage />
+	</NuxtLayout>
 </template>
