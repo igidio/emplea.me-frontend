@@ -14,10 +14,12 @@
 	"dependencies": {
 		"@nuxt/ui": "^2.18.4",
 		"nuxt": "^3.12.4",
-		"vue": "latest"
+		"vue": "latest",
+		"yup": "^1.4.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.4.0",
-		"@commitlint/config-conventional": "^19.2.2"
+		"@commitlint/config-conventional": "^19.2.2",
+		"@nuxtjs/color-mode": "^3.4.2"
 	}
 }

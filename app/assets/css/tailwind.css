@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	@apply bg-violet-50 text-base font-normal;
+}
+
+body, html, #__nuxt {
+	@apply h-full;
+}
+
+.text-primary-states {
+	@apply text-violet-600 hover:text-violet-500 active:text-violet-800 disabled:text-violet-200;
+}
+
+a {
+	@apply text-base font-semibold text-primary-states;
+}
+
+h3 {
+	@apply text-4xl font-semibold;
+}
+
+input[type="text"] {
+	@apply text-base;
+}
+
+input[type="password"] {
+	@apply text-base;
+}
+
+input[type="checkbox"] ~ label {
+	@apply text-base;
+}
+
+.span-input-large {
+	@apply transition-all duration-500;
+}
