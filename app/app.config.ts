@@ -64,11 +64,12 @@ export default defineAppConfig({
 				base: "w-6",
 			},
 			color: {
-				white: { solid: "bg-white text-black shadow-none" },
+				white: { solid: "bg-white text-black", outline: "ring-0" },
 				gray: { solid: "bg-white" },
 			},
 			variant: {
 				outline: "bg-white",
+				none: "ring-0 shadow-none",
 			},
 			leading: {
 				padding: {

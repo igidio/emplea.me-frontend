@@ -1,11 +1,16 @@
 <template>
 	<div
-		class="flex flex-col tablet:mb-0 tablet:place-content-between h-full content-between"
+		class="flex flex-col tablet:mb-0 tablet:place-content-between h-screen content-between"
 	>
-		<Header />
-		<div class="w-full mt-16 tablet:mt-0">
-			<slot />
+		<div>
+			<Header />
+			<div class="mt-6 flex justify-center">
+				<div class="max-w-[2600px] w-full">
+					<slot />
+				</div>
+			</div>
 		</div>
+
 		<Footer />
 	</div>
 </template>

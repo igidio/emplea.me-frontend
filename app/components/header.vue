@@ -1,5 +1,5 @@
 <template>
-	<div
+	<header
 		id="auth-buttons"
 		class="flex flex-row justify-between items-center h-12 p-4 my-4 sticky top-0 bg-violet-50 z-50"
 	>
@@ -13,7 +13,7 @@
 		<div class="h-min gap-6 hidden tablet:flex flex-row">
 			<AuthButtons />
 		</div>
-	</div>
+	</header>
 
 	<USlideover v-model="isOpen">
 		<Sidebar v-model="isOpen" />

@@ -1,5 +1,7 @@
 <template>
-	<div class="flex flex-col gap-4 items-center tablet:justify-center m-4">
+	<div
+		class="flex flex-col gap-4 items-center self-center tablet:justify-center m-4"
+	>
 		<h3 class="text-center">Bienvenido de vuelta</h3>
 		<div class="w-full max-w-[652px]">
 			<UCard>

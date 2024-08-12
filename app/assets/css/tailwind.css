@@ -6,9 +6,12 @@ body {
 	@apply bg-violet-50 text-base font-normal;
 }
 
-body, html, #__nuxt {
+html, #__nuxt {
 	@apply h-full;
 }
+/* body, html, #__nuxt {
+	@apply h-full;
+} */
 
 .text-primary-states {
 	@apply text-violet-600 hover:text-violet-500 active:text-violet-800 disabled:text-violet-200;
@@ -53,3 +56,5 @@ input[type="checkbox"] ~ label {
 .span-input-large {
 	@apply transition-all duration-500;
 }
+
+header {position: sticky;top: 0;}
