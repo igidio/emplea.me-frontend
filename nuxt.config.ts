@@ -6,6 +6,17 @@ export default defineNuxtConfig({
 		preference: "light",
 		fallback: "light",
 	},
+	components: [
+		{
+			path: "components",
+			pathPrefix: false,
+		},
+		{
+			prefix: "Auth",
+			path: "~/components/Auth",
+			pathPrefix: true,
+		},
+	],
 
 	future: {
 		compatibilityVersion: 4,

@@ -10,11 +10,9 @@
 			@click="isOpen = !isOpen"
 		/>
 		<div class="h-full flex">
+			<slot />
 			<div class="w-full self-center flex flex-col gap-4">
-				<UButton variant="ghost" class="w-full"
-					>Volver a página principal</UButton
-				>
-				<UButton class="w-full">¡Regístrate!</UButton>
+				<AuthButtons />
 			</div>
 		</div>
 	</div>

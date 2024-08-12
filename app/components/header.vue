@@ -3,18 +3,15 @@
 		id="auth-buttons"
 		class="flex flex-row justify-between items-center h-12 p-4 my-4 sticky top-0 bg-violet-50 z-50"
 	>
-		<UButton variant="ghost"> <Logo /></UButton>
-
-		<UButton
-			variant="ghost"
-			icon="ri:menu-fill"
-			class="block tablet:hidden"
-			@click="isOpen = !isOpen"
-		/>
+		<NuxtLink to="/">
+			<UButton variant="ghost"> <Logo /></UButton>
+		</NuxtLink>
+		<UButton variant="ghost" class="block tablet:hidden">
+			<Icon name="ri:menu-fill" style="color: black" @click="isOpen = true" />
+		</UButton>
 
 		<div class="h-min gap-6 hidden tablet:flex flex-row">
-			<UButton variant="ghost">Volver a página principal</UButton>
-			<UButton>¡Regístrate!</UButton>
+			<AuthButtons />
 		</div>
 	</div>
 
