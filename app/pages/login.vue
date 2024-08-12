@@ -15,7 +15,8 @@
 					>
 						<UInput
 							v-model="state.usernameOrEmail"
-							variant="big"
+							size="lg"
+							color="white"
 							placeholder="nombreusuario / correoeletronico@mail.com"
 						/>
 					</UFormGroup>
@@ -24,19 +25,19 @@
 						<UInput
 							class="mt-4"
 							v-model="state.password"
-							variant="big"
-							placeholder=""
+							size="lg"
+							color="white"
 							type="password"
 						/>
 					</UFormGroup>
 
-					<UButton type="submit" block color="primary" variant="big">
+					<UButton type="submit" block color="primary" size="lg">
 						Iniciar sesión
 					</UButton>
 					<div
 						class="flex flex-col-reverse gap-4 tablet:gap-0 tablet:flex-row justify-between"
 					>
-						<a href="">¿Olvidaste tu contraseña?</a>
+						<NuxtLink to="forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
 						<UCheckbox
 							v-model="state.rememberMe"
 							name="remember-me"
@@ -49,14 +50,7 @@
 			<div class="flex flex-col gap-4 mt-4">
 				También puedes probar:
 				<div class="flex flex-col tablet:flex-row gap-3 w-full">
-					<UButton color="primary" class="grow">
-						<Icon name="ri:google-fill" class="mr-2" />
-						Ingresar con Google
-					</UButton>
-					<UButton color="primary" class="grow">
-						<Icon name="ri:linkedin-fill" class="mr-2" />
-						Ingresar con LinkedIn
-					</UButton>
+					<AuthExternal />
 				</div>
 			</div>
 		</div>

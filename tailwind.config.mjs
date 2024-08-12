@@ -1,6 +1,5 @@
 export default {
 	darkMode: "class",
-	primary: "violet",
 	theme: {
 		screens: {
 			tablet: "575px",
@@ -21,6 +20,7 @@ export default {
 		},
 		borderRadius: {
 			small: "4px",
+			medium: "8px",
 			large: "16px",
 		},
 		extend: {

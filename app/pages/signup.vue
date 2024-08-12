@@ -3,7 +3,9 @@
 		<h3 class="mb-4">¿Qué vas a hacer hoy?</h3>
 		<div class="flex flex-col w-full max-w-[652px] gap-4">
 			<UButton
-				variant="big_outline"
+				color="primary"
+				variant="outline"
+				size="lg"
 				class="w-full"
 				v-for="data in signupData"
 				>{{ data.message }}</UButton
