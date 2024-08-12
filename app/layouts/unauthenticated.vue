@@ -1,9 +1,11 @@
 <template>
-	<div class="flex flex-col place-content-between h-full content-between">
+	<div
+		class="flex flex-col tablet:mb-0 tablet:place-content-between h-full content-between"
+	>
 		<Header />
-		<div class="w-full">
+		<div class="w-full mt-16 tablet:mt-0">
 			<slot />
 		</div>
-		<Footer class="self-center my-4" />
+		<Footer />
 	</div>
 </template>

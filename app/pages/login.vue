@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-4 items-center justify-center m-4">
+	<div class="flex flex-col gap-4 items-center tablet:justify-center m-4">
 		<h3 class="text-center">Bienvenido de vuelta</h3>
 		<div class="w-full max-w-[652px]">
 			<UCard>
@@ -30,10 +30,12 @@
 						/>
 					</UFormGroup>
 
-					<UButton type="submit" block color="primary" variant="big"
-						>Iniciar sesión</UButton
+					<UButton type="submit" block color="primary" variant="big">
+						Iniciar sesión
+					</UButton>
+					<div
+						class="flex flex-col-reverse gap-4 tablet:gap-0 tablet:flex-row justify-between"
 					>
-					<div class="flex flex-row justify-between">
 						<a href="">¿Olvidaste tu contraseña?</a>
 						<UCheckbox
 							v-model="state.rememberMe"
@@ -47,8 +49,14 @@
 			<div class="flex flex-col gap-4 mt-4">
 				También puedes probar:
 				<div class="flex flex-col tablet:flex-row gap-3 w-full">
-					<UButton color="primary" class="grow">Ingresar con Google</UButton>
-					<UButton color="primary" class="grow">Ingresar con LinkedIn</UButton>
+					<UButton color="primary" class="grow">
+						<Icon name="ri:google-fill" class="mr-2" />
+						Ingresar con Google
+					</UButton>
+					<UButton color="primary" class="grow">
+						<Icon name="ri:linkedin-fill" class="mr-2" />
+						Ingresar con LinkedIn
+					</UButton>
 				</div>
 			</div>
 		</div>
