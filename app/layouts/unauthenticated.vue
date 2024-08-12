@@ -5,7 +5,7 @@
 		<div>
 			<Header />
 			<div class="mt-6 flex justify-center">
-				<div class="max-w-[2600px] w-full">
+				<div class="max-w-[1600px] w-full p-4">
 					<slot />
 				</div>
 			</div>

@@ -22,7 +22,7 @@ a {
 }
 
 h1 {
-	@apply text-6xl font-semibold;
+	@apply text-6xl font-extrabold;
 }
 h2 {
 	@apply text-5xl font-semibold;
@@ -40,6 +40,9 @@ h6 {
 	@apply text-xl font-semibold;
 }
 
+.background {
+	@apply bg-violet-50;
+}
 
 input[type="text"] {
 	@apply text-base;
@@ -58,3 +61,7 @@ input[type="checkbox"] ~ label {
 }
 
 header {position: sticky;top: 0;}
+
+.white_states = {
+	@apply bg-white hover:bg-gray-100 active:bg-gray-200 disabled:text-gray-500 text-black;
+}

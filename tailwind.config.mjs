@@ -3,7 +3,7 @@ export default {
 	theme: {
 		screens: {
 			tablet: "575px",
-			desktop: "960px",
+			desktop: "720px",
 		},
 		fontFamily: {
 			sans: ["Poppins", "Helvetica", "Arial"],
@@ -37,6 +37,19 @@ export default {
 					800: "#4A12C5",
 					900: "#3E11A1",
 					950: "#23076E",
+				},
+				gray: {
+					50: "#F6F6F6",
+					100: "#EFEFEF",
+					200: "#DCDCDC",
+					300: "#BDBDBD",
+					400: "#989898",
+					500: "#7C7C7C",
+					600: "#656565",
+					700: "#525252",
+					800: "#464646",
+					900: "#3D3D3D",
+					900: "#292929",
 				},
 			},
 		},

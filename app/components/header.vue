@@ -1,7 +1,7 @@
 <template>
 	<header
 		id="auth-buttons"
-		class="flex flex-row justify-between items-center h-12 p-4 my-4 sticky top-0 bg-violet-50 z-50"
+		class="flex flex-row justify-between items-center h-16 p-4 my-4 sticky top-0 bg-violet-50 z-50"
 	>
 		<NuxtLink to="/">
 			<UButton variant="ghost"> <Logo /></UButton>

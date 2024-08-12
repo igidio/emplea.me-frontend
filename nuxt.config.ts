@@ -16,6 +16,11 @@ export default defineNuxtConfig({
 			path: "~/components/Auth",
 			pathPrefix: true,
 		},
+		{
+			prefix: "Landing",
+			path: "~/components/Landing",
+			pathPrefix: true,
+		},
 	],
 
 	future: {
