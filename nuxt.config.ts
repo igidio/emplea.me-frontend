@@ -21,6 +21,16 @@ export default defineNuxtConfig({
 			path: "~/components/Landing",
 			pathPrefix: true,
 		},
+		{
+			prefix: "Landing",
+			path: "~/components/Landing",
+			pathPrefix: true,
+		},
+		{
+			prefix: "Employer",
+			path: "~/components/Employer",
+			pathPrefix: true,
+		},
 	],
 
 	future: {

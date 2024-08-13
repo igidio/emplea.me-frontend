@@ -87,9 +87,12 @@ export default defineAppConfig({
 		},
 
 		card: {
-			background: "bg-violet-200",
+			background: "bg-white",
 			rounded: "rounded-large",
 			shadow: "shadow",
+			header: {
+				base: "font-semibold text-2xl",
+			},
 		},
 
 		input: {
