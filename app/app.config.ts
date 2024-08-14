@@ -156,5 +156,18 @@ export default defineAppConfig({
 				size: "sm",
 			},
 		},
+		modal: {
+			rounded: "rounded-large",
+		},
+		selectMenu: {
+			base: "m-1",
+			option: {
+				size: "text-base",
+				rounded: "rounded-small",
+				padding: "p-2",
+			},
+			padding: "py-4",
+			rounded: "rounded-large",
+		},
 	},
 });
