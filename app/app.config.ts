@@ -169,5 +169,8 @@ export default defineAppConfig({
 			padding: "py-4",
 			rounded: "rounded-large",
 		},
+		badge: {
+			rounded: "rounded-small",
+		},
 	},
 });
