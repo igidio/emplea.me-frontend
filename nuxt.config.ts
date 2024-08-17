@@ -41,6 +41,11 @@ export default defineNuxtConfig({
 			path: "~/components/Search",
 			pathPrefix: true,
 		},
+		{
+			prefix: "Notifications",
+			path: "~/components/Notifications",
+			pathPrefix: true,
+		},
 	],
 
 	future: {
