@@ -1,8 +1,12 @@
 <template>
 	<div class="flex flex-col gap-4">
-		<div class="flex flex-col tablet:flex-row gap-4">
-			<LandingWelcomeMessage />
-			<LandingSearch />
+		<div class="flex flex-col desktop:flex-row gap-4">
+			<div class="desktop:w-[50%]">
+				<LandingWelcomeMessage />
+			</div>
+			<div class="desktop:w-[50%]">
+				<LandingSearch />
+			</div>
 		</div>
 		<LandingCategories />
 		<hr />

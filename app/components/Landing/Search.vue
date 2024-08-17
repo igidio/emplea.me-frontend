@@ -15,7 +15,7 @@
 					/>
 				</UFormGroup>
 
-				<div class="flex flex-col desktop:flex-row gap-4">
+				<div class="flex flex-col tablet:flex-row gap-4">
 					<!-- Lugar -->
 					<USelectMenu
 						clear-search-on-close
@@ -26,7 +26,7 @@
 						:options="searchOptions.locations"
 						option-attribute="name"
 						size="lg"
-						class="w-[50%]"
+						class="tablet:w-[50%]"
 					/>
 
 					<USelectMenu
@@ -46,7 +46,9 @@
 				{{ state.category }}
 
 				<h6>Modalidad</h6>
-				<div class="flex flex-col desktop:flex-row gap-2 desktop:gap-4">
+				<div
+					class="flex flex-col flex-wrap tablet:flex-row gap-2 desktop:gap-4"
+				>
 					<UCheckbox
 						v-for="modality in state.modalities"
 						:label="modality.name"
