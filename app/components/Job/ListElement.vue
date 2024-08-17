@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col">
-				<UButton size="md">Más detalles</UButton>
+				<UButton size="md" :to="'jobs/' + 1">Más detalles</UButton>
 			</div>
 		</div>
 
