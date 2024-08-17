@@ -86,7 +86,7 @@
 								<div class="flex flex-col gap-2">
 									<itemLink
 										:icon="phone.icon"
-										:label="phone.label"
+										:label="phone.label.toString()"
 										:link="phone.link"
 										v-for="phone in phones"
 									/>

@@ -15,7 +15,7 @@
 interface Props {
 	name: string;
 	rounded?: string;
-	small: boolean;
+	small?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {

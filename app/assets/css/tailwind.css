@@ -74,6 +74,10 @@ header {position: sticky;top: 0;}
 
 }
 
+.dotted {
+	@apply outline-2 outline-dashed outline-violet-600;
+}
+
 /* span {
 	@apply line-clamp-1;
 } */

@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="outline-2 outline-dashed outline-violet-600 flex flex-col p-4 rounded-large gap-4 text-ellipsis overflow-hidden"
+		class="flex flex-col p-4 rounded-large gap-4 text-ellipsis overflow-hidden dotted"
 	>
 		<div class="flex tablet:flex-row flex-col justify-between gap-4">
 			<div class="flex flex-row gap-4">
@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col">
-				<UButton size="md" :to="'jobs/' + 1">Más detalles</UButton>
+				<UButton size="md" :to="'/jobs/' + 1">Más detalles</UButton>
 			</div>
 		</div>
 

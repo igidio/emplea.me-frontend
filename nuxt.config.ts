@@ -36,11 +36,11 @@ export default defineNuxtConfig({
 			path: "~/components/Job",
 			pathPrefix: true,
 		},
-		{
-			prefix: "Search",
-			path: "~/components/Search",
-			pathPrefix: true,
-		},
+		// {
+		// 	prefix: "Search",
+		// 	path: "~/components/Search",
+		// 	pathPrefix: true,
+		// },
 		{
 			prefix: "Notifications",
 			path: "~/components/Notifications",
