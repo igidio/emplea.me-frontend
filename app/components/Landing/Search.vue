@@ -39,8 +39,11 @@
 						option-attribute="name"
 						size="lg"
 						class="grow"
-					/>
+					>
+					</USelectMenu>
 				</div>
+
+				{{ state.category }}
 
 				<h6>Modalidad</h6>
 				<div class="flex flex-col desktop:flex-row gap-2 desktop:gap-4">

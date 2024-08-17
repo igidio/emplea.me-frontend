@@ -11,7 +11,7 @@
 						: 'h-48 tablet:h-32 overflow-hidden'
 				"
 			>
-				<CategoryButton v-for="element in 20" />
+				<CategoryButton :category="category" v-for="category in categories" />
 			</div>
 		</div>
 
@@ -34,5 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import searchOptions from "~/data/search/search-options.data";
 const isShowMoreCategories: Ref<boolean> = ref(false);
+
+const categories = ref(searchOptions.categories);
 </script>

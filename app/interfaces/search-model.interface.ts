@@ -1,7 +1,7 @@
 export interface SearchModelInterface {
 	modalities: ModalitiesInterface[];
 	location: IdNameRelationInterface | undefined;
-	category: IdNameRelationInterface | undefined;
+	category: categoryInterface | undefined;
 	searchQuery: string | undefined;
 }
 
@@ -20,3 +20,10 @@ export interface TitleInterface {
 	category: string | undefined;
 	location: string | undefined;
 }
+
+export interface categoryInterface {
+	id: number;
+	name: string;
+	icon: string;
+}
+[];

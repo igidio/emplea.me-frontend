@@ -2,7 +2,7 @@ import type { Reactive } from "vue";
 import type { LocationQueryRaw } from "vue-router";
 
 import modalitiesData from "~/data/search/modalities.data.js";
-import searchOptionsData from "~/data/search/search-options,data.js";
+import searchOptionsData from "~/data/search/search-options.data.js";
 import type {
 	ModalitiesInterface,
 	SearchModelInterface,
