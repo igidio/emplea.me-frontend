@@ -1,10 +1,12 @@
 <template>
-	<div
-		class="flex flex-row bg-white rounded-medium overflow-hidden items-center gap-2 w-full"
-	>
-		<img :src="profile_image" class="h-16 aspect-[1:1]" />
-		<span class="font-semibold">{{ name }}</span>
-	</div>
+	<NuxtLink :to="`/employer/${id}`">
+		<div
+			class="flex flex-row bg-white rounded-medium overflow-hidden items-center gap-2 w-full"
+		>
+			<img :src="profile_image" class="h-16 aspect-[1:1]" />
+			<span class="font-semibold">{{ name }}</span>
+		</div>
+	</NuxtLink>
 </template>
 
 <script setup lang="ts">
