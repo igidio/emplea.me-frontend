@@ -1,10 +1,8 @@
 export interface SearchModelInterface {
 	modalities: ModalitiesInterface[];
+	location: IdNameRelationInterface | undefined;
 	category: IdNameRelationInterface | undefined;
-	department: IdNameRelationInterface | undefined;
-	province: IdNameRelationInterface | undefined;
 	searchQuery: string | undefined;
-	isOpen: boolean;
 }
 
 export interface ModalitiesInterface {
@@ -20,6 +18,5 @@ export interface IdNameRelationInterface {
 
 export interface TitleInterface {
 	category: string | undefined;
-	department: string | undefined;
-	province: string | undefined;
+	location: string | undefined;
 }

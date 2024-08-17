@@ -29,32 +29,19 @@
 	</div>
 
 	<div class="flex flex-col gap-2">
-		<h6>Departamento</h6>
+		<h6>Localización</h6>
 		<USelectMenu
 			clear-search-on-close
 			placeholder="Seleccione"
 			searchable
 			searchable-placeholder="Buscar"
-			v-model="searchModel.department"
-			:options="searchOptions.departments"
+			v-model="searchModel.location"
+			:options="searchOptions.locations"
 			option-attribute="name"
 			size="lg"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-2">
-		<h6>Provincia</h6>
-		<USelectMenu
-			clear-search-on-close
-			placeholder="Seleccione"
-			searchable
-			searchable-placeholder="Buscar"
-			v-model="searchModel.province"
-			:options="searchOptions.provinces"
-			option-attribute="name"
-			size="lg"
-		/>
-	</div>
 	<UButton size="lg" color="white" @click="clear()">Limpiar</UButton>
 	<Add class="h-64" v-if="add"></Add>
 </template>
@@ -71,16 +58,21 @@ interface Props {
 }
 defineProps<Props>();
 
-const searchModel = defineModel<SearchModelInterface>({
+const searchModel = defineModel<SearchModelInterface>("searchModel", {
 	type: Object,
 	required: true,
+});
+
+const isOpen = defineModel<boolean>("isOpen", {
+	type: Boolean,
+	required: false,
 });
 
 const searchInput = ref("");
 
 const sendSearchQuery = () => {
 	searchModel.value.searchQuery = searchInput.value;
-	searchModel.value.isOpen = false;
+	isOpen.value = false;
 };
 
 const clear = () => {
@@ -91,10 +83,9 @@ const clear = () => {
 		})
 	);
 	searchModel.value.modalities = clean_modalities;
-	searchModel.value.category = undefined;
-	searchModel.value.department = undefined;
-	searchModel.value.province = undefined;
+	searchModel.value.location = undefined;
 	searchModel.value.searchQuery = undefined;
+	searchModel.value.category = undefined;
 	searchInput.value = "";
 };
 </script>

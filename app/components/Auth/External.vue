@@ -1,10 +1,10 @@
 <template>
 	<UButton color="primary" class="grow">
-		<Icon name="ri:google-fill" class="mr-2" />
+		<IconFill name="ri:google-fill" class="mr-2" />
 		{{ textPrefix }} Google
 	</UButton>
 	<UButton color="primary" class="grow">
-		<Icon name="ri:linkedin-fill" class="mr-2" />
+		<IconFill name="ri:linkedin-fill" class="mr-2" />
 		{{ textPrefix }} LinkedIn
 	</UButton>
 </template>

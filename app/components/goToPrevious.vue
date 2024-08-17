@@ -1,6 +1,6 @@
 <template>
 	<RouterLink to="/" class="flex flex-row gap-2 items-center">
-		<Icon name="ri:arrow-drop-left-line"></Icon>
+		<IconFill name="ri:arrow-drop-left-line"></IconFill>
 		Volver a <span class="font-semibold">Route</span>
 	</RouterLink>
 </template>

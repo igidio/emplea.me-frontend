@@ -8,7 +8,7 @@
 				<!-- Searchbar -->
 				<UFormGroup>
 					<UInput
-						v-model="state.search"
+						v-model="state.searchQuery"
 						type="text"
 						size="lg"
 						placeholder="Buscar trabajo"
@@ -17,48 +17,48 @@
 
 				<div class="flex flex-col desktop:flex-row gap-4">
 					<!-- Lugar -->
-					<UFormGroup v-model="state.location" size="lg" class="grow">
-						<USelect
-							name="locationOptions"
-							:options="locationOptions"
-							size="lg"
-							placeholder="Lugar"
-						/>
-					</UFormGroup>
-					<UFormGroup
-						name="categoryOptions"
+					<USelectMenu
+						clear-search-on-close
+						placeholder="Seleccione"
+						searchable
+						searchable-placeholder="Buscar"
 						v-model="state.location"
+						:options="searchOptions.locations"
+						option-attribute="name"
+						size="lg"
+						class="w-[50%]"
+					/>
+
+					<USelectMenu
+						clear-search-on-close
+						placeholder="Seleccione"
+						searchable
+						searchable-placeholder="Buscar"
+						v-model="state.category"
+						:options="searchOptions.categories"
+						option-attribute="name"
 						size="lg"
 						class="grow"
-					>
-						<USelect
-							:options="categoryOptions"
-							size="lg"
-							placeholder="Categoría"
-						/>
-					</UFormGroup>
+					/>
 				</div>
-				<UButton type="submit" size="lg"> Buscar </UButton>
+
+				<h6>Modalidad</h6>
+				<div class="flex flex-col desktop:flex-row gap-2 desktop:gap-4">
+					<UCheckbox
+						v-for="modality in state.modalities"
+						:label="modality.name"
+						v-model="modality.active"
+					/>
+				</div>
+
+				<UButton type="submit" size="lg" @click="sendSearchQuery()">
+					Buscar
+				</UButton>
 			</div>
 		</UForm>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type { Reactive } from "vue";
-
-const locationOptions = ["La Paz", "El Alto"];
-const categoryOptions = ["Categoría 1", "Categoría 2"];
-
-interface state {
-	search: string;
-	location: string;
-	category: string;
-}
-
-const state: Reactive<state> = reactive({
-	search: "",
-	location: "",
-	category: "",
-});
+const { searchOptions, state, sendSearchQuery } = useSearch();
 </script>

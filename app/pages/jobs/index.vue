@@ -20,8 +20,8 @@
 				</h3>
 				<UCard>
 					<template #header>
-						100 resultados<span v-if="searchModel.searchQuery"
-							>: {{ searchModel.searchQuery }}</span
+						100 resultados<span v-if="state.searchQuery"
+							>: {{ state.searchQuery }}</span
 						>
 						<span v-if="route.query.search">de {{ route.query.search }}</span>
 					</template>
@@ -55,7 +55,8 @@
 				<JobSearchOptions
 					add
 					:search-options="searchOptions"
-					v-model="searchModel"
+					v-model:search-model="state"
+					v-model:isOpen="isOpen"
 				/>
 			</div>
 		</div>
@@ -65,7 +66,8 @@
 					fullscreen
 					!add
 					:search-options="searchOptions"
-					v-model="searchModel"
+					v-model:search-model="state"
+					v-model:isOpen="isOpen"
 				/>
 				<UButton
 					size="lg"
@@ -81,102 +83,55 @@
 
 <script setup lang="ts">
 import type { Reactive } from "vue";
-import SearchOptions from "~/data/search/search-options,data.js";
-import modalities from "~/data/search/modalities.data.js";
+
 import type {
 	ModalitiesInterface,
-	SearchModelInterface,
 	TitleInterface,
 } from "~/interfaces/search-model.interface";
 
+const { searchOptions, state, sendSearchQuery } = useSearch();
+
 const route = useRoute();
-const router = useRouter();
-
 const loading = ref(true);
-
 const isOpen = ref(false);
-const searchOptions = reactive(SearchOptions);
 
-const searchModel: Reactive<SearchModelInterface> = reactive({
-	searchQuery: undefined,
-	modalities: [...modalities],
-	category: undefined,
-	department: undefined,
-	province: undefined,
-	isOpen: isOpen,
-});
-
-const activeModalities = computed(() => {
-	return searchModel.modalities.reduce(
-		(acc: number[], e: ModalitiesInterface) => {
-			if (e.active) acc.push(e.id);
-			return acc;
-		},
-		[]
-	);
-});
+// const activeModalities = computed(() => {
+// 	return state.modalities.reduce((acc: number[], e: ModalitiesInterface) => {
+// 		if (e.active) acc.push(e.id);
+// 		return acc;
+// 	}, []);
+// });
 
 const title: ComputedRef<TitleInterface> = computed(() => ({
-	category: searchModel.category?.name,
-	department: searchModel.department?.name,
-	province: searchModel.province?.name,
+	category: state.category?.name,
+	location: state.location?.name,
 }));
 
 const modalitiess: ComputedRef<string[]> = computed(() => {
-	return searchModel.modalities.reduce(
-		(acc: string[], e: ModalitiesInterface) => {
-			if (e.active) acc.push(e.name);
-			return acc;
-		},
-		[]
-	);
+	return state.modalities.reduce((acc: string[], e: ModalitiesInterface) => {
+		if (e.active) acc.push(e.name);
+		return acc;
+	}, []);
 });
 
-watch(searchModel, () => modifyQueryParams());
-
-const modifyQueryParams = () => {
-	let queryParams: any = {};
-
-	const modalities = searchModel.modalities.reduce(
-		(acc: number[], e: ModalitiesInterface) => {
-			if (e.active) acc.push(e.id);
-			return acc;
-		},
-		[]
-	);
-
-	if (modalities.length > 0)
-		queryParams.modalities = modalities.flat(1).toString();
-	if (searchModel.category) queryParams.category = searchModel.category?.id;
-	if (searchModel.department)
-		queryParams.department = searchModel.department?.id;
-	if (searchModel.province) queryParams.province = searchModel.province?.id;
-
-	router.push({
-		path: "/jobs",
-		query: { ...queryParams },
-	});
-};
+watch(state, () => sendSearchQuery());
 
 onMounted(() => {
 	if (route.query.modalities) {
 		const modalitiesFromQuery = route?.query.modalities.toString().split(",");
-		searchModel.modalities.map((e: any) => {
+		state.modalities.map((e: any) => {
 			if (modalitiesFromQuery.includes(e.id.toString())) e.active = true;
 		});
 	}
 
+	if (route.query.search) state.searchQuery = route.query.search.toString();
 	if (route.query.category)
-		searchModel.category = searchOptions.categories.find(
+		state.category = searchOptions.categories.find(
 			(e: any) => e.id == route.query.category
 		);
-	if (route.query.department)
-		searchModel.department = searchOptions.departments.find(
-			(e: any) => e.id == route.query.department
-		);
-	if (route.query.province)
-		searchModel.province = searchOptions.provinces.find(
-			(e: any) => e.id == route.query.province
+	if (route.query.location)
+		state.location = searchOptions.locations.find(
+			(e: any) => e.id == route.query.location
 		);
 	loading.value = false;
 });

@@ -7,7 +7,11 @@
 			<UButton variant="ghost"> <Logo /></UButton>
 		</NuxtLink>
 		<UButton variant="ghost" class="block tablet:hidden">
-			<Icon name="ri:menu-fill" style="color: black" @click="isOpen = true" />
+			<IconFill
+				name="ri:menu-fill"
+				style="color: black"
+				@click="isOpen = true"
+			/>
 		</UButton>
 
 		<div class="h-min gap-6 hidden tablet:flex flex-row">
