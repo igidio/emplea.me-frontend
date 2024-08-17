@@ -1,23 +1,33 @@
 <template>
 	<GoToPrevious></GoToPrevious>
 	<div v-if="!loading">
+		<!-- Only for mobile viewports -->
 		<div
-			class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-4"
+			class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-2"
 		>
 			<h5>
 				<JobTitle :title="title" />
 			</h5>
+			<span v-if="state.searchQuery"
+				><UIcon name="ri:search-line" class="w-3 h-3" />
+				{{ state.searchQuery }}</span
+			>
+			<div class="flex flex-wrap gap-2">
+				<UBadge :label="modality" v-for="modality in modalitiess" />
+			</div>
 			<UButton
 				color="black"
 				label="Opciones de búsqueda"
 				@click="isOpen = true"
 			/>
 		</div>
+		<!-- END: Only for mobile viewports -->
+
 		<div class="flex flex-col desktop:flex-row gap-4">
 			<div class="flex flex-col w-[100%] desktop:w-[75%] gap-4">
-				<h3 class="hidden tablet:block">
+				<h4 class="hidden desktop:block">
 					<JobTitle :title="title" />
-				</h3>
+				</h4>
 				<UCard>
 					<template #header>
 						100 resultados<span v-if="state.searchQuery"
@@ -27,7 +37,7 @@
 					</template>
 
 					<div class="flex flex-col gap-4 w-full">
-						<div class="flex flex-wrap gap-2">
+						<div class="hidden desktop:flex flex-wrap gap-2">
 							<UBadge :label="modality" v-for="modality in modalitiess" />
 						</div>
 						<div class="flex flex-col gap-4">
@@ -50,7 +60,7 @@
 				</UCard>
 			</div>
 			<div
-				class="hidden desktop:flex flex-col grow gap-4 sticky top-16 h-[80svh] overflow-x-auto p-1"
+				class="w-[25%] hidden desktop:flex flex-col gap-4 sticky top-16 h-[80svh] overflow-x-auto p-1"
 			>
 				<JobSearchOptions
 					add
@@ -82,8 +92,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Reactive } from "vue";
-
 import type {
 	ModalitiesInterface,
 	TitleInterface,

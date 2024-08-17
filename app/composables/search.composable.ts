@@ -43,7 +43,7 @@ export function useSearch() {
 		if (modalities.length > 0)
 			queryParams.modalities = modalities.flat(1).toString();
 		if (state.searchQuery) queryParams.search = state.searchQuery;
-		if (state.location) queryParams.department = state.location?.id;
+		if (state.location) queryParams.location = state.location?.id;
 		if (state.category) queryParams.category = state.category?.id;
 
 		return queryParams;

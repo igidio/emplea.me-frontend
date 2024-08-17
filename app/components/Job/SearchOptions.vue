@@ -87,5 +87,7 @@ const clear = () => {
 	searchModel.value.searchQuery = undefined;
 	searchModel.value.category = undefined;
 	searchInput.value = "";
+
+	isOpen.value = false;
 };
 </script>
