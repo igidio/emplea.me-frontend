@@ -1,0 +1,3 @@
+<template>
+	<JobEditPage />
+</template>

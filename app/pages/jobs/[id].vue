@@ -114,6 +114,7 @@
 <script setup lang="ts">
 import searchOptions from "~/data/search/search-options.data";
 import socialMediaData from "~/data/social_media.data";
+import { skillLevelEnum } from "~/enums/skill_level.enum";
 
 const is_hidden = ref(true);
 const unauthenticated = ref(true);
@@ -122,12 +123,6 @@ enum salaryTypeEnum {
 	MONTHLY = "Mensual",
 	DAILY = "Diario",
 	YEARLY = "Anual",
-}
-
-enum skillLevelEnum {
-	BASIC = "Básico",
-	INTERMEDIATE = "Intermedio",
-	ADVANCED = "Avanzado",
 }
 
 const employer = reactive({
