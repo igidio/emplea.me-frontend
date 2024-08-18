@@ -6,6 +6,9 @@ export default defineNuxtConfig({
 		preference: "light",
 		fallback: "light",
 	},
+	devServer: {
+		port: 5173,
+	},
 	components: [
 		{
 			path: "components",
