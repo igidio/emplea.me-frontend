@@ -13,6 +13,7 @@
 	},
 	"dependencies": {
 		"@nuxt/ui": "^2.18.4",
+		"@vue/apollo-composable": "^4.2.1",
 		"nuxt": "^3.12.4",
 		"vue": "latest",
 		"yup": "^1.4.0"
