@@ -2,10 +2,17 @@
 export default defineNuxtConfig({
 	devtools: { enabled: true },
 	modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@nuxtjs/apollo"],
+	runtimeConfig: {
+		public: {
+			server_host: process.env.SERVER_HOST,
+			google_client_id: process.env.GOOGLE_CLIENT_ID,
+			google_callback: process.env.GOOGLE_CALLBACK,
+		},
+	},
 	apollo: {
 		clients: {
 			default: {
-				httpEndpoint: "https://spacex-production.up.railway.app",
+				httpEndpoint: process.env.QGL_HOST!,
 			},
 		},
 	},
