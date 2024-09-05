@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	//ssr: false,
 	devtools: { enabled: true },
 	modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@nuxtjs/apollo"],
 	runtimeConfig: {
@@ -12,7 +13,8 @@ export default defineNuxtConfig({
 	apollo: {
 		clients: {
 			default: {
-				httpEndpoint: process.env.QGL_HOST!,
+				//httpEndpoint: process.env.QGL_HOST!,
+				httpEndpoint: "http://localhost:3000/graphql",
 			},
 		},
 	},

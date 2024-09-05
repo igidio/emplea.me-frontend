@@ -8,7 +8,7 @@
 				<UForm
 					:state="state"
 					:schema="schema"
-					@submit="onSubmit"
+					@submit="onSubmit()"
 					class="flex flex-col gap-4"
 				>
 					<UFormGroup
@@ -18,7 +18,7 @@
 						<UInput
 							v-model="state.usernameOrEmail"
 							size="lg"
-							color="white"
+							color="gray"
 							placeholder="nombreusuario / correoeletronico@mail.com"
 						/>
 					</UFormGroup>
@@ -28,20 +28,31 @@
 							class="mt-4"
 							v-model="state.password"
 							size="lg"
-							color="white"
+							color="gray"
 							type="password"
 						/>
 					</UFormGroup>
 
-					<UButton type="submit" block color="primary" size="lg">
+					<span class="error py-2 inline-block w-full text-center" v-if="error">
+						{{ error.message }}</span
+					>
+					<UButton
+						type="submit"
+						block
+						color="primary"
+						size="lg"
+						:loading="loading"
+					>
 						Iniciar sesión
 					</UButton>
+
 					<div
 						class="flex flex-col-reverse gap-4 tablet:gap-0 tablet:flex-row justify-between"
 					>
 						<NuxtLink to="forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
+
 						<UCheckbox
-							v-model="state.rememberMe"
+							v-model="state.remember_me"
 							name="remember-me"
 							label="Recuérdame"
 						/>
@@ -68,17 +79,55 @@ const schema = yup.object({
 	password: yup.string().required("Este campo es requerido"),
 });
 
-const onSubmit = () => {
-	console.log("submitted");
-};
-
 const state: Reactive<{
 	usernameOrEmail: string | undefined;
 	password: string | undefined;
-	rememberMe: boolean;
+	remember_me: boolean;
 }> = reactive({
 	usernameOrEmail: undefined,
 	password: undefined,
-	rememberMe: false,
+	remember_me: false,
 });
+
+const query = gql`
+	mutation Login($loginInput: LoginInput!) {
+		login(loginInput: $loginInput) {
+			token
+			user {
+				id
+				username
+				email
+				image
+				google_id
+				linkedin_id
+				created_at
+				modified_at
+				role
+				is_active
+				contact {
+					first_name
+					last_name
+					phone
+					gender
+					date_of_birth
+					created_at
+					modified_at
+				}
+			}
+		}
+	}
+`;
+
+const { mutate: login, onDone, loading, error } = useMutation(query);
+
+onDone((result) => {
+	console.log(result);
+	if (import.meta.client) {
+		localStorage.setItem("token", result.data.login.token);
+	}
+});
+
+const onSubmit = () => {
+	login({ loginInput: state });
+};
 </script>

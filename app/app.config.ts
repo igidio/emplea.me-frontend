@@ -1,41 +1,5 @@
 import { _white } from "#tailwind-config/theme/accentColor";
 
-const primaryStateButton = `
-	bg-violet-600 
-	hover:bg-violet-500 
-	active:bg-violet-800 
-	disabled:bg-violet-200 
-	text-white
-`;
-const centerTextButton = "text-center justify-center text-base";
-const primaryOutlineButton = `
-	border-2 
-	border-violet-600 
-	hover:bg-violet-100 
-	active:bg-violet-200 
-	disabled:border-violet-200 
-	disabled:text-gray-700 
-	text-black
-`;
-const primaryGhostStateButton =
-	"hover:bg-violet-200 active:bg-violet-100 disabled:text-gray-700";
-
-const blackStateButton = `
-	bg-black 
-	hover:bg-gray-950 
-	active:bg-gray-800 
-	disabled:bg-gray-200 
-	text-white
-`;
-
-const whiteStateButton = `
-	bg-white 
-	hover:bg-gray-100 
-	active:bg-gray-200 
-	disabled:text-gray-500
-	text-black
-`;
-
 const colorInput = {
 	white: { solid: "bg-white text-black", outline: "ring-0" },
 	gray: { solid: "bg-white" },
@@ -59,17 +23,17 @@ export default defineAppConfig({
 			},
 			color: {
 				primary: {
-					solid: primaryStateButton,
-					outline: primaryOutlineButton,
-					ghost: primaryGhostStateButton,
+					solid: "primary",
+					outline: "outline-primary",
+					ghost: "ghost-primary",
 				},
 				black: {
-					solid: blackStateButton,
+					solid: "black",
 				},
 				white: {
-					solid: whiteStateButton,
+					solid: "white",
 					outline: "ring-0",
-					ghost: primaryGhostStateButton,
+					ghost: "ghost-primary",
 				},
 			},
 			default: {
@@ -107,6 +71,7 @@ export default defineAppConfig({
 			color: colorInput,
 			variant: {
 				outline: "bg-white",
+				gray: "bg-white-50",
 				none: "ring-0 shadow-none",
 			},
 			leading: {

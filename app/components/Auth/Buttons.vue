@@ -21,5 +21,4 @@
 <script setup lang="ts">
 import headerOptions from "~/data/headerOptions.data.js";
 const route = useRoute();
-console.log(route.name);
 </script>
