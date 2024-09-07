@@ -74,6 +74,8 @@
 import type { Reactive } from "vue";
 import * as yup from "yup";
 
+const userStore = useUserStore();
+
 const schema = yup.object({
 	usernameOrEmail: yup.string().required("Este campo es requerido"),
 	password: yup.string().required("Este campo es requerido"),
@@ -122,9 +124,8 @@ const { mutate: login, onDone, loading, error } = useMutation(query);
 
 onDone((result) => {
 	console.log(result);
-	if (import.meta.client) {
-		localStorage.setItem("token", result.data.login.token);
-	}
+	userStore.set_token(result.data.login.token);
+	userStore.set_user(result.data.login.user);
 });
 
 const onSubmit = () => {

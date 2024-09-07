@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
 	//ssr: false,
 	devtools: { enabled: true },
-	modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@nuxtjs/apollo"],
+	modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@nuxtjs/apollo", "@pinia/nuxt"],
 	runtimeConfig: {
 		public: {
 			server_host: process.env.SERVER_HOST,
@@ -11,10 +11,11 @@ export default defineNuxtConfig({
 		},
 	},
 	apollo: {
+		tokenStorage: "localStorage",
 		clients: {
 			default: {
-				//httpEndpoint: process.env.QGL_HOST!,
-				httpEndpoint: "http://localhost:3000/graphql",
+				httpEndpoint: process.env.QGL_HOST!,
+				tokenName: "token",
 			},
 		},
 	},
@@ -53,6 +54,11 @@ export default defineNuxtConfig({
 		{
 			prefix: "Job",
 			path: "~/components/Job",
+			pathPrefix: true,
+		},
+		{
+			prefix: "Admin",
+			path: "~/components/Admin",
 			pathPrefix: true,
 		},
 		// {

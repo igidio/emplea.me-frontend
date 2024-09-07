@@ -13,6 +13,17 @@
 
 		<Footer />
 	</div>
+
+	<!-- <div v-else>cargando</div> -->
+	{{ initial_loading }}
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useUserStore } from "~/stores/user.pinia";
+const userStore = useUserStore();
+const { initial_loading } = storeToRefs(userStore);
+
+onMounted(async () => {
+	await userStore.get_current_user();
+});
+</script>

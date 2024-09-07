@@ -124,6 +124,15 @@ span.error {
 	text-black;
 }
 
+.gold {
+	@apply bg-yellow-500
+	hover:bg-yellow-400
+	active:bg-yellow-600
+	disabled:bg-yellow-200
+	text-black
+	transition-all;
+}
+
 .center-text {
 	@apply text-center justify-center text-base;
 }

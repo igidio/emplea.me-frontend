@@ -30,6 +30,9 @@ export default defineAppConfig({
 				black: {
 					solid: "black",
 				},
+				gold: {
+					solid: "gold",
+				},
 				white: {
 					solid: "white",
 					outline: "ring-0",
@@ -132,6 +135,22 @@ export default defineAppConfig({
 		},
 		badge: {
 			rounded: "rounded-small",
+		},
+		dropdown: {
+			item: {
+				rounded: "rounded-small",
+				padding: "px-2",
+			},
+			width: "w-32",
+			background: "bg-white",
+			rounded: "rounded-large",
+			ring: "ring-0",
+			padding: "py-2 px-2",
+		},
+		popover: {
+			background: "bg-white",
+			rounded: "rounded-large",
+			ring: "ring-0",
 		},
 	},
 });
