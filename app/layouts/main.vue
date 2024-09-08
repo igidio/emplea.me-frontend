@@ -1,9 +1,15 @@
 <template>
+	<!-- {{ userStore.initial_loading }} -->
+	<Loading v-if="isLoading" />
+
 	<div
 		class="flex flex-col tablet:mb-0 tablet:place-content-between h-screen content-between"
+		:class="isLoading && 'hidden'"
 	>
 		<div>
-			<Header />
+			<ClientOnly>
+				<Header />
+			</ClientOnly>
 			<div class="mt-6 flex justify-center">
 				<div class="max-w-[1600px] w-full p-4">
 					<slot />
@@ -16,3 +22,25 @@
 
 	<!-- <div v-else>cargando</div> -->
 </template>
+
+<script setup lang="ts">
+const { isHydrating } = useNuxtApp();
+
+import { useUserStore } from "~/stores/user.pinia";
+const userStore = useUserStore();
+
+const isLoading = ref(true);
+
+// await useAsyncData(
+// 	"initial_loadingg",
+// 	async () => await userStore.update_user().then(() => true)
+// );
+
+if (import.meta.client) {
+	await userStore.get_current_user();
+}
+
+onMounted(() => {
+	isLoading.value = userStore.initial_loading;
+});
+</script>

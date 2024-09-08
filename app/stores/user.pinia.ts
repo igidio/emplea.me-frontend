@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { getUserByToken } from "~/queries";
 
+import { useQuery } from "@vue/apollo-composable";
+
 export const useUserStore = defineStore("user", () => {
 	const user: any = ref({});
 	const token: Ref<string> = ref("");
@@ -22,19 +24,25 @@ export const useUserStore = defineStore("user", () => {
 
 	const get_current_user = async () => {
 		initial_loading.value = true;
-		console.log("ejecutando");
-
 		await useApollo().getToken();
 		if (token && !(Object.keys(user.value).length > 0)) {
-			const { data } = await useAsyncQuery(getUserByToken);
-			user.value = data.value;
+			let { data }: { data: any } = await useAsyncQuery(getUserByToken, {
+				server: false,
+			});
+
+			let { getUserByToken: res } = data.value;
+			user.value = res;
 		}
+
 		initial_loading.value = false;
-		console.log(initial_loading.value);
 	};
 
 	const update_user = async () => {
 		//if (get_current_user());
+		console.log("sdasdasd");
+
+		initial_loading.value = false;
+		console.log(initial_loading.value);
 	};
 
 	const get_token = () => {
@@ -52,5 +60,6 @@ export const useUserStore = defineStore("user", () => {
 		set_user,
 		get_current_user,
 		initial_loading,
+		update_user,
 	};
 });

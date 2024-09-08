@@ -13,9 +13,6 @@
 		<UButton variant="ghost" icon="ri:menu-fill" @click="isOpen = true" />
 	</header>
 
-	{{ user }}
-	{{ layout }}
-
 	<USlideover v-model="isOpen">
 		<Sidebar v-model="isOpen" />
 	</USlideover>
