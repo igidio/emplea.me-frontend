@@ -22,13 +22,15 @@ export const useUserStore = defineStore("user", () => {
 
 	const get_current_user = async () => {
 		initial_loading.value = true;
+		console.log("ejecutando");
+
 		await useApollo().getToken();
 		if (token && !(Object.keys(user.value).length > 0)) {
 			const { data } = await useAsyncQuery(getUserByToken);
 			user.value = data.value;
-			return true;
 		}
 		initial_loading.value = false;
+		console.log(initial_loading.value);
 	};
 
 	const update_user = async () => {
