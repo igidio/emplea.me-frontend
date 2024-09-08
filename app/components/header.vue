@@ -1,6 +1,6 @@
 <template>
 	<header id="auth-buttons" class="header hidden tablet:flex">
-		<NuxtLayout :name="layout">
+		<NuxtLayout :name="change_layout">
 			<NuxtPage />
 		</NuxtLayout>
 	</header>
@@ -20,10 +20,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user.pinia";
-
 const { user } = storeToRefs(useUserStore());
-
-const userStore = useUserStore();
 
 const cases: any = {
 	SUPERUSER: "header-admin",
@@ -32,14 +29,11 @@ const cases: any = {
 	SEEKER: "header-seeker",
 };
 
-const layout = cases[user.value.role] || "header-unauthenticated";
+const change_layout = computed(() => {
+	return cases[user.value.role] || "header-unauthenticated";
+});
 
 const isOpen = ref(false);
-
-//const layout = "header-admin";
-//const layout = "header-seeker";
-//const layout = "header-unauthenticated";
-//const layout = "header-employer";
 </script>
 
 <style scoped>

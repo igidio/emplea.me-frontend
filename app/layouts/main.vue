@@ -24,19 +24,13 @@
 </template>
 
 <script setup lang="ts">
-const { isHydrating } = useNuxtApp();
-
 import { useUserStore } from "~/stores/user.pinia";
 const userStore = useUserStore();
 
 const isLoading = ref(true);
 
-// await useAsyncData(
-// 	"initial_loadingg",
-// 	async () => await userStore.update_user().then(() => true)
-// );
-
 if (import.meta.client) {
+	userStore.get_token();
 	await userStore.get_current_user();
 }
 
