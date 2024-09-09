@@ -5,10 +5,12 @@
 		</NuxtLink>
 
 		<div class="flex flex-row h-fit gap-2">
-			<UButton variant="ghost">Mis negocios</UButton>
-			<UButton variant="ghost">Mis publicaciones</UButton>
-			<UButton variant="ghost" v-if="is_premium">⭐ Mis servicios</UButton>
-			<UButton color="gold" v-if="!is_premium">Sé un premium</UButton>
+			<UButton
+				v-for="option in computed_navigation_options"
+				:variant="!option.is_gold ? 'ghost' : undefined"
+				:color="option.is_gold ? 'gold' : undefined"
+				>{{ option.label }}</UButton
+			>
 		</div>
 	</div>
 
@@ -27,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+const { computed_navigation_options } = useUserStore();
+
 const is_open = ref(false);
 
 const is_premium = ref(true);

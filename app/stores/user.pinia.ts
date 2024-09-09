@@ -4,6 +4,21 @@ import { getUserByToken } from "~/queries";
 import { useQuery } from "@vue/apollo-composable";
 import Login from "~/pages/login.vue";
 import type { UserInterface } from "~/interfaces";
+import {
+	RolesEnum,
+	type AdminRolesEnum,
+	type ClientRolesEnum,
+} from "~/enums/server/roles.enum";
+import type { navigationOptionsInterface } from "~/interfaces/client.interface";
+
+import {
+	favorites_option,
+	jobs_option,
+	my_employments_option,
+	my_posts_option,
+	my_services_option,
+	premium_option,
+} from "~/data/navigation-options.data";
 
 export const useUserStore = defineStore("user", () => {
 	const user: Ref<UserInterface> = ref({} as UserInterface);
@@ -47,12 +62,65 @@ export const useUserStore = defineStore("user", () => {
 
 	const update_user = async () => {};
 
-	const logout = () => {
+	const user_role_computed: ComputedRef<AdminRolesEnum | ClientRolesEnum> =
+		computed(() => {
+			return user.value.role;
+		});
+
+	const is_premium = computed(() => true);
+
+	const logout_user = () => {
 		if (import.meta.client) {
 			localStorage.removeItem("token");
 			user.value = {} as UserInterface;
 		}
+		useRouter().push({
+			path: "/",
+		});
 	};
+
+	const dropdown_options: ComputedRef<any[][]> = computed(() => {
+		let profile = {
+			label: "Ver perfil",
+			shortcuts: ["E"],
+			click: () => {
+				console.log("Ver perfil");
+			},
+		};
+
+		let payment = {
+			label: "Pagos",
+			shortcuts: ["D"],
+		};
+
+		let logout = {
+			label: "Cerrar sesión",
+			click: () => logout_user(),
+		};
+
+		if (user.value.role === RolesEnum.EMPLOYER) {
+			return [[profile, payment, logout]];
+		} else {
+			return [[profile, logout]];
+		}
+	});
+
+	const computed_navigation_options: ComputedRef<navigationOptionsInterface[]> =
+		computed(() => {
+			let cases: any = {
+				EMPLOYER: [my_employments_option, my_posts_option],
+				SEEKER: [jobs_option, favorites_option],
+			};
+			is_premium.value
+				? cases.EMPLOYER.push(my_services_option)
+				: cases.EMPLOYER.push(premium_option);
+
+			return cases[user.value.role];
+		});
+
+	const first_of_fist_name = computed(
+		() => user.value.contact.first_name.split(" ")[0]
+	);
 
 	return {
 		user,
@@ -63,6 +131,11 @@ export const useUserStore = defineStore("user", () => {
 		get_current_user,
 		initial_loading,
 		update_user,
-		logout,
+		logout_user,
+		// computed
+		user_role_computed,
+		dropdown_options,
+		first_of_fist_name,
+		computed_navigation_options,
 	};
 });

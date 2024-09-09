@@ -1,6 +1,9 @@
 <template>
 	<div class="w-fit">
-		<UDropdown :items="options" :popper="{ placement: 'bottom-start' }">
+		<UDropdown
+			:items="dropdown_options"
+			:popper="{ placement: 'bottom-start' }"
+		>
 			<button
 				class="white text-base rounded-large flex flex-row gap-1 overflow-hidden w-32 justify-between shadow-sm"
 			>
@@ -19,46 +22,5 @@
 </template>
 
 <script setup lang="ts">
-import { RolesEnum } from "~/enums/server/roles.enum";
-import type { UserInterface } from "~/interfaces";
-
-const userStore = useUserStore();
-const { user }: { user: Ref<UserInterface> } = storeToRefs(userStore);
-
-const profile = {
-	label: "Ver perfil",
-	shortcuts: ["E"],
-	click: () => {
-		console.log("Ver perfil");
-	},
-};
-
-const payment = {
-	label: "Pagos",
-	shortcuts: ["D"],
-};
-
-const logout = {
-	label: "Cerrar sesión",
-	click: () => {
-		userStore.logout();
-		useRouter().push({
-			path: "/",
-		});
-	},
-};
-
-const options: ComputedRef<any[][]> = computed(() => {
-	console.log(user.value.role == RolesEnum.EMPLOYER);
-
-	if (user.value.role === RolesEnum.EMPLOYER) {
-		return [[profile, payment, logout]];
-	} else {
-		return [[profile, logout]];
-	}
-});
-
-const first_of_fist_name = computed(
-	() => user.value.contact.first_name.split(" ")[0]
-);
+const { dropdown_options, first_of_fist_name } = useUserStore();
 </script>
