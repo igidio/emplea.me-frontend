@@ -1,6 +1,6 @@
 <template>
 	<header id="auth-buttons" class="header hidden tablet:flex">
-		<NuxtLayout :name="change_layoutt">
+		<NuxtLayout :name="change_layout">
 			<NuxtPage />
 		</NuxtLayout>
 	</header>
@@ -29,7 +29,7 @@ const cases: any = {
 	SEEKER: "header-seeker",
 };
 
-const change_layoutt = computed(() => {
+const change_layout = computed(() => {
 	return cases[user.value.role] || "header-unauthenticated";
 });
 

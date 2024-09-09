@@ -82,26 +82,21 @@ export const useUserStore = defineStore("user", () => {
 	const dropdown_options: ComputedRef<any[][]> = computed(() => {
 		let profile = {
 			label: "Ver perfil",
-			shortcuts: ["E"],
-			click: () => {
-				console.log("Ver perfil");
-			},
+			shortcuts: ["V"],
+			click: () => {},
 		};
 
 		let payment = {
 			label: "Pagos",
-			shortcuts: ["D"],
+			shortcuts: ["P"],
+			click: () => {},
 		};
 
 		let logout = {
 			label: "Cerrar sesión",
+			shortcuts: ["P"],
 			click: () => logout_user(),
 		};
-
-		{
-			{
-			}
-		}
 
 		if (user.value.role === RolesEnum.EMPLOYER.toUpperCase()) {
 			return [[profile, payment, logout]];
