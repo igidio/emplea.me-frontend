@@ -23,6 +23,7 @@ export default {
 			small: "4px",
 			medium: "8px",
 			large: "16px",
+			xlarge: "32px",
 			full: "9999px;",
 		},
 		extend: {

@@ -17,7 +17,11 @@
 			</div>
 		</div>
 
-		<Footer />
+		<!-- <Footer /> -->
+
+		<NuxtLayout name="footer-default">
+			<NuxtPage />
+		</NuxtLayout>
 	</div>
 
 	<!-- <div v-else>cargando</div> -->
