@@ -1,37 +1,31 @@
 <template>
 	<div class="flex flex-col items-center mx-4">
-		<div
-			class="bg-white rounded-medium p-4 flex flex-row gap-2 items-center w-full max-w-[652px] mb-6"
-		>
-			<UIcon name="devicon:google" class="w-6 h-6" />
-			<div class="flex flex-col">
-				<span>Te vas a registrar como:</span>
-				<span class="font-semibold"
-					>{{ data.first_name }} {{ data.last_name }}</span
-				>
-			</div>
-		</div>
+		<SignupGoogle
+			v-if="Object.keys(data).length > 0"
+			:first_name="data.first_name"
+			:last_name="data.last_name"
+			:email="data.email"
+		/>
 
-		<h3 class="mb-4">¿Qué vas a hacer hoy?</h3>
-		<div class="flex flex-col w-full max-w-[652px] gap-4">
-			<UButton
-				color="primary"
-				variant="outline"
-				size="lg"
-				class="w-full"
-				v-for="data in signupData"
-				>{{ data.message }}</UButton
-			>
-		</div>
-
-		<div>sadsadssadsad</div>
+		<SignupSelect v-model="selection" v-if="selection === undefined" />
+		<SignupInternalForm
+			v-if="selection !== undefined && Object.keys(data).length == 0"
+			:change_selection="change_selection"
+			:selection="selection"
+		/>
+		<SignupExternalForm
+			v-if="selection !== undefined && Object.keys(data).length > 0"
+			:change_selection="change_selection"
+			:selection="selection"
+		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import signupData from "~/data/signup.data.js";
 import { js_decrypt } from "~/libraries/crypto.plugin";
 const route = useRoute();
+
+const selection: Ref<number | undefined> = ref();
 
 interface dataInterface {
 	google_id: string;
@@ -42,9 +36,25 @@ interface dataInterface {
 
 const data: Ref<dataInterface> = ref({} as dataInterface);
 
-onMounted(() => {
-	if (route.query.key) {
-		data.value = JSON.parse(js_decrypt(route.query.key.toString()));
+const change_selection = () => {
+	if (selection.value == 1) selection.value = 0;
+	else if (selection.value == 0) selection.value = 1;
+};
+
+const load_data = () => {
+	if (!route.query.key) {
+		data.value = {} as dataInterface;
+		return;
 	}
+	data.value = JSON.parse(js_decrypt(route.query.key!.toString()));
+};
+
+onMounted(() => {
+	if (route.query.key) load_data();
 });
+
+watch(
+	() => useRoute().query,
+	() => load_data()
+);
 </script>

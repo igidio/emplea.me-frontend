@@ -61,6 +61,11 @@ export default defineNuxtConfig({
 			path: "~/components/Admin",
 			pathPrefix: true,
 		},
+		{
+			prefix: "Signup",
+			path: "~/components/Signup",
+			pathPrefix: true,
+		},
 		// {
 		// 	prefix: "Search",
 		// 	path: "~/components/Search",
