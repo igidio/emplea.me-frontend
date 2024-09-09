@@ -10,7 +10,6 @@
 	<UButton color="primary" class="grow" icon="ri:linkedin-fill">
 		{{ textPrefix }} LinkedIn
 	</UButton>
-	{{ `${config.public.server_host}${config.public.google_callback}` }}
 </template>
 
 <script setup lang="ts">
