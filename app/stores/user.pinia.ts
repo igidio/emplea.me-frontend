@@ -98,7 +98,12 @@ export const useUserStore = defineStore("user", () => {
 			click: () => logout_user(),
 		};
 
-		if (user.value.role === RolesEnum.EMPLOYER) {
+		{
+			{
+			}
+		}
+
+		if (user.value.role === RolesEnum.EMPLOYER.toUpperCase()) {
 			return [[profile, payment, logout]];
 		} else {
 			return [[profile, logout]];

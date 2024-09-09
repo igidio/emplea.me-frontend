@@ -5,7 +5,7 @@ export const jobs_option: navigationOptionsInterface = {
 	//click:
 };
 export const favorites_option: navigationOptionsInterface = {
-	label: "Favorites",
+	label: "Mis Favoritos",
 	//click:
 };
 export const my_employments_option: navigationOptionsInterface = {

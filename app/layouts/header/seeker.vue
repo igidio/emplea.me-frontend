@@ -5,8 +5,12 @@
 		</NuxtLink>
 
 		<div class="flex flex-row h-fit gap-2">
-			<UButton variant="ghost">Trabajos</UButton>
-			<UButton variant="ghost">Mis favoritos</UButton>
+			<UButton
+				v-for="option in computed_navigation_options"
+				:variant="!option.is_gold ? 'ghost' : undefined"
+				:color="option.is_gold ? 'gold' : undefined"
+				>{{ option.label }}</UButton
+			>
 		</div>
 	</div>
 
@@ -25,5 +29,6 @@
 </template>
 
 <script setup lang="ts">
+const { computed_navigation_options } = useUserStore();
 const is_open = ref(false);
 </script>

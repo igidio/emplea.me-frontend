@@ -46,6 +46,15 @@
 			</div>
 
 			<h6>Navegación</h6>
+			<div>
+				<UButton
+					variant="ghost"
+					v-for="options in computed_navigation_options"
+					class="h-fit w-full"
+				>
+					{{ option.label }}
+				</UButton>
+			</div>
 		</div>
 	</div>
 </template>
@@ -53,7 +62,7 @@
 <script setup lang="ts">
 const userStore = useUserStore();
 
-const { dropdown_options } = useUserStore();
+const { dropdown_options, computed_navigation_options } = useUserStore();
 
 import type {
 	AdminRolesEnum,
