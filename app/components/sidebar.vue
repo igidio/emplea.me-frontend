@@ -13,7 +13,7 @@
 			<slot />
 			<div class="h-full flex" v-if="!user_role_computed">
 				<div class="self-center w-full flex flex-col gap-4">
-					<AuthButtons />
+					<AuthButtons v-model="isOpen" />
 				</div>
 			</div>
 
