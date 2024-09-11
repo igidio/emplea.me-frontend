@@ -15,6 +15,7 @@
 		:schema="schema"
 		@submit="onSubmitt()"
 		class="flex flex-row w-full gap-4"
+		autocomplete="off"
 	>
 		<!-- <div class=""> -->
 		<div class="flex flex-col w-full gap-4">

@@ -13,8 +13,11 @@
 </template>
 
 <script setup lang="ts">
+import type { LocationQueryRaw } from "vue-router";
+
 const config = useRuntimeConfig();
 const router = useRouter();
+const route = useRoute();
 
 interface Props {
 	textPrefix?: string;
@@ -23,6 +26,12 @@ interface Props {
 withDefaults(defineProps<Props>(), {
 	textPrefix: "Ingresar con ",
 });
+
+interface queriesInterface {
+	method: string;
+	key: string;
+	selection?: string;
+}
 
 const signInWithGoogle = () => {
 	const googleAuthUrl = `${config.public.server_host}${config.public.google_callback}`;
@@ -38,13 +47,18 @@ const signInWithGoogle = () => {
 	);
 
 	let handleMessage = (event: MessageEvent) => {
+		let queries: queriesInterface = {
+			method: "google",
+			key: event.data.msg,
+		};
+
+		if (route.query.selection)
+			queries.selection = route.query.selection.toString();
+
 		if (event.data.msg) {
 			router.push({
 				path: "/signup",
-				query: {
-					method: "google",
-					key: event.data.msg,
-				},
+				query: { ...queries },
 			});
 		}
 	};
