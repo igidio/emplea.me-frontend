@@ -100,7 +100,7 @@ export default defineAppConfig({
 			label: {
 				base: "text-base",
 			},
-			error: "font-semibold text-base text-black",
+			error: "font-semibold text-base text-red-500",
 			help: "text-black text-sm",
 			default: {
 				size: "sm",
@@ -115,8 +115,16 @@ export default defineAppConfig({
 				md: "p-2",
 				lg: "p-4",
 			},
+			file: {
+				base: "",
+			},
+			variant: {
+				none: "",
+				outline: "bg-white",
+			},
 			color: colorInput,
 			default: {
+				color: "white",
 				size: "sm",
 			},
 		},

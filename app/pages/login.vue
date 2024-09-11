@@ -120,10 +120,9 @@ const query = gql`
 	}
 `;
 
-const { mutate: login, onDone, loading, error } = useMutation(query);
+const { mutate: login, onDone, loading, error, onError } = useMutation(query);
 
 onDone((result) => {
-	console.log(result);
 	userStore.set_token(result.data.login.token);
 	userStore.set_user(result.data.login.user);
 });

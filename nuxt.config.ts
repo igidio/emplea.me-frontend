@@ -10,6 +10,9 @@ export default defineNuxtConfig({
 			google_callback: process.env.GOOGLE_CALLBACK,
 		},
 	},
+	build: {
+		transpile: ["@vuepic/vue-datepicker"],
+	},
 	apollo: {
 		tokenStorage: "localStorage",
 		clients: {

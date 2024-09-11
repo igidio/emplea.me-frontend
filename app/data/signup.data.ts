@@ -1,10 +1,10 @@
 export default [
 	{
-		type: "seeker",
+		type: "SEEKER",
 		message: "Voy a buscar trabajo",
 	},
 	{
-		type: "employer",
+		type: "EMPLOYER",
 		message: "Tengo una empresa, busco trabajadores",
 	},
 ];
