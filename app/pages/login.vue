@@ -74,6 +74,8 @@
 import type { Reactive } from "vue";
 import * as yup from "yup";
 
+const toast = useToast();
+
 const userStore = useUserStore();
 
 const schema = yup.object({
@@ -125,6 +127,8 @@ const { mutate: login, onDone, loading, error, onError } = useMutation(query);
 onDone((result) => {
 	userStore.set_token(result.data.login.token);
 	userStore.set_user(result.data.login.user);
+	useRouter().push("/");
+	toast.add({ title: "Inicio de sesión exitoso." });
 });
 
 const onSubmit = () => {

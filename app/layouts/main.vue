@@ -19,7 +19,7 @@
 
 		<!-- <Footer /> -->
 
-		<NuxtLayout name="footer-default">
+		<NuxtLayout :name="footer">
 			<NuxtPage />
 		</NuxtLayout>
 	</div>
@@ -37,6 +37,9 @@ if (import.meta.client) {
 	userStore.get_token();
 	await userStore.get_current_user();
 }
+
+const footer = "footer-auth";
+//const footer = "footer-default";
 
 onMounted(() => {
 	isLoading.value = userStore.initial_loading;

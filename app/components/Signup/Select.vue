@@ -10,7 +10,7 @@
 			@click="
 				() => {
 					selection = index;
-					modify({ selection: index });
+					modify_query_params({ selection: index });
 				}
 			"
 			>{{ data.message }}</UButton
@@ -21,13 +21,8 @@
 
 <script setup lang="ts">
 import signupData from "~/data/signup.data.js";
-const route = useRoute();
 
-interface props {
-	modify: (params: Record<string, any>) => void;
-}
+const { selection, modify_query_params } = useSignup();
 
-defineProps<props>();
-
-const selection = defineModel();
+//const selection = defineModel();
 </script>

@@ -1,43 +1,35 @@
 <template>
 	<div class="flex flex-col items-center mx-4">
-		<SignupGoogle
-			v-if="Object.keys(data).length > 0"
-			:first_name="data.first_name"
-			:last_name="data.last_name"
-			:email="data.email"
-			:onSubmit="onSubmit"
-		/>
+		<ClientOnly>
+			<SignupGoogle
+				v-if="Object.keys(data_oauth).length > 0"
+				:first_name="data_oauth.first_name"
+				:last_name="data_oauth.last_name"
+				:email="data_oauth.email"
+			/>
 
-		<SignupSelect
-			v-model="selection"
-			:modify="modify_query_params"
-			v-if="selection === undefined"
-		/>
-		<SignupInternalForm
-			v-if="selection !== undefined && Object.keys(data).length == 0"
-			:change_selection="change_selection"
-			:selection="selection"
-			:schema="schema"
-			:on_submit="onSubmit"
-		/>
-		<SignupExternalForm
-			v-if="selection !== undefined && Object.keys(data).length > 0"
-			:change_selection="change_selection"
-			:selection="selection"
-		/>
+			<SignupSelect v-if="selection === undefined" />
+
+			<SignupInternalForm
+				v-if="selection !== undefined && Object.keys(data_oauth).length == 0"
+			/>
+			<SignupExternalForm
+				v-if="selection !== undefined && Object.keys(data_oauth).length > 0"
+			/>
+		</ClientOnly>
 	</div>
 </template>
 
 <script setup lang="ts">
-const {
-	selection,
-	change_selection,
-	data,
-	onSubmit,
-	schema,
-	set_selection,
-	modify_query_params,
-} = useSignup();
+const { selection, data_oauth, set_selection } = useSignup();
 
-set_selection();
+selection.value;
+
+onMounted(() => {
+	set_selection();
+});
+
+onUnmounted(() => {
+	selection.value = undefined;
+});
 </script>

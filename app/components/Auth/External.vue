@@ -55,6 +55,12 @@ const signInWithGoogle = () => {
 		if (route.query.selection)
 			queries.selection = route.query.selection.toString();
 
+		if (event.data.token) {
+			useUserStore().set_token(event.data.token);
+			router.go(0);
+			return;
+		}
+
 		if (event.data.msg) {
 			router.push({
 				path: "/signup",

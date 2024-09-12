@@ -19,6 +19,7 @@ import {
 	my_services_option,
 	premium_option,
 } from "~/data/navigation-options.data";
+import type { NuxtError } from "#app";
 
 export const useUserStore = defineStore("user", () => {
 	const user: Ref<UserInterface> = ref({} as UserInterface);
@@ -39,6 +40,11 @@ export const useUserStore = defineStore("user", () => {
 		token.value = new_token;
 	};
 
+	const delete_token = () => {
+		localStorage.removeItem("token");
+		token.value = "";
+	};
+
 	const set_user = (new_user: UserInterface) => (user.value = new_user);
 
 	const get_current_user = async () => {
@@ -46,13 +52,24 @@ export const useUserStore = defineStore("user", () => {
 		await useApollo().getToken();
 
 		if (token.value !== "" && !(Object.keys(user.value).length > 0)) {
-			let { data }: { data: any } = await useAsyncQuery(getUserByToken, {
+			let {
+				data,
+				error,
+			}: {
+				data: any;
+				error: globalThis.Ref<NuxtError<unknown> | null | undefined>;
+			} = await useAsyncQuery(getUserByToken, {
+				//let { data, error } = await useAsyncQuery(getUserByToken, {
 				server: false,
 			});
 
-			let { getUserByToken: res } = data.value;
+			if (error.value) {
+				initial_loading.value = false;
+				delete_token();
+				return;
+			}
 
-			console.log(data.value);
+			let { getUserByToken: res } = data.value;
 
 			user.value = res;
 		}
