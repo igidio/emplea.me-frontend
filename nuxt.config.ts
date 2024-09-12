@@ -14,10 +14,13 @@ export default defineNuxtConfig({
 		transpile: ["@vuepic/vue-datepicker"],
 	},
 	apollo: {
-		tokenStorage: "localStorage",
+		tokenStorage: "cookie",
 		clients: {
 			default: {
 				httpEndpoint: process.env.QGL_HOST!,
+				httpLinkOptions: {
+					credentials: "include",
+				},
 				tokenName: "token",
 			},
 		},

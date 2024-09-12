@@ -1,7 +1,5 @@
 import CryptoJS from "crypto-js";
-
 const key = "P455P0R7_J5_K3Y";
-//const iv = CryptoJS.lib.WordArray.random(16);
 
 export const js_encrypt = (message: string) => {
 	CryptoJS.AES.encrypt(message, key).toString();

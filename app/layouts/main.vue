@@ -1,10 +1,11 @@
 <template>
 	<!-- {{ userStore.initial_loading }} -->
-	<Loading v-if="isLoading" />
+	{{ status }}
+	<Loading v-if="status == 'pending'" />
 
 	<div
 		class="flex flex-col tablet:mb-0 tablet:place-content-between h-screen content-between"
-		:class="isLoading && 'hidden'"
+		:class="status && 'success'"
 	>
 		<div>
 			<ClientOnly>
@@ -28,20 +29,33 @@
 </template>
 
 <script setup lang="ts">
+import { getUserByToken } from "~/queries";
 import { useUserStore } from "~/stores/user.pinia";
 const userStore = useUserStore();
 
-const isLoading = ref(true);
+//const { getToken } = useApollo();
 
-if (import.meta.client) {
-	userStore.get_token();
-	await userStore.get_current_user();
-}
+// if (import.meta.client) {
+// 	userStore.get_token();
+// 	await userStore.get_current_user();
+// }
+
+// function storeToken(token: string) {
+// 	const newCookie = useCookie("token", {
+// 		maxAge: 60 * 24 * 28,
+// 		sameSite: true,
+// 		secure: true,
+// 	});
+// 	newCookie.value = token;
+// }
+
+//getToken();
+
+const { data, error, status } = await useAsyncQuery(getUserByToken, {
+	server: true,
+});
+userStore.set_user((data.value as any).getUserByToken);
 
 const footer = "footer-auth";
 //const footer = "footer-default";
-
-onMounted(() => {
-	isLoading.value = userStore.initial_loading;
-});
 </script>

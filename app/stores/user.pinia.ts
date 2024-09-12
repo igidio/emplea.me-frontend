@@ -26,17 +26,24 @@ export const useUserStore = defineStore("user", () => {
 	const token: Ref<string> = ref("");
 	const initial_loading = ref(true);
 
-	//token.value = localStorage.getItem("token");
-
 	const get_token = () => {
-		if (import.meta.client) {
-			let token_from_storage = localStorage.getItem("token");
-			if (token_from_storage) token.value = token_from_storage;
-		}
+		let token_from_storage = useCookie("token");
+		if (token_from_storage.value) token.value = token_from_storage.value;
 	};
 
-	const set_token = (new_token: string, set_to_storage: boolean = true) => {
-		if (set_to_storage) localStorage.setItem("token", new_token);
+	const set_token = (
+		new_token: string,
+		set_to_storage: boolean = true,
+		max_age: number = 60 * 4
+	) => {
+		if (set_to_storage) {
+			const newCookie = useCookie("token", {
+				maxAge: max_age,
+				sameSite: true,
+				secure: true,
+			});
+			newCookie.value = new_token;
+		}
 		token.value = new_token;
 	};
 
@@ -46,36 +53,6 @@ export const useUserStore = defineStore("user", () => {
 	};
 
 	const set_user = (new_user: UserInterface) => (user.value = new_user);
-
-	const get_current_user = async () => {
-		initial_loading.value = true;
-		await useApollo().getToken();
-
-		if (token.value !== "" && !(Object.keys(user.value).length > 0)) {
-			let {
-				data,
-				error,
-			}: {
-				data: any;
-				error: globalThis.Ref<NuxtError<unknown> | null | undefined>;
-			} = await useAsyncQuery(getUserByToken, {
-				//let { data, error } = await useAsyncQuery(getUserByToken, {
-				server: false,
-			});
-
-			if (error.value) {
-				initial_loading.value = false;
-				delete_token();
-				return;
-			}
-
-			let { getUserByToken: res } = data.value;
-
-			user.value = res;
-		}
-
-		initial_loading.value = false;
-	};
 
 	const update_user = async () => {};
 
@@ -145,7 +122,6 @@ export const useUserStore = defineStore("user", () => {
 		get_token,
 		set_token,
 		set_user,
-		get_current_user,
 		initial_loading,
 		update_user,
 		logout_user,
