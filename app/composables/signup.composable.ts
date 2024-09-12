@@ -192,7 +192,16 @@ export function useSignup() {
 			data_oauth.value = {} as dataInterface;
 			return;
 		}
-		data_oauth.value = JSON.parse(js_decrypt(route.query.key!.toString()));
+
+		try {
+			data_oauth.value = JSON.parse(js_decrypt(route.query.key!.toString()));
+		} catch (e) {
+			useRouter().push({
+				path: "/signup",
+				query: {},
+			});
+			clear_state();
+		}
 		state.email = data_oauth.value.email;
 		state.contact.first_name = data_oauth.value.first_name;
 		if (data_oauth.value.last_name)
@@ -217,6 +226,8 @@ export function useSignup() {
 		state.contact.last_name = undefined;
 		state.contact.gender = undefined;
 		state.contact.date_of_birth = undefined;
+
+		selection.value = undefined;
 	};
 
 	return {
