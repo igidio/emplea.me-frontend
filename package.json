@@ -14,7 +14,6 @@
 	"dependencies": {
 		"@nuxt/ui": "^2.18.4",
 		"@pinia/nuxt": "^0.5.4",
-		"@vue/apollo-composable": "^4.2.1",
 		"@vuepic/vue-datepicker": "^9.0.3",
 		"bcryptjs": "^2.4.3",
 		"crypto-js": "^4.2.0",

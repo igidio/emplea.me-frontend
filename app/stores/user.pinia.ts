@@ -1,8 +1,4 @@
 import { defineStore } from "pinia";
-import { getUserByToken } from "~/queries";
-
-import { useQuery } from "@vue/apollo-composable";
-import Login from "~/pages/login.vue";
 import type { UserInterface } from "~/interfaces";
 import {
 	RolesEnum,
@@ -19,7 +15,6 @@ import {
 	my_services_option,
 	premium_option,
 } from "~/data/navigation-options.data";
-import type { NuxtError } from "#app";
 
 export const useUserStore = defineStore("user", () => {
 	const user: Ref<UserInterface> = ref({} as UserInterface);
@@ -48,8 +43,8 @@ export const useUserStore = defineStore("user", () => {
 	};
 
 	const delete_token = () => {
-		localStorage.removeItem("token");
-		token.value = "";
+		const cookie = useCookie("token");
+		cookie.value = null;
 	};
 
 	const set_user = (new_user: UserInterface) => (user.value = new_user);
@@ -64,10 +59,10 @@ export const useUserStore = defineStore("user", () => {
 	const is_premium = computed(() => true);
 
 	const logout_user = () => {
-		if (import.meta.client) {
-			localStorage.removeItem("token");
-			user.value = {} as UserInterface;
-		}
+		//localStorage.removeItem("token");
+		delete_token();
+		user.value = {} as UserInterface;
+
 		useRouter().push({
 			path: "/",
 		});

@@ -18,9 +18,9 @@ export default defineNuxtConfig({
 		clients: {
 			default: {
 				httpEndpoint: process.env.QGL_HOST!,
-				httpLinkOptions: {
-					credentials: "include",
-				},
+				// httpLinkOptions: {
+				// 	credentials: "include",
+				// },
 				tokenName: "token",
 			},
 		},
