@@ -1,15 +1,28 @@
 <template>
 	<UCard>
 		<div class="flex flex-row gap-4">
-			<img
-				src="/images/empleame_user_silhouette.png"
-				alt=""
-				class="w-48 h-48 rounded-full"
-			/>
+			<div class="flex w-48 h-full relative image-container">
+				<img
+					src="/images/empleame_user_silhouette.png"
+					alt=""
+					class="rounded-full h-fit"
+				/>
+				<UButton
+					icon="ri:pencil-fill"
+					color="white"
+					class="absolute bottom-0 right-0 button-from-container"
+					label="Editar"
+				/>
+			</div>
 
 			<div class="flex flex-col gap-4 ml-4 w-full">
-				<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
-				<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
+				<div class="flex flex-row justify-between">
+					<div class="flex flex-col gap-2">
+						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
+						<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
+					</div>
+					<UButton icon="ri:pencil-fill" label="Editar" class="h-fit" />
+				</div>
 				<hr />
 				<item
 					icon="ri:user-3-fill"
@@ -35,6 +48,10 @@
 					label_bold="Activo desde:"
 					one_line
 				/>
+				<div class="flex flex-row gap-2">
+					<UButton icon="ri:google-fill" label="Conectar con Google" />
+					<UButton icon="ri:google-fill" label="Conectar con LinkedIn" />
+				</div>
 			</div>
 		</div>
 	</UCard>
@@ -57,3 +74,12 @@ const get_date_computed = computed(() => {
 	return get_date(user.value.contact.created_at);
 });
 </script>
+
+<style>
+.button-from-container {
+	@apply opacity-0 transition-all;
+}
+.image-container:hover .button-from-container {
+	@apply opacity-100;
+}
+</style>
