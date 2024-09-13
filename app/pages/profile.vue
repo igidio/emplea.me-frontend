@@ -1,7 +1,9 @@
 <template>
 	<UCard>
-		<div class="flex flex-row gap-4">
-			<div class="flex w-48 h-full relative image-container">
+		<div class="flex flex-col tablet:flex-row gap-4">
+			<div
+				class="w-48 h-full relative image-container self-center tablet:self-auto"
+			>
 				<img
 					src="/images/empleame_user_silhouette.png"
 					alt=""
@@ -15,9 +17,11 @@
 				/>
 			</div>
 
-			<div class="flex flex-col gap-4 ml-4 w-full">
-				<div class="flex flex-row justify-between">
-					<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-4 tablet:ml-4 w-full">
+				<div
+					class="flex flex-col tablet:flex-row justify-between items-center gap-2"
+				>
+					<div class="flex flex-col gap-2 items-center tablet:items-start">
 						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
 						<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
 					</div>
@@ -48,7 +52,7 @@
 					label_bold="Activo desde:"
 					one_line
 				/>
-				<div class="flex flex-row gap-2">
+				<div class="flex flex-col desktop:flex-row gap-2">
 					<UButton icon="ri:google-fill" label="Conectar con Google" />
 					<UButton icon="ri:google-fill" label="Conectar con LinkedIn" />
 				</div>
