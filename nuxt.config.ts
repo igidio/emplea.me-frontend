@@ -82,6 +82,11 @@ export default defineNuxtConfig({
 			path: "~/components/Notifications",
 			pathPrefix: true,
 		},
+		{
+			prefix: "Profile",
+			path: "~/components/Profile",
+			pathPrefix: true,
+		},
 	],
 
 	future: {
