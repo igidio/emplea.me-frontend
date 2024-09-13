@@ -2,11 +2,18 @@
 	<div class="flex flex-row gap-2">
 		<IconFill
 			:name="icon"
-			:small="!(labelBold !== undefined || (small && regular))"
+			:small="!(label_bold !== undefined || (small && regular)) || one_line"
 		/>
 		<div class="flex flex-col" v-if="label">
-			<span class="font-semibold" v-if="labelBold">{{ labelBold }}</span>
-			<span>{{ label }}</span>
+			<span class="font-semibold" v-if="label_bold && !one_line">{{
+				label_bold
+			}}</span>
+			<span>
+				<span class="font-semibold" v-if="label_bold && one_line">{{
+					label_bold
+				}}</span>
+				{{ label }}
+			</span>
 		</div>
 		<div class="flex flex-col" v-if="small && regular">
 			<span class="text-sm">{{ small }}</span>
@@ -18,10 +25,11 @@
 <script setup lang="ts">
 interface Props {
 	label?: string;
-	labelBold?: string;
+	label_bold?: string;
 	small?: string;
 	regular?: string;
 	icon: string;
+	one_line?: boolean;
 }
 
 defineProps<Props>();

@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user", () => {
 	const set_token = (
 		new_token: string,
 		set_to_storage: boolean = true,
-		max_age: number = 60 * 4
+		max_age: number = 60 * 60 * 4
 	) => {
 		if (set_to_storage) {
 			const newCookie = useCookie("token", {
@@ -73,7 +73,9 @@ export const useUserStore = defineStore("user", () => {
 		let profile = {
 			label: "Ver perfil",
 			shortcuts: ["V"],
-			click: () => {},
+			click: () => {
+				useRouter().push("/profile");
+			},
 		};
 
 		let payment = {
