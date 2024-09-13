@@ -26,11 +26,21 @@
 <script setup lang="ts">
 import { getUserByToken } from "~/queries";
 import { useUserStore } from "~/stores/user.pinia";
+
 const userStore = useUserStore();
+
+const { getToken } = useApollo();
+
+getToken();
+console.log(await getToken());
 
 const { data, error, status } = await useAsyncQuery(getUserByToken, {
 	server: true,
 });
+
+console.log(data);
+console.log(error);
+
 if (data && !error.value)
 	userStore.set_user((data.value as any).getUserByToken);
 

@@ -1,6 +1,9 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-	// TODO
-	// const { $locally } = useNuxtApp();
-	// const token = $locally.getItem("token");
-	// if (token && to.path === "/login") return navigateTo("/");
+	//const { $locally } = useNuxtApp();
+	let token = useCookie("token");
+	if (token.value && (to.path === "/login" || to.path === "/signup"))
+		return navigateTo("/");
+
+	console.log("to", to);
+	console.log("from", from);
 });

@@ -1,6 +1,6 @@
 import { ApolloError } from "@apollo/client/core/index.js";
 
-export default function create(error: Ref<ApolloError | null>) {
+export function create_error_message(error: Ref<ApolloError | null>) {
 	return computed(() => {
 		if (error.value?.graphQLErrors[0]) {
 			if (error.value?.graphQLErrors[0].extensions?.originalError) {

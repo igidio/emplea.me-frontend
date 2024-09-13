@@ -44,7 +44,7 @@ export const useUserStore = defineStore("user", () => {
 
 	const delete_token = () => {
 		const cookie = useCookie("token");
-		cookie.value = null;
+		cookie.value = undefined;
 	};
 
 	const set_user = (new_user: UserInterface) => (user.value = new_user);

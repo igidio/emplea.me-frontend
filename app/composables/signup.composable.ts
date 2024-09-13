@@ -15,7 +15,7 @@ const state: userDtoInterface = reactive({
 	google_id: undefined,
 	linkedin_id: undefined,
 	contact: {
-		phone: 12345678,
+		phone: "12345678",
 		first_name: "Salvador",
 		last_name: "Adrian",
 		gender: GenderEnum.MALE,

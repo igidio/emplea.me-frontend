@@ -10,7 +10,7 @@ export interface userDtoInterface {
 	contact: {
 		first_name: string | undefined;
 		last_name: string | undefined;
-		phone: number | undefined;
+		phone: string | undefined;
 		gender: GenderEnum | undefined;
 		date_of_birth: Date | undefined;
 	};

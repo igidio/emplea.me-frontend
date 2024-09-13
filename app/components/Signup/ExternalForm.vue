@@ -36,12 +36,7 @@
 				help="Tu número no se va a mostrar públicamente"
 				name="contact.phone"
 			>
-				<UInput
-					placeholder="--------"
-					size="lg"
-					v-model="state.contact.phone"
-					type="number"
-				>
+				<UInput placeholder="--------" size="lg" v-model="state.contact.phone">
 					<template #leading>
 						<span class="font-bold dark:text-gray-400 text-xs">+591</span>
 					</template>
@@ -125,8 +120,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import "~/assets/css/vue-datepicker.css";
 
 import signupData from "~/data/signup.data.js";
-import create from "~/helpers/error_message.helper";
-import format_date from "~/helpers/format_date.helper";
+import { format_date, format_name, create_error_message } from "~/helpers";
 
 const toast = useToast();
 const userStore = useUserStore();
@@ -143,19 +137,19 @@ const {
 
 const { mutate: signup, error, loading, onDone } = useMutation(query);
 
-const format_error_message_computed = create(error);
+const format_error_message_computed = create_error_message(error);
 
 const on_submit = async () => {
 	await signup({
 		createUser: {
-			email: state.email,
-			username: state.username,
-			password: state.password,
+			email: state.email!.trim(),
+			username: state.username!.trim(),
+			password: state.password!.trim(),
 			google_id: state.google_id ? state.google_id : undefined,
 			contact: {
-				phone: state.contact.phone,
-				first_name: state.contact.first_name,
-				last_name: state.contact.last_name,
+				phone: parseInt(state.contact.phone!.trim()),
+				first_name: format_name(state.contact.first_name!.trim()),
+				last_name: format_name(state.contact.last_name!.trim()),
 				gender: state.contact.gender,
 				date_of_birth: format_date(state.contact.date_of_birth! as Date),
 			},
