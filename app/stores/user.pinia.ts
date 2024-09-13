@@ -58,14 +58,15 @@ export const useUserStore = defineStore("user", () => {
 
 	const is_premium = computed(() => true);
 
-	const logout_user = () => {
-		//localStorage.removeItem("token");
+	const logout_user = async () => {
 		delete_token();
 		user.value = {} as UserInterface;
 
-		useRouter().push({
+		await useRouter().push({
 			path: "/",
 		});
+		useRouter().go(0);
+		useToast().add({ title: "Sesión finalizada" });
 	};
 
 	const dropdown_options: ComputedRef<any[][]> = computed(() => {
@@ -84,7 +85,9 @@ export const useUserStore = defineStore("user", () => {
 		let logout = {
 			label: "Cerrar sesión",
 			shortcuts: ["P"],
-			click: () => logout_user(),
+			click: () => {
+				logout_user();
+			},
 		};
 
 		if (user.value.role === RolesEnum.EMPLOYER.toUpperCase()) {

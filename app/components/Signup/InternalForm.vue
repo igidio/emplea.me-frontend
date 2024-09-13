@@ -164,22 +164,21 @@ import "~/assets/css/vue-datepicker.css";
 
 import signupData from "~/data/signup.data";
 import { create_error_message, format_date, format_name } from "~/helpers";
+import { clientSignupQuery } from "~/queries";
 
 const userStore = useUserStore();
 
 const toast = useToast();
 
-const {
-	state,
-	past_date,
-	query,
-	selection,
-	change_selection,
-	schema,
-	clear_state,
-} = useSignup();
+const { state, past_date, selection, change_selection, schema, clear_state } =
+	useSignup();
 
-const { mutate: signup, error, loading, onDone } = useMutation(query);
+const {
+	mutate: signup,
+	error,
+	loading,
+	onDone,
+} = useMutation(clientSignupQuery);
 
 const format_error_message_computed = create_error_message(error);
 
@@ -208,6 +207,7 @@ onDone((result) => {
 	userStore.set_user(result.data.clientSignup.user);
 	clear_state();
 	useRouter().push("/");
+	useRouter().go(0);
 	toast.add({ title: "Te registraste correctamente." });
 });
 </script>

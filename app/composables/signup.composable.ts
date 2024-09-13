@@ -1,25 +1,25 @@
+import type { LocationQueryRaw } from "vue-router";
 import * as yup from "yup";
+
 import { GenderEnum } from "~/enums";
 import { js_decrypt } from "~/libraries/crypto.plugin";
-import type { LocationQueryRaw } from "vue-router";
-
-import format_date from "~/helpers/format_date.helper";
 import signup_data from "~/data/signup.data";
 import type { userDtoInterface } from "~/interfaces/dtos/user.dto.interface";
+import { only_letters_regex, only_numbers_regex } from "~/regex";
 
 const state: userDtoInterface = reactive({
-	email: "adriancitoooo@gmail.com",
-	username: "adrianazoooo",
-	password: "SALVA1234a",
-	password_repeat: "SALVA1234a",
+	email: undefined,
+	username: undefined,
+	password: undefined,
+	password_repeat: undefined,
 	google_id: undefined,
 	linkedin_id: undefined,
 	contact: {
-		phone: "12345678",
-		first_name: "Salvador",
-		last_name: "Adrian",
-		gender: GenderEnum.MALE,
-		date_of_birth: new Date("11/11/2000"),
+		phone: undefined,
+		first_name: undefined,
+		last_name: undefined,
+		gender: undefined,
+		date_of_birth: undefined,
 	},
 });
 
@@ -62,16 +62,12 @@ export function useSignup() {
 		modify_query_params({ selection: selection.value });
 	};
 
-	onMounted(() => {
-		if (route.query.key) load_data();
-	});
-
 	watch(
 		() => useRoute().query,
 		() => load_data()
 	);
 
-	const schema = yup.object().shape({
+	const yup_validators = {
 		email: yup
 			.string()
 			.email("Debe ser un correo electrónico válido")
@@ -95,11 +91,17 @@ export function useSignup() {
 				}
 			),
 		contact: yup.object().shape({
-			first_name: yup.string().required("El nombre es obligatorio"),
-			last_name: yup.string().required("El apellido es obligatorio"),
+			first_name: yup
+				.string()
+				.matches(only_letters_regex, "El nombre debe contener solo letras")
+				.required("El nombre es obligatorio"),
+			last_name: yup
+				.string()
+				.matches(only_letters_regex, "El apellido debe contener solo letras")
+				.required("El apellido es obligatorio"),
 			phone: yup
 				.string()
-				.matches(/^[0-9]+$/, "El teléfono debe contener solo números")
+				.matches(only_numbers_regex, "El teléfono debe contener solo números")
 				.min(8, "El teléfono debe tener al menos 8 dígitos")
 				.required("El teléfono es obligatorio"),
 			gender: yup
@@ -110,76 +112,20 @@ export function useSignup() {
 				.string()
 				.required("La fecha de nacimiento es obligatoria"),
 		}),
+	};
+
+	const schema = yup.object().shape({
+		email: yup_validators.email,
+		username: yup_validators.username,
+		password: yup_validators.password,
+		password_repeat: yup_validators.password_repeat,
+		contact: yup_validators.contact,
 	});
 
 	const schema_ext = yup.object().shape({
-		username: yup
-			.string()
-			.min(3, "El nombre de usuario debe tener al menos 3 caracteres")
-			.required("El nombre de usuario es obligatorio"),
-		contact: yup.object().shape({
-			first_name: yup.string().required("El nombre es obligatorio"),
-			last_name: yup.string().required("El apellido es obligatorio"),
-			phone: yup
-				.string()
-				.matches(/^[0-9]+$/, "El teléfono debe contener solo números")
-				.min(8, "El teléfono debe tener al menos 8 dígitos")
-				.required("El teléfono es obligatorio"),
-			gender: yup
-				.string()
-				.oneOf(["MALE", "FEMALE", "OTHER"], "Debe seleccionar un género válido")
-				.required("El género es obligatorio"),
-			date_of_birth: yup
-				.string()
-				.required("La fecha de nacimiento es obligatoria"),
-		}),
+		email: yup_validators.email,
+		contact: yup_validators.contact,
 	});
-
-	const query = gql`
-		mutation ClientSignup(
-			$createUser: CreateUserInput!
-			$clientRole: ClientRoleInput!
-		) {
-			clientSignup(createUser: $createUser, clientRole: $clientRole) {
-				token
-				user {
-					id
-					username
-					email
-					image
-					google_id
-					linkedin_id
-					created_at
-					modified_at
-					role
-					is_active
-					contact {
-						first_name
-						last_name
-						phone
-						gender
-						date_of_birth
-						created_at
-						modified_at
-					}
-				}
-			}
-		}
-	`;
-
-	// const state = reactive({
-	// 	email: undefined,
-	// 	username: undefined,
-	// 	password: undefined,
-	// 	password_repeat: undefined,
-	// 	phone: undefined,
-	// 	contact: {
-	// 		first_name: undefined,
-	// 		last_name: undefined,
-	// 		gender: undefined,
-	// 		date_of_birth: undefined,
-	// 	},
-	// });
 
 	const past_date = computed(() => {
 		let currentDate = new Date();
@@ -209,11 +155,6 @@ export function useSignup() {
 		state.google_id = data_oauth.value.google_id;
 	};
 
-	// watch(
-	// 	() => useRoute().query.selection,
-	// 	() => alert("hola")
-	// );
-
 	const clear_state = () => {
 		state.email = undefined;
 		state.username = undefined;
@@ -226,7 +167,6 @@ export function useSignup() {
 		state.contact.last_name = undefined;
 		state.contact.gender = undefined;
 		state.contact.date_of_birth = undefined;
-
 		selection.value = undefined;
 	};
 
@@ -236,14 +176,11 @@ export function useSignup() {
 		schema_ext,
 		state,
 		selection,
-		// methods
-		//onSubmit,
 		change_selection,
 		set_selection,
+		load_data,
 		clear_state,
 		modify_query_params,
-		query,
 		past_date,
-		//format_error_message_computed,
 	};
 }

@@ -49,13 +49,12 @@
 					<div
 						class="flex flex-col-reverse gap-4 tablet:gap-0 tablet:flex-row justify-between"
 					>
-						<NuxtLink to="forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
-
 						<UCheckbox
 							v-model="state.remember_me"
 							name="remember-me"
 							label="Recuérdame"
 						/>
+						<NuxtLink to="forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
 					</div>
 				</UForm>
 			</UCard>
@@ -73,6 +72,7 @@
 <script setup lang="ts">
 import type { Reactive } from "vue";
 import * as yup from "yup";
+import { loginQuery } from "~/queries";
 
 const toast = useToast();
 
@@ -93,36 +93,7 @@ const state: Reactive<{
 	remember_me: false,
 });
 
-const query = gql`
-	mutation Login($loginInput: LoginInput!) {
-		login(loginInput: $loginInput) {
-			token
-			user {
-				id
-				username
-				email
-				image
-				google_id
-				linkedin_id
-				created_at
-				modified_at
-				role
-				is_active
-				contact {
-					first_name
-					last_name
-					phone
-					gender
-					date_of_birth
-					created_at
-					modified_at
-				}
-			}
-		}
-	}
-`;
-
-const { mutate: login, onDone, loading, error, onError } = useMutation(query);
+const { mutate: login, onDone, loading, error } = useMutation(loginQuery);
 
 onDone((result) => {
 	userStore.set_token(result.data.login.token);
@@ -131,7 +102,9 @@ onDone((result) => {
 	toast.add({ title: "Inicio de sesión exitoso." });
 });
 
-const onSubmit = () => {
-	login({ loginInput: state });
+const onSubmit = async () => {
+	await login({ loginInput: state });
+	//useRouter().go(0);
+	useToast().add({ title: "Inicio de sesión exitoso." });
 };
 </script>
