@@ -16,6 +16,9 @@
 				{{ label }}
 			</span>
 			<span class="text-sm" v-if="small && !one_line">{{ small }}</span>
+			<span class="text-sm" v-if="description && !one_line">{{
+				description
+			}}</span>
 		</div>
 		<div class="flex flex-col" v-if="small && regular">
 			<span class="text-sm">{{ small }}</span>
@@ -29,6 +32,7 @@ interface Props {
 	label?: string;
 	label_bold?: string;
 	small?: string;
+	description?: string;
 	regular?: string;
 	icon: string;
 	one_line?: boolean;
