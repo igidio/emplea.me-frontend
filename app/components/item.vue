@@ -8,12 +8,14 @@
 			<span class="font-semibold" v-if="label_bold && !one_line">{{
 				label_bold
 			}}</span>
+
 			<span>
 				<span class="font-semibold" v-if="label_bold && one_line">{{
 					label_bold
 				}}</span>
 				{{ label }}
 			</span>
+			<span class="text-sm" v-if="small && !one_line">{{ small }}</span>
 		</div>
 		<div class="flex flex-col" v-if="small && regular">
 			<span class="text-sm">{{ small }}</span>
