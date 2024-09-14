@@ -1,5 +1,6 @@
 <template>
 	<ProfileUserModal v-model="modal_user" />
+	<ProfileModalContact v-model="modal_contact" />
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
@@ -83,6 +84,7 @@
 import { get_age, get_date, get_gender } from "~/helpers";
 
 const modal_user = ref(false);
+const modal_contact = ref(false);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
@@ -106,9 +108,7 @@ const items = [
 		},
 		{
 			label: "Modificar información del contacto",
-			click: () => {
-				console.log("Edit");
-			},
+			click: () => (modal_contact.value = true),
 		},
 		{
 			label: "Actualizar contraseña",
