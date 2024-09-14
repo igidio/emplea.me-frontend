@@ -26,12 +26,23 @@
 						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
 						<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
 					</div>
-					<UButton
-						icon="ri:pencil-fill"
-						label="Editar"
-						class="h-fit"
-						@click="modal_user = true"
-					/>
+					<UDropdown
+						:items="items"
+						:popper="{ placement: 'bottom-start' }"
+						:ui="{
+							width: 'w-50',
+							background: 'bg-violet-100',
+							item: {
+								active: 'bg-violet-200',
+							},
+						}"
+					>
+						<UButton
+							color="primary"
+							label="Opciones"
+							trailing-icon="i-heroicons-chevron-down-20-solid"
+						/>
+					</UDropdown>
 				</div>
 				<hr />
 				<item
@@ -86,6 +97,27 @@ const get_gender_computed = computed(() => {
 const get_date_computed = computed(() => {
 	return get_date(new Date(user.value.created_at));
 });
+
+const items = [
+	[
+		{
+			label: "Modificar información del usuario",
+			click: () => (modal_user.value = true),
+		},
+		{
+			label: "Modificar información del contacto",
+			click: () => {
+				console.log("Edit");
+			},
+		},
+		{
+			label: "Actualizar contraseña",
+			click: () => {
+				console.log("Edit");
+			},
+		},
+	],
+];
 </script>
 
 <style>
