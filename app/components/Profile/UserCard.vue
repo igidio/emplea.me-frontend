@@ -1,4 +1,5 @@
 <template>
+	<ProfileUserModal v-model="modal_user" />
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
@@ -25,7 +26,12 @@
 						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
 						<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
 					</div>
-					<UButton icon="ri:pencil-fill" label="Editar" class="h-fit" />
+					<UButton
+						icon="ri:pencil-fill"
+						label="Editar"
+						class="h-fit"
+						@click="modal_user = true"
+					/>
 				</div>
 				<hr />
 				<item
@@ -36,7 +42,7 @@
 				/>
 				<item
 					icon="ri:cellphone-fill"
-					:label="user.contact.phone"
+					:label="user.contact.phone.toString()"
 					label_bold="Número telefónico:"
 					one_line
 				/>
@@ -64,6 +70,8 @@
 
 <script setup lang="ts">
 import { get_age, get_date, get_gender } from "~/helpers";
+
+const modal_user = ref(false);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);

@@ -158,6 +158,8 @@
 </template>
 
 <script setup lang="ts">
+import * as yup from "yup";
+
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "~/assets/css/vue-datepicker.css";
@@ -165,12 +167,13 @@ import "~/assets/css/vue-datepicker.css";
 import signupData from "~/data/signup.data";
 import { create_error_message, format_date, format_name } from "~/helpers";
 import { clientSignupQuery } from "~/queries";
+import { user_schema } from "~/schemas";
 
 const userStore = useUserStore();
 
 const toast = useToast();
 
-const { state, past_date, selection, change_selection, schema, clear_state } =
+const { state, past_date, selection, change_selection, clear_state } =
 	useSignup();
 
 const {
@@ -201,6 +204,14 @@ const on_submit = async () => {
 		},
 	});
 };
+
+const schema = yup.object().shape({
+	email: user_schema.email,
+	username: user_schema.username,
+	password: user_schema.password,
+	password_repeat: user_schema.password_repeat,
+	contact: user_schema.contact,
+});
 
 onDone((result) => {
 	userStore.set_token(result.data.clientSignup.token);

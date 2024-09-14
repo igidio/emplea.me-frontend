@@ -1,11 +1,7 @@
 import type { LocationQueryRaw } from "vue-router";
-import * as yup from "yup";
-
-import { GenderEnum } from "~/enums";
 import { js_decrypt } from "~/libraries/crypto.plugin";
 import signup_data from "~/data/signup.data";
 import type { userDtoInterface } from "~/interfaces/dtos/user.dto.interface";
-import { only_letters_regex, only_numbers_regex } from "~/regex";
 
 const state: userDtoInterface = reactive({
 	email: undefined,
@@ -67,66 +63,6 @@ export function useSignup() {
 		() => load_data()
 	);
 
-	const yup_validators = {
-		email: yup
-			.string()
-			.email("Debe ser un correo electrónico válido")
-			.required("El correo es obligatorio"),
-		username: yup
-			.string()
-			.min(3, "El nombre de usuario debe tener al menos 3 caracteres")
-			.required("El nombre de usuario es obligatorio"),
-		password: yup
-			.string()
-			.min(8, "La contraseña debe tener al menos 8 caracteres")
-			.required("La contraseña es obligatoria"),
-		password_repeat: yup
-			.string()
-			.required("Debe confirmar la contraseña")
-			.test(
-				"passwords-match",
-				"Las contraseñas deben coincidir",
-				function (value) {
-					return value === this.parent.password;
-				}
-			),
-		contact: yup.object().shape({
-			first_name: yup
-				.string()
-				.matches(only_letters_regex, "El nombre debe contener solo letras")
-				.required("El nombre es obligatorio"),
-			last_name: yup
-				.string()
-				.matches(only_letters_regex, "El apellido debe contener solo letras")
-				.required("El apellido es obligatorio"),
-			phone: yup
-				.string()
-				.matches(only_numbers_regex, "El teléfono debe contener solo números")
-				.min(8, "El teléfono debe tener al menos 8 dígitos")
-				.required("El teléfono es obligatorio"),
-			gender: yup
-				.string()
-				.oneOf(["MALE", "FEMALE", "OTHER"], "Debe seleccionar un género válido")
-				.required("El género es obligatorio"),
-			date_of_birth: yup
-				.string()
-				.required("La fecha de nacimiento es obligatoria"),
-		}),
-	};
-
-	const schema = yup.object().shape({
-		email: yup_validators.email,
-		username: yup_validators.username,
-		password: yup_validators.password,
-		password_repeat: yup_validators.password_repeat,
-		contact: yup_validators.contact,
-	});
-
-	const schema_ext = yup.object().shape({
-		email: yup_validators.email,
-		contact: yup_validators.contact,
-	});
-
 	const past_date = computed(() => {
 		let currentDate = new Date();
 		let pastDate = new Date(currentDate.getTime());
@@ -172,8 +108,6 @@ export function useSignup() {
 
 	return {
 		data_oauth,
-		schema,
-		schema_ext,
 		state,
 		selection,
 		change_selection,

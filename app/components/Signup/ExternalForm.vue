@@ -11,7 +11,7 @@
 
 	<UForm
 		:state="state"
-		:schema="schema_ext"
+		:schema="schema"
 		@submit="on_submit"
 		class="flex flex-col items-center w-full gap-4"
 		autocomplete="off"
@@ -115,6 +115,7 @@
 </template>
 
 <script setup lang="ts">
+import * as yup from "yup";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "~/assets/css/vue-datepicker.css";
@@ -122,18 +123,13 @@ import "~/assets/css/vue-datepicker.css";
 import signupData from "~/data/signup.data.js";
 import { format_date, format_name, create_error_message } from "~/helpers";
 import { clientSignupQuery } from "~/queries";
+import { user_schema } from "~/schemas";
 
 const toast = useToast();
 const userStore = useUserStore();
 
-const {
-	state,
-	past_date,
-	schema_ext,
-	selection,
-	change_selection,
-	clear_state,
-} = useSignup();
+const { state, past_date, selection, change_selection, clear_state } =
+	useSignup();
 
 const {
 	mutate: signup,
@@ -143,6 +139,11 @@ const {
 } = useMutation(clientSignupQuery);
 
 const format_error_message_computed = create_error_message(error);
+
+const schema = yup.object().shape({
+	email: user_schema.email,
+	contact: user_schema.contact,
+});
 
 const on_submit = async () => {
 	await signup({
