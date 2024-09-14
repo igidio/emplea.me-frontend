@@ -1,13 +1,9 @@
 <template>
 	<div
-		class="bg-violet-600 aspect-[1/1] h-full flex items-center justify-center p-[3px]"
-		:class="rounded"
+		class="bg-violet-600 aspect-[1/1] h-fit flex items-center justify-center p-[3px]"
+		:class="`${rounded} ${size_computed.parent}`"
 	>
-		<UIcon
-			:name="name"
-			class="bg-white z-0"
-			:class="small ? 'h-3 w-3' : 'h-6 w-6'"
-		/>
+		<UIcon :name="name" class="bg-white z-0" :class="size_computed.child" />
 	</div>
 </template>
 
@@ -18,8 +14,17 @@ interface Props {
 	small?: boolean;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
 	rounded: "rounded-small",
 	small: false,
+});
+
+const size_computed = computed(() => {
+	return props.small
+		? {
+				parent: "p-[3px]",
+				child: "h-3 w-3",
+		  }
+		: { parent: "p-[4px]", child: "h-5 w-6" };
 });
 </script>
