@@ -4,14 +4,14 @@
 			<template #header>Foto de perfil</template>
 
 			<div
-				class="flex flex-row tablet:grid-cols-2 gap-16 w-full justify-center"
+				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
 			>
 				<img
 					src="/images/empleame_user_silhouette.png"
 					alt=""
-					class="rounded-full h-fit w-64"
+					class="rounded-full h-fit w-64 self-center"
 				/>
-				<div class="flex flex-col gap-2 self-center">
+				<div class="flex flex-col gap-2 self-center w-full tablet:w-auto">
 					<UButton color="black">Subir foto de perfil</UButton>
 					<span class="mb-4">Formatos permitidos: jpg, jpeg, png</span>
 					<UButton color="black">Eliminar</UButton>
