@@ -1,6 +1,7 @@
 <template>
 	<ProfileUserModal v-model="modal_user" />
 	<ProfileModalContact v-model="modal_contact" />
+	<ProfileModalImage v-model="modal_image" />
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
@@ -16,6 +17,7 @@
 					color="white"
 					class="absolute bottom-0 right-0 button-from-container"
 					label="Editar"
+					@click="modal_image = true"
 				/>
 			</div>
 
@@ -85,6 +87,7 @@ import { get_age, get_date, get_gender } from "~/helpers";
 
 const modal_user = ref(false);
 const modal_contact = ref(false);
+const modal_image = ref(false);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
