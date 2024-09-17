@@ -6,13 +6,23 @@
 			<div
 				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
 			>
+				{{ file }}
 				<img
 					src="/images/empleame_user_silhouette.png"
 					alt=""
 					class="rounded-full h-fit w-64 self-center"
 				/>
 				<div class="flex flex-col gap-2 self-center w-full tablet:w-auto">
-					<UButton color="black">Subir foto de perfil</UButton>
+					<UInput
+						type="file"
+						ref="fileInput"
+						icon="i-heroicons-folder"
+						accept="image/png, image/jpeg, image/jpg"
+						color="gray"
+						@change="onFileChange"
+					/>
+
+					<UButton color="black" type="file">Subir foto de perfil</UButton>
 					<span class="mb-4">Formatos permitidos: jpg, jpeg, png</span>
 					<UButton color="black">Eliminar</UButton>
 				</div>
@@ -29,4 +39,13 @@
 
 <script setup lang="ts">
 const isOpen = defineModel({ required: true, default: false });
+
+const fileInput = ref<HTMLInputElement | null>(null);
+
+//const file: Ref<File | null> = ref(null);
+const file: Ref<any> = ref(null);
+
+const onFileChange = () => {
+	console.log((fileInput.value as any).input.files[0].size);
+};
 </script>
