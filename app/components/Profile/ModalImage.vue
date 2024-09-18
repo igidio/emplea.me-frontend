@@ -5,14 +5,17 @@
 
 			<div
 				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
+				v-if="image === ''"
 			>
-				{{ file }}
 				<img
 					src="/images/empleame_user_silhouette.png"
 					alt=""
 					class="rounded-full h-fit w-64 self-center"
 				/>
 				<div class="flex flex-col gap-2 self-center w-full tablet:w-auto">
+					<span class="font-semibold"
+						>Seleccione una imagen desde su ordenador:</span
+					>
 					<UInput
 						type="file"
 						ref="fileInput"
@@ -22,10 +25,15 @@
 						@change="onFileChange"
 					/>
 
-					<UButton color="black" type="file">Subir foto de perfil</UButton>
 					<span class="mb-4">Formatos permitidos: jpg, jpeg, png</span>
-					<UButton color="black">Eliminar</UButton>
+					<UButton color="black" v-if="user.image">Eliminar</UButton>
 				</div>
+			</div>
+			<div
+				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
+				v-else
+			>
+				<ProfileCropper :image="image" :delete_image="delete_image" />
 			</div>
 
 			<template #footer>
@@ -40,12 +48,30 @@
 <script setup lang="ts">
 const isOpen = defineModel({ required: true, default: false });
 
-const fileInput = ref<HTMLInputElement | null>(null);
+const { user } = storeToRefs(useUserStore());
 
-//const file: Ref<File | null> = ref(null);
-const file: Ref<any> = ref(null);
+const fileInput = ref<HTMLInputElement | null>(null);
+const image = ref("");
+
+const click_handler = () => {
+	fileInput.value?.click;
+	fileInput.value?.click();
+};
 
 const onFileChange = () => {
-	console.log((fileInput.value as any).input.files[0].size);
+	const img = (fileInput.value as any).input.files[0];
+	const blob = URL.createObjectURL(img);
+
+	const reader = new FileReader();
+
+	reader.onload = () => {
+		image.value = blob;
+	};
+
+	reader.readAsArrayBuffer(img);
+};
+
+const delete_image = () => {
+	image.value = "";
 };
 </script>
