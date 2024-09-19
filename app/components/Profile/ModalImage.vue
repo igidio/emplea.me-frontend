@@ -5,7 +5,7 @@
 
 			<div
 				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
-				v-if="image === ''"
+				v-if="image_url === ''"
 			>
 				<img
 					src="/images/empleame_user_silhouette.png"
@@ -33,7 +33,11 @@
 				class="flex tablet:flex-row flex-col tablet:grid-cols-2 gap-16 w-full justify-center"
 				v-else
 			>
-				<ProfileCropper :image="image" :delete_image="delete_image" />
+				<ProfileCropper
+					:image="image"
+					:image_url="image_url"
+					:delete_image="delete_image"
+				/>
 			</div>
 
 			<template #footer>
@@ -51,7 +55,8 @@ const isOpen = defineModel({ required: true, default: false });
 const { user } = storeToRefs(useUserStore());
 
 const fileInput = ref<HTMLInputElement | null>(null);
-const image = ref("");
+const image_url = ref("");
+const image = ref();
 
 const click_handler = () => {
 	fileInput.value?.click;
@@ -59,19 +64,19 @@ const click_handler = () => {
 };
 
 const onFileChange = () => {
-	const img = (fileInput.value as any).input.files[0];
-	const blob = URL.createObjectURL(img);
+	image.value = (fileInput.value as any).input.files[0];
+	const blob = URL.createObjectURL(image.value);
 
 	const reader = new FileReader();
 
 	reader.onload = () => {
-		image.value = blob;
+		image_url.value = blob;
 	};
 
-	reader.readAsArrayBuffer(img);
+	reader.readAsArrayBuffer(image.value);
 };
 
 const delete_image = () => {
-	image.value = "";
+	image_url.value = "";
 };
 </script>

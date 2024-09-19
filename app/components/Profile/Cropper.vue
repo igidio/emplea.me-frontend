@@ -1,30 +1,33 @@
 <template>
-	<div
-		class="overflow-hidden flex flex-row self-center justify-center w-[75%] gap-4"
-	>
-		<div class="h-64 rounded-large overflow-hidden">
-			<Cropper
-				class="cropper"
-				:src="image"
-				:stencil-props="{
-					handlers: {},
-					movable: false,
-					resizable: true,
-					aspectRatio: 1 / 1,
-				}"
-				:resize-image="{
-					adjustStencil: false,
-				}"
-				:stencil-component="CircleStencil"
-				@change="onCropChange"
-				image-restriction="stencil"
-			/>
-		</div>
+	<div class="flex flex-col gap-4 h-full">
+		<div class="overflow-hidden flex flex-row self-center justify-center gap-4">
+			<div class="rounded-large overflow-hidden h-64">
+				<Cropper
+					class="cropper aspect-[4/3]"
+					:src="image_url"
+					:stencil-props="{
+						handlers: {},
+						movable: false,
+						resizable: true,
+						aspectRatio: 1 / 1,
+					}"
+					:resize-image="{
+						adjustStencil: false,
+					}"
+					:stencil-component="CircleStencil"
+					@change="onCropChange"
+					image-restriction="stencil"
+				/>
+			</div>
 
-		<div class="flex flex-col gap-2">
-			<UButton color="black" @click="delete_image()">Cancelar</UButton>
-			<UButton @click="send_image()">Subir</UButton>
+			<div class="flex flex-col gap-2">
+				<UButton color="black" @click="delete_image()" :loading="loading"
+					>Cancelar</UButton
+				>
+				<UButton @click="send_image()" :loading="loading">Subir</UButton>
+			</div>
 		</div>
+		<span class="error" v-if="error">{{ "error" }}</span>
 	</div>
 </template>
 
@@ -33,10 +36,14 @@ import { Cropper, CircleStencil } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
 interface props {
-	image: string;
+	image_url: string;
+	image: File;
 	delete_image: () => void;
 }
-defineProps<props>();
+const props = defineProps<props>();
+const { image } = toRefs(props);
+const error = ref();
+const loading = ref(false);
 
 const image_properties = ref({
 	width: null,
@@ -45,21 +52,53 @@ const image_properties = ref({
 	top: null,
 });
 
-const onCropChange = ({ coordinates, canvas }: any) => {
-	console.log("Coordinates:", coordinates);
-	console.log("Canvas:", canvas.height);
-	console.log("Canvas:", canvas.width);
-
+const onCropChange = ({ coordinates }: any) => {
 	image_properties.value = { ...coordinates };
-
-	console.log(image_properties.value);
 };
 
-const send_image = () => {
-	// TODO: Send Image to server, img to blob or base64
+const send_image = async () => {
+	loading.value = true;
 
-	console.log({
-		image_properties: image_properties.value,
-	});
+	const formData = new FormData();
+	formData.append(
+		"operations",
+		JSON.stringify({
+			query:
+				"mutation UploadImage($body: UploadDto!) {uploadImage(body: $body)}",
+			variables: {
+				body: {
+					image: null,
+					image_properties: image_properties.value,
+				},
+			},
+		})
+	);
+	formData.append(
+		"map",
+		JSON.stringify({
+			"0": ["variables.body.image"],
+		})
+	);
+	formData.append("0", image.value);
+
+	console.log(image.value);
+
+	await fetch("http://localhost:3000/graphql", {
+		method: "POST",
+		body: formData,
+		headers: {
+			"x-apollo-operation-name": "multipart/form-data",
+			Authorization: "Bearer " + useCookie("token").value,
+		},
+	})
+		.then((data) => {
+			useUserStore().user.image = (data as any).uploadImage;
+			useToast().add({ title: "Imagen subida exitosamente" });
+		})
+		.catch((err) => {
+			error.value = err;
+		});
+
+	loading.value = false;
 };
 </script>
