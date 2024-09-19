@@ -11,7 +11,7 @@ export interface UserInterface {
 	email: string;
 	is_active: boolean;
 	role: AdminRolesEnum | ClientRolesEnum;
-	image: string;
+	image: string | null;
 	google_id: string;
 	created_at: Date;
 	modified_at: Date;

@@ -26,7 +26,13 @@
 					/>
 
 					<span class="mb-4">Formatos permitidos: jpg, jpeg, png</span>
-					<UButton color="black" v-if="user.image">Eliminar</UButton>
+					<UButton
+						color="black"
+						v-if="user.image"
+						:loading="loading"
+						@click="delete_image()"
+						>Eliminar</UButton
+					>
 				</div>
 			</div>
 			<div
@@ -36,7 +42,7 @@
 				<ProfileCropper
 					:image="image"
 					:image_url="image_url"
-					:delete_image="delete_image"
+					:delete_preview="delete_preview"
 					v-model="isOpen"
 				/>
 			</div>
@@ -51,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import { deleteImage } from "~/queries";
+
 const isOpen = defineModel({ required: true, default: false });
 
 const { user, computed_image } = storeToRefs(useUserStore());
@@ -72,7 +80,16 @@ const onFileChange = () => {
 	reader.readAsArrayBuffer(image.value);
 };
 
-const delete_image = () => {
+const { mutate, loading } = useMutation(deleteImage);
+
+const delete_preview = () => {
+	image.value = null;
 	image_url.value = "";
+};
+
+const delete_image = () => {
+	mutate();
+	useToast().add({ title: "Tu imagen ha sido eliminada" });
+	user.value.image = "";
 };
 </script>

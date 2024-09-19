@@ -22,7 +22,7 @@
 			/>
 
 			<div class="flex flex-col gap-2 w-32 self-end">
-				<UButton color="black" @click="delete_image()" :loading="loading"
+				<UButton color="black" @click="delete_preview()" :loading="loading"
 					>Cancelar</UButton
 				>
 				<UButton @click="send_image()" :loading="loading">Subir</UButton>
@@ -42,10 +42,10 @@ const { user } = storeToRefs(useUserStore());
 interface props {
 	image_url: string;
 	image: File;
-	delete_image: () => void;
+	delete_preview: () => void;
 }
 const props = defineProps<props>();
-const { image } = toRefs(props);
+const { image, delete_preview } = toRefs(props);
 const error = ref();
 const loading = ref(false);
 
@@ -102,7 +102,7 @@ const send_image = async () => {
 
 		user.value.image = data.data.uploadImage;
 		isOpen.value = false;
-		props.delete_image();
+		props.delete_preview();
 		useToast().add({ title: "Imagen subida exitosamente" });
 	} catch (err) {
 		error.value = err;

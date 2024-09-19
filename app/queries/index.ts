@@ -3,6 +3,7 @@ import getUserByToken from "./getUserByToken.query";
 import loginQuery from "./login.query";
 import userUpdate from "./userUpdate.query.js";
 import uploadImage from "./uploadImage.query.js";
+import deleteImage from "./deleteImage.query.js";
 
 export {
 	getUserByToken,
@@ -10,4 +11,5 @@ export {
 	clientSignupQuery,
 	userUpdate,
 	uploadImage,
+	deleteImage,
 };
