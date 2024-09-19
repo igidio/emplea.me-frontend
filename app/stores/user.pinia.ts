@@ -116,6 +116,10 @@ export const useUserStore = defineStore("user", () => {
 		() => user.value.contact.first_name.split(" ")[0]
 	);
 
+	const computed_image = computed(() =>
+		user.value.image ? user.value.image : "/images/empleame_user_silhouette.png"
+	);
+
 	return {
 		user,
 		token,
@@ -130,5 +134,6 @@ export const useUserStore = defineStore("user", () => {
 		dropdown_options,
 		first_of_fist_name,
 		computed_navigation_options,
+		computed_image,
 	};
 });

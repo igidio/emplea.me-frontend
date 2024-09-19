@@ -1,26 +1,27 @@
 <template>
 	<div class="flex flex-col gap-4 h-full">
-		<div class="overflow-hidden flex flex-row self-center justify-center gap-4">
-			<div class="rounded-large overflow-hidden h-64">
-				<Cropper
-					class="cropper aspect-[4/3]"
-					:src="image_url"
-					:stencil-props="{
-						handlers: {},
-						movable: false,
-						resizable: true,
-						aspectRatio: 1 / 1,
-					}"
-					:resize-image="{
-						adjustStencil: false,
-					}"
-					:stencil-component="CircleStencil"
-					@change="onCropChange"
-					image-restriction="stencil"
-				/>
-			</div>
+		<span>Recorta la imagen para ajustarla como foto de perfil:</span>
+		<div
+			class="overflow-hidden flex flex-col desktop:flex-row self-center justify-center gap-4"
+		>
+			<Cropper
+				class="cropper rounded-large overflow-hidden aspect-[4/3] w-64 tablet:w-96"
+				:src="image_url"
+				:stencil-props="{
+					handlers: {},
+					movable: false,
+					resizable: true,
+					aspectRatio: 1 / 1,
+				}"
+				:resize-image="{
+					adjustStencil: false,
+				}"
+				:stencil-component="CircleStencil"
+				@change="onCropChange"
+				image-restriction="stencil"
+			/>
 
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-2 w-32 self-end">
 				<UButton color="black" @click="delete_image()" :loading="loading"
 					>Cancelar</UButton
 				>
@@ -34,6 +35,9 @@
 <script setup lang="ts">
 import { Cropper, CircleStencil } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
+
+const isOpen = defineModel({ required: true, default: false });
+const { user } = storeToRefs(useUserStore());
 
 interface props {
 	image_url: string;
@@ -58,6 +62,7 @@ const onCropChange = ({ coordinates }: any) => {
 
 const send_image = async () => {
 	loading.value = true;
+	const { user } = storeToRefs(useUserStore());
 
 	const formData = new FormData();
 	formData.append(
@@ -81,23 +86,27 @@ const send_image = async () => {
 	);
 	formData.append("0", image.value);
 
-	console.log(image.value);
-
-	await fetch("http://localhost:3000/graphql", {
-		method: "POST",
-		body: formData,
-		headers: {
-			"x-apollo-operation-name": "multipart/form-data",
-			Authorization: "Bearer " + useCookie("token").value,
-		},
-	})
-		.then((data) => {
-			useUserStore().user.image = (data as any).uploadImage;
-			useToast().add({ title: "Imagen subida exitosamente" });
-		})
-		.catch((err) => {
-			error.value = err;
+	try {
+		const response = await fetch("http://localhost:3000/graphql", {
+			method: "POST",
+			body: formData,
+			headers: {
+				"x-apollo-operation-name": "multipart/form-data",
+				Authorization: "Bearer " + useCookie("token").value,
+			},
 		});
+
+		let data = await response.json();
+		console.log(data);
+		console.log(data.data.uploadImage);
+
+		user.value.image = data.data.uploadImage;
+		isOpen.value = false;
+		props.delete_image();
+		useToast().add({ title: "Imagen subida exitosamente" });
+	} catch (err) {
+		error.value = err;
+	}
 
 	loading.value = false;
 };

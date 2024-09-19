@@ -7,11 +7,7 @@
 			<div
 				class="w-48 h-full relative image-container self-center tablet:self-auto"
 			>
-				<img
-					src="/images/empleame_user_silhouette.png"
-					alt=""
-					class="rounded-full h-fit"
-				/>
+				<img :src="computed_image" alt="" class="rounded-full h-fit" />
 				<UButton
 					icon="ri:pencil-fill"
 					color="white"
@@ -54,6 +50,7 @@
 					label_bold="Nombre de usuario:"
 					one_line
 				/>
+
 				<item
 					icon="ri:cellphone-fill"
 					:label="user.contact.phone.toString()"
@@ -90,7 +87,7 @@ const modal_contact = ref(false);
 const modal_image = ref(false);
 
 const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const { user, computed_image } = storeToRefs(userStore);
 
 const get_age_computed = computed(() => {
 	return `${get_age(new Date(user.value.contact.date_of_birth))} años`;

@@ -8,7 +8,7 @@
 				v-if="image_url === ''"
 			>
 				<img
-					src="/images/empleame_user_silhouette.png"
+					:src="computed_image"
 					alt=""
 					class="rounded-full h-fit w-64 self-center"
 				/>
@@ -37,6 +37,7 @@
 					:image="image"
 					:image_url="image_url"
 					:delete_image="delete_image"
+					v-model="isOpen"
 				/>
 			</div>
 
@@ -52,16 +53,11 @@
 <script setup lang="ts">
 const isOpen = defineModel({ required: true, default: false });
 
-const { user } = storeToRefs(useUserStore());
+const { user, computed_image } = storeToRefs(useUserStore());
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const image_url = ref("");
 const image = ref();
-
-const click_handler = () => {
-	fileInput.value?.click;
-	fileInput.value?.click();
-};
 
 const onFileChange = () => {
 	image.value = (fileInput.value as any).input.files[0];

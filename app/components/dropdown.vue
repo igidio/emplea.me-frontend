@@ -12,16 +12,13 @@
 					>{{ first_of_fist_name }}</span
 				>
 
-				<img
-					class="h-8 rounded-full"
-					src="https://avatars.githubusercontent.com/u/739984?v=4"
-				/>
+				<img class="h-8 rounded-full" :src="computed_image" />
 			</button>
 
 			<button>
 				<img
 					class="h-8 rounded-full tablet:block desktop:hidden"
-					src="https://avatars.githubusercontent.com/u/739984?v=4"
+					:src="computed_image"
 				/>
 			</button>
 		</UDropdown>
@@ -30,4 +27,6 @@
 
 <script setup lang="ts">
 const { dropdown_options, first_of_fist_name } = useUserStore();
+
+const { user, computed_image } = storeToRefs(useUserStore());
 </script>
