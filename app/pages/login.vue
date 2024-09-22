@@ -54,7 +54,9 @@
 							name="remember-me"
 							label="Recuérdame"
 						/>
-						<NuxtLink to="forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
+						<NuxtLink to="forgot-password" class="hyper"
+							>¿Olvidaste tu contraseña?</NuxtLink
+						>
 					</div>
 				</UForm>
 			</UCard>

@@ -65,7 +65,7 @@ export const useUserStore = defineStore("user", () => {
 		await useRouter().push({
 			path: "/",
 		});
-		useRouter().go(0);
+		//useRouter().go(0);
 		useToast().add({ title: "Sesión finalizada" });
 	};
 
