@@ -5,6 +5,7 @@ import userUpdate from "./userUpdate.query.js";
 import uploadImage from "./uploadImage.query.js";
 import deleteImage from "./deleteImage.query.js";
 import confirmationCreateForgotPassword from "./confirmationCreateForgotPassword.query.js";
+import confirmationVerifyToken from "./confirmationVerifyToken.query.js";
 
 export {
 	getUserByToken,
@@ -14,4 +15,5 @@ export {
 	uploadImage,
 	deleteImage,
 	confirmationCreateForgotPassword,
+	confirmationVerifyToken,
 };
