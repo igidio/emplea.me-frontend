@@ -28,6 +28,8 @@
 				/>
 			</UFormGroup>
 
+			<span class="error" v-if="error">{{ error.message }}</span>
+
 			<div class="flex flex-col-reverse tablet:flex-row gap-4 justify-center">
 				<UButton variant="ghost" label="Cancelar" to="/login" />
 				<UButton
@@ -43,9 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import { string } from "yup";
 import { user_schema } from "~/schemas";
 import * as yup from "yup";
+import { confirmationRecoveryAccount } from "~/queries";
 
 definePageMeta({
 	middleware: ["recovery"],
@@ -65,10 +67,21 @@ const state = reactive({
 	password_repeat: "",
 });
 
-const loading = true;
+const { mutate, error, loading, onDone } = useMutation(
+	confirmationRecoveryAccount
+);
 
 const onSubmit = () => {
-	console.log("submit");
+	mutate({
+		token: useRoute().query.t,
+		password: state.password,
+	});
 };
-//const {} = useMutation()
+
+onDone(() => {
+	useToast().add({
+		title: "Contraseña cambiada con éxito, ingrese con su nueva contraseña",
+	});
+	useRouter().push("/login");
+});
 </script>

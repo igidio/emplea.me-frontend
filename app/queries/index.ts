@@ -6,6 +6,7 @@ import uploadImage from "./uploadImage.query.js";
 import deleteImage from "./deleteImage.query.js";
 import confirmationCreateForgotPassword from "./confirmationCreateForgotPassword.query.js";
 import confirmationVerifyToken from "./confirmationVerifyToken.query.js";
+import confirmationRecoveryAccount from "./confirmationRecoveryAccount.query.js";
 
 export {
 	getUserByToken,
@@ -16,4 +17,5 @@ export {
 	deleteImage,
 	confirmationCreateForgotPassword,
 	confirmationVerifyToken,
+	confirmationRecoveryAccount,
 };
