@@ -2,6 +2,7 @@
 	<ProfileUserModal v-model="modal_user" />
 	<ProfileModalContact v-model="modal_contact" />
 	<ProfileModalImage v-model="modal_image" />
+	<ProfileModalPassword v-model="modal_password" />
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
@@ -71,8 +72,16 @@
 				/>
 
 				<div class="flex flex-col desktop:flex-row gap-2">
-					<UButton icon="ri:google-fill" label="Conectar con Google" />
-					<UButton icon="ri:google-fill" label="Conectar con LinkedIn" />
+					<UButton
+						icon="ri:google-fill"
+						label="Conectar con Google"
+						v-if="!user.google_id"
+					/>
+					<UButton
+						icon="ri:google-fill"
+						label="Conectar con LinkedIn"
+						v-if="!user.linkedin_id"
+					/>
 				</div>
 			</div>
 		</div>
@@ -85,6 +94,7 @@ import { get_age, get_date, get_gender } from "~/helpers";
 const modal_user = ref(false);
 const modal_contact = ref(false);
 const modal_image = ref(false);
+const modal_password = ref(false);
 
 const userStore = useUserStore();
 const { user, computed_image } = storeToRefs(userStore);
@@ -112,9 +122,7 @@ const items = [
 		},
 		{
 			label: "Actualizar contraseña",
-			click: () => {
-				console.log("Edit");
-			},
+			click: () => (modal_password.value = true),
 		},
 	],
 ];

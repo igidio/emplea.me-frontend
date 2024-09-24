@@ -13,6 +13,7 @@ export interface UserInterface {
 	role: AdminRolesEnum | ClientRolesEnum;
 	image: string | null;
 	google_id: string;
+	linkedin_id: string;
 	created_at: Date;
 	modified_at: Date;
 }
