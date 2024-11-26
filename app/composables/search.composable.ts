@@ -2,18 +2,24 @@ import type { Reactive } from "vue";
 import type { LocationQueryRaw } from "vue-router";
 
 import modalitiesData from "~/data/search/modalities.data.js";
-import searchOptionsData from "~/data/search/search-options.data.js";
 import type {
 	ModalitiesInterface,
 	SearchModelInterface,
 } from "~/interfaces/search-model.interface";
+import {usePostStore} from "~/stores/post.pinia";
+import searchOptionsData from "~/data/search/search-options.data";
 
-const searchOptions = reactive({
-	locations: searchOptionsData.locations,
-	categories: searchOptionsData.categories,
-});
+
 
 export function useSearch() {
+	const { categories, location_options } = usePostStore();
+
+	const searchOptions = reactive({
+		//	locations: location_options,
+		locations: location_options,
+		categories: categories,
+	});
+
 	const router = useRouter();
 	const state: Reactive<SearchModelInterface> = reactive({
 		searchQuery: undefined,

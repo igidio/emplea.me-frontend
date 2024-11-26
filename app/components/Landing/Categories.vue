@@ -27,7 +27,7 @@
 					: "Mostrar todas las categorías"
 			}}
 		</UButton>
-		<NuxtLink to="categories" class="self-center tablet:hidden">
+		<NuxtLink to="/categories" class="self-center tablet:hidden">
 			<UButton size="lg" color="black" label="Mostrar todas las categorías" />
 		</NuxtLink>
 	</div>
@@ -35,7 +35,8 @@
 
 <script setup lang="ts">
 import searchOptions from "~/data/search/search-options.data";
+import {usePostStore} from "~/stores/post.pinia";
 const isShowMoreCategories: Ref<boolean> = ref(false);
 
-const categories = ref(searchOptions.categories);
+const categories = usePostStore().categories;
 </script>
