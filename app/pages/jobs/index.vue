@@ -30,9 +30,10 @@
 				</h4>
 				<UCard>
 					<template #header>
-						100 resultados<span v-if="state.searchQuery"
-					>: {{ state.searchQuery }}</span
-					>
+						{{ list_total }}
+						<span v-if="state.searchQuery"
+						>: {{ state.searchQuery }}</span
+						>
 						<span v-if="route.query.search">de {{ route.query.search }}</span>
 					</template>
 
@@ -51,9 +52,19 @@
 								}"
 									v-for="e in list"
 							/>
-							<!--							<Add class="h-32"/>-->
-							<!--							<Add class="h-32"/>-->
-							<div class="" v-if="locked">Locked</div>
+							<!--<Add class="h-32"/>-->
+
+							<UButton block color="black" v-if="!locked && !loading_more"
+											 @click="async () => { current_skip++; await get_job_list()}">Cargar más
+							</UButton>
+
+							<div class="w-full center-text p-4 bg-violet-100 rounded-medium" v-if="loading_more">
+								<UIcon name="ri:loader-5-line" class="animate-spin bg-primary" size="32"/>
+							</div>
+
+							<div class="text-slate-500 bg-slate-100 p-4 rounded-medium text-center" v-if="locked">Fin de los
+								resultados
+							</div>
 						</div>
 					</div>
 				</UCard>
@@ -153,6 +164,13 @@ onMounted(() => {
 
 const current_skip = ref(1)
 
+const list_total = computed(() =>
+
+		(list.value.length === 0) ? 'Ningún resultado' :
+				(list.value.length === 1) ? 'Un resultado' :
+						`${list.value.length} resultados`
+)
+
 const get_job_list = async () => {
 	loading_more.value = true
 	const {data, error} = await useAsyncQuery(postFromRangeQuery, {
@@ -162,17 +180,19 @@ const get_job_list = async () => {
 		}
 	});
 	const new_data = (data.value as any).postsFromRange;
-	console.log(new_data)
 	if (new_data.length === 0) locked.value = true
 	if (data.value && !error.value) list.value.push(...new_data);
 	loading_more.value = false
 }
 
 if (import.meta.client) {
-	window.onscroll = function (ev) {
+	window.onscroll = async function (ev) {
 		if (Math.round(window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
-			current_skip.value++
-			if (!locked.value || loading_more.value) get_job_list()
+			if (!(locked.value || loading_more.value)) {
+				await get_job_list()
+				current_skip.value++
+			}
+
 		}
 	};
 }

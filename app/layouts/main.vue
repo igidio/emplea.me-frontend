@@ -39,5 +39,7 @@ const { data, error, status } = await useAsyncQuery(getUserByToken, {
 if (data && !error.value)
 	userStore.set_user((data.value as any).getUserByToken);
 
+// Categorías
+
 const footer = "footer-auth"; // "footer-default";
 </script>
