@@ -115,6 +115,8 @@
 import searchOptions from "~/data/search/search-options.data";
 import socialMediaData from "~/data/social_media.data";
 import { skillLevelEnum } from "~/enums/skill_level.enum";
+import postFromRangeQuery from "~/queries/postFromRange.query";
+import {postFindOne} from "~/queries";
 
 const is_hidden = ref(true);
 const unauthenticated = ref(true);
@@ -125,10 +127,76 @@ enum salaryTypeEnum {
 	YEARLY = "Anual",
 }
 
+enum modalityEnum {
+	FULL_DAY = 'Día completo',
+	EVERY_OTHER_DAY = 'Día por medio',
+	PART_TIME = 'Medio tiempo',
+	LIVE_IN = 'Cama adentro',
+	HOURLY = 'Por horas',
+	WEEKENDS = 'Fines de semana',
+}
+
+const date = computed(() => job.modified_at.toString());
+
+const phones = computed(() =>
+	employer.phone.map((e: any) => {
+		let object: any = {
+			label: e.number,
+			icon: e.has_whatsapp ? "ri:whatsapp-line" : "ri:phone-line",
+		};
+
+		if (e.has_whatsapp) object.link = `https://wa.me/591${e.profile_name}`;
+		return object;
+	})
+);
+
+const social_media = computed(() =>
+	employer.social_media.map((e: any) => ({
+		label: socialMediaData[e.social_media]!.type,
+		icon: socialMediaData[e.social_media]!.icon,
+		link: `${socialMediaData[e.social_media]!.prefixUrl}${e.profile_name}`,
+	}))
+);
+
+const skillLevelIcon = {
+	[skillLevelEnum.BASIC]: "ri:progress-3-line",
+	[skillLevelEnum.INTERMEDIATE]: "ri:progress-4-line",
+	[skillLevelEnum.ADVANCED]: "ri:progress-8-line",
+};
+
+// GET DATA
+const {data, error} = await useAsyncQuery(postFindOne, { "postId": 1 });
+const post = (data.value as any).post
+
+const job = reactive({
+	title: post.name,
+	category: post.category,
+	location: `${post.location.department} - ${post.location.municipality} - ${post.location.province}`,
+	modality: modalityEnum[ post.modality as keyof typeof modalityEnum],
+	modified_at: new Date(post.modified_at),
+	salary: post.salary,
+	salary_type: salaryTypeEnum[post.salary_type as keyof typeof salaryTypeEnum],
+	description: post.description,
+	skills: [
+		{
+			name: "Habilidad 1",
+			level: skillLevelEnum.ADVANCED,
+		},
+		{
+			name: "Habilidad 2",
+			level: skillLevelEnum.INTERMEDIATE,
+		},
+		{
+			name: "Habilidad 3",
+			level: skillLevelEnum.BASIC,
+		},
+	],
+});
+
 const employer = reactive({
-	name: "employer-name",
-	id: 1,
-	profile_image: "https://placehold.co/400",
+	name: post.employer.name,
+	id: post.employer.id,
+	profile_image: post.employer.profile_image,
 	website: "employer-website",
 	phone: [
 		{ number: 76543210, has_whatsapp: true },
@@ -165,57 +233,4 @@ const employer = reactive({
 		},
 	],
 });
-
-const job = reactive({
-	title: "job-title",
-	category: searchOptions.categories[0],
-	location: "Department - province",
-	modality: "Tiempo completo",
-	modified_at: new Date(),
-	salary: 3000.0,
-	salary_type: salaryTypeEnum.MONTHLY,
-	description: `job-description  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae nulla a elit sollicitudin aliquet vitae varius mi. Aliquam magna mi, volutpat sit amet facilisis a, varius in ante. Integer eu elementum neque. Vestibulum eget leo pharetra, finibus orci nec, sodales augue. Duis vehicula maximus lorem, sed semper tellus semper vitae. Duis ac velit et purus faucibus blandit. Sed laoreet magna velit, et convallis augue posuere eget. In hac habitasse platea dictumst. Nam urna neque, efficitur eu tincidunt ut, tincidunt quis velit. Mauris ornare dapibus lorem vitae consequat. Phasellus rhoncus odio ac consectetur hendrerit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque volutpat ipsum sem, quis tempor nunc ultricies vel. Nullam vitae placerat tortor, quis mollis leo.`,
-	skills: [
-		{
-			name: "skill-1",
-			level: skillLevelEnum.ADVANCED,
-		},
-		{
-			name: "skill-2",
-			level: skillLevelEnum.INTERMEDIATE,
-		},
-		{
-			name: "skill-3",
-			level: skillLevelEnum.BASIC,
-		},
-	],
-});
-
-const date = computed(() => job.modified_at.toString());
-
-const phones = computed(() =>
-	employer.phone.map((e: any) => {
-		let object: any = {
-			label: e.number,
-			icon: e.has_whatsapp ? "ri:whatsapp-line" : "ri:phone-line",
-		};
-
-		if (e.has_whatsapp) object.link = `https://wa.me/591${e.profile_name}`;
-		return object;
-	})
-);
-
-const social_media = computed(() =>
-	employer.social_media.map((e: any) => ({
-		label: socialMediaData[e.social_media]!.type,
-		icon: socialMediaData[e.social_media]!.icon,
-		link: `${socialMediaData[e.social_media]!.prefixUrl}${e.profile_name}`,
-	}))
-);
-
-const skillLevelIcon = {
-	[skillLevelEnum.BASIC]: "ri:progress-3-line",
-	[skillLevelEnum.INTERMEDIATE]: "ri:progress-4-line",
-	[skillLevelEnum.ADVANCED]: "ri:progress-8-line",
-};
 </script>

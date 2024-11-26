@@ -9,6 +9,8 @@ import confirmationVerifyToken from "./confirmationVerifyToken.query.js";
 import confirmationRecoveryAccount from "./confirmationRecoveryAccount.query.js";
 import categoryGet from "./categoryGet.query.js";
 import locationGet from "./locationGet.query";
+import postFindOne from "./postFindOne.query";
+
 
 export {
 	getUserByToken,
@@ -21,5 +23,6 @@ export {
 	confirmationVerifyToken,
 	confirmationRecoveryAccount,
 	categoryGet,
-	locationGet
+	locationGet,
+	postFindOne
 };
