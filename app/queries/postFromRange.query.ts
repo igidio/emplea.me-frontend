@@ -1,12 +1,21 @@
 export default gql`
-    query PostsFromRange($paginationDto: PaginationDto!) {
-        postsFromRange(paginationDto: $paginationDto) {
-            id
-            name
-            description
-            employer {
+    query PostsFromRange(
+        $paginationDto: PaginationDto!
+        $searchAdditionalInputsDto: SearchAdditionalInput
+    ) {
+        postsFromRange(
+            paginationDto: $paginationDto
+            SearchAdditionalInputsDto: $searchAdditionalInputsDto
+        ) {
+            total
+            found {
+                id
                 name
-                profile_image
+                description
+                employer {
+                    name
+                    profile_image
+                }
             }
         }
     }

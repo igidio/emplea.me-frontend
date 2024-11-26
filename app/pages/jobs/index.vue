@@ -32,7 +32,7 @@
 					<template #header>
 						{{ list_total }}
 						<span v-if="state.searchQuery"
-						>: {{ state.searchQuery }}</span
+						>para "{{ state.searchQuery }}"</span
 						>
 						<span v-if="route.query.search">de {{ route.query.search }}</span>
 					</template>
@@ -118,6 +118,7 @@ const loading = ref(true);
 const isOpen = ref(false);
 const loading_more = ref(false);
 const locked = ref(false)
+const total:Ref<null | number> = ref()
 
 const list: Ref<PostInterface[]> = ref([]);
 
@@ -140,7 +141,8 @@ const modalitiess: ComputedRef<string[]> = computed(() => {
 	}, []);
 });
 
-watch(state, () => sendSearchQuery());
+//watch(state, () => sendSearchQuery());
+
 
 onMounted(() => {
 	if (route.query.modalities) {
@@ -165,23 +167,39 @@ onMounted(() => {
 const current_skip = ref(1)
 
 const list_total = computed(() =>
-
-		(list.value.length === 0) ? 'Ningún resultado' :
-				(list.value.length === 1) ? 'Un resultado' :
-						`${list.value.length} resultados`
+		(total.value === 0) ? 'Ningún resultado' :
+				(total.value === 1) ? 'Un resultado' :
+						`${total.value} resultados`
 )
+
+const search_additional_inputs = computed(() => ({
+	"paginationDto": {
+		"skip": current_skip.value,
+		"take": 4
+	},
+	"searchAdditionalInputsDto": {
+		"category": (state.category?.id) ? Number(state.category.id) : null,
+		"input": (state.searchQuery) ? state.searchQuery : null,
+		"location": (state.location?.id) ? Number(state.location.id) : null,
+		"modalities": (state.modalities && state.modalities.length > 0) ? state.modalities.filter(e => e.active).map((e) => {
+			if (e.active) return e.name
+		}) : null
+	}
+}))
 
 const get_job_list = async () => {
 	loading_more.value = true
-	const {data, error} = await useAsyncQuery(postFromRangeQuery, {
-		"paginationDto": {
-			"skip": current_skip.value,
-			"take": 4
-		}
-	});
+	locked.value = false
+
+	const {data, error} = await useAsyncQuery(postFromRangeQuery, search_additional_inputs.value);
+
 	const new_data = (data.value as any).postsFromRange;
-	if (new_data.length === 0) locked.value = true
-	if (data.value && !error.value) list.value.push(...new_data);
+	if (new_data.found.length === 0) {
+		locked.value = true;
+		total.value = null
+	}
+	if (data.value && !error.value) list.value.push(...new_data.found);
+	total.value = new_data.total
 	loading_more.value = false
 }
 
@@ -199,4 +217,10 @@ if (import.meta.client) {
 
 
 get_job_list()
+
+watch(state, async () => {
+	list.value = []
+	current_skip.value = 1
+	await get_job_list()
+});
 </script>

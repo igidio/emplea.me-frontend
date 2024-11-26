@@ -76,13 +76,12 @@ const sendSearchQuery = () => {
 };
 
 const clear = () => {
-	let clean_modalities = searchModel.value.modalities.map(
-		(e: ModalitiesInterface) => ({
-			...e,
-			active: false,
-		})
+	searchModel.value.modalities = searchModel.value.modalities.map(
+			(e: ModalitiesInterface) => ({
+				...e,
+				active: false,
+			})
 	);
-	searchModel.value.modalities = clean_modalities;
 	searchModel.value.location = undefined;
 	searchModel.value.searchQuery = undefined;
 	searchModel.value.category = undefined;
