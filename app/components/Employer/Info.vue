@@ -3,7 +3,7 @@
 		<div
 			class="flex flex-row bg-white rounded-medium overflow-hidden items-center gap-2 w-full"
 		>
-			<img :src="profile_image" class="h-16 aspect-[1:1]" />
+			<img :src="profile_image" class="h-16 aspect-[1:1]" alt="Foto de perfil" />
 			<span class="font-semibold">{{ name }}</span>
 		</div>
 	</NuxtLink>

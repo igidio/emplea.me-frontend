@@ -4,24 +4,33 @@
 	>
 		<div class="flex tablet:flex-row flex-col justify-between gap-4">
 			<div class="flex flex-row gap-4">
-				<img src="https://placehold.co/400" class="w-16 rounded-small" />
+				<img :src="(image) ? image : 'https://placehold.co/400'" class="w-16 rounded-small" alt="Imagen de la empresa" />
 				<div class="flex flex-col">
-					<h4>Job title</h4>
-					<span class="font-semibold">Employer Name</span>
+					<h4>{{ title }}</h4>
+					<span class="font-semibold">{{ employer }}</span>
 				</div>
 			</div>
 			<div class="flex flex-col">
-				<UButton size="md" :to="'/jobs/' + 1">Más detalles</UButton>
+				<UButton size="md" :to="'/jobs/' + id">Más detalles</UButton>
 			</div>
 		</div>
 
 		<div class="line-clamp-3 tablet:line-clamp-2">
 			<p class="">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec
-				lacinia est. Nunc at sodales ex, eu ultrices nisi. Fusce ac ultrices
-				nisi. Curabitur vestibulum ac est sit amet congue. Fusce quis sapien in
-				ante dictum tincidunt. Nam sit amet.
+				{{ description }}
 			</p>
 		</div>
 	</div>
 </template>
+
+<script setup lang="ts">
+interface Props {
+	id: string
+  title: string,
+  employer: string,
+  image?: string,
+  description: string
+}
+const props = defineProps< { props: Props }>()
+const { id, title, employer, image, description } = props.props
+</script>
