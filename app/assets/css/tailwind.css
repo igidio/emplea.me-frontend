@@ -1,9 +1,10 @@
-@tailwind base;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 body {
-	@apply bg-violet-50 text-base font-normal;
+	@apply bg-violet-50 text-base font-normal font-['Poppins'];
 }
 
 html, #__nuxt {
@@ -70,7 +71,7 @@ header {position: sticky;top: 0;}
 }
 
 .center-absolute {
-	@apply  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 right-0 
+	@apply  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 right-0
 
 }
 
@@ -87,20 +88,20 @@ span.error {
 } */
 
 .primary {
-	@apply 	bg-violet-600 
-	hover:bg-violet-500 
-	active:bg-violet-800 
-	disabled:bg-violet-200 
+	@apply 	bg-violet-600
+	hover:bg-violet-500
+	active:bg-violet-800
+	disabled:bg-violet-200
 	text-white;
 }
 
 .outline-primary {
-	@apply 	border-2 
-	border-violet-600 
-	hover:bg-violet-100 
-	active:bg-violet-200 
-	disabled:border-violet-200 
-	disabled:text-gray-700 
+	@apply 	border-2
+	border-violet-600
+	hover:bg-violet-100
+	active:bg-violet-200
+	disabled:border-violet-200
+	disabled:text-gray-700
 	text-black;
 }
 
@@ -109,17 +110,17 @@ span.error {
 }
 
 .black {
-	@apply bg-black 
-	hover:bg-gray-950 
-	active:bg-gray-800 
-	disabled:bg-gray-200 
+	@apply bg-black
+	hover:bg-gray-950
+	active:bg-gray-800
+	disabled:bg-gray-200
 	text-white;
 }
 
 .white {
-	@apply bg-white 
-	hover:bg-gray-100 
-	active:bg-gray-200 
+	@apply bg-white
+	hover:bg-gray-100
+	active:bg-gray-200
 	disabled:text-gray-500
 	text-black;
 }

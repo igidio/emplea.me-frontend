@@ -29,7 +29,7 @@
 import type {PlanInterface} from "~/interfaces";
 
 const props = withDefaults(
-	defineProps<{ props: PlanInterface, current?: boolean, index: number, show_select_button: true }>(),
+	defineProps<{ props: PlanInterface, current?: boolean, index: number, show_select_button: boolean }>(),
 	{
 		show_select_button: true
 	}

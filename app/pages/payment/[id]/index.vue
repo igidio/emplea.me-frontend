@@ -19,6 +19,8 @@
 				cual es la más cercana a tí por acá.
 			</div>
 		</div>
+		
+
 	</div>
 </template>
 
