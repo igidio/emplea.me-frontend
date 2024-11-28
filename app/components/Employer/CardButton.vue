@@ -1,12 +1,10 @@
 <template>
-	<div
-			class="bg-white flex flex-col gap-2 items-center rounded-medium w-64 center-text"
-	>
-		<img :src="image ? image : 'https://placehold.co/400'" class="w-16 h-auto rounded-medium"/>
-		<span class="font-semibold">{{ name }}</span>
-<!--		<span>{{ EmployerLevelEnum[role] }}</span>-->
-		<span>{{ EmployerLevelEnum[role as keyof typeof EmployerLevelEnum] }}</span>
-	</div>
+	<UButton color="white" class="flex flex-col gap-1 items-center rounded-medium w-64 center-text">
+			<img :src="image ? image : 'https://placehold.co/400'" class="w-16 h-auto rounded-medium" alt="Logo de empresa"/>
+			<span class="font-semibold">{{ name }}</span>
+			<span class="font-medium">{{ EmployerLevelEnum[role as keyof typeof EmployerLevelEnum] }}</span>
+	</UButton>
+	
 </template>
 
 <script setup lang="ts">

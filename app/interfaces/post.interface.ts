@@ -1,11 +1,11 @@
 export interface PostInterface {
-  id:          string;
-  name:        string;
-  description: string;
-  employer:    EmployerInterface;
+	id: number;
+	name: string;
+	description: string;
+	employer: EmployerInterface;
 }
 
 export interface EmployerInterface {
-  name:          string;
-  profile_image: string;
+	name: string;
+	profile_image: string;
 }

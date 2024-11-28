@@ -2,14 +2,12 @@
 	<div class="flex flex-col">
 		<div class="flex flex-row gap-4">
 			<div class="flex flex-col gap-4 w-[80%]">
-				<EmployerPresentation
-					:name="employer.name"
-					:establishment_date="employer.establishment_date.toString()"
-					:email="employer.email"
-					:description="employer.description"
-				/>
+				<EmployerPresentation/>
 
-<!--				<EmployerPosts />-->
+				<EmployerPosts
+						:employer-info="{ image: emp.profile_image, name: emp.name }"
+						:posts="posts"
+				/>
 			</div>
 
 			<div class="w-[20%] flex flex-col gap-4">
@@ -22,8 +20,8 @@
 				<EmployerRoleInfo :role="role" />
 
 				<EmployerAditional
-					:posts_total="posts_total.toString()"
-					:created_at="employer.created_at.toString()"
+					:posts_total="posts.length.toString()"
+					:created_at="emp.created_at.toString()"
 				/>
 				<Add class="h-64" />
 			</div>
@@ -33,19 +31,35 @@
 
 <script setup lang="ts">
 import { roleEnum } from "~/enums/role.enum";
+import type {EmployerInterface} from "~/interfaces";
+import type {PostInterface} from "~/interfaces/server/post.interface";
 
-const role = ref(roleEnum.ADMINISTRADOR);
+interface Props {
+	employer: EmployerInterface,
+	role: string,
+	posts: PostInterface[]|[]
+}
+const props = defineProps<Props>()
+const { employer, role, posts } = toRefs( props )
 
-const employer = reactive({
-	name: "employer-name",
-	establishment_date: new Date("2014-04-04"),
-	created_at: new Date("2024-04-04"),
-	id: 1,
-	profile_image: "https://placehold.co/400",
-	email: "email@mail.com",
-	description:
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel turpis ac velit fermentum placerat. Donec vulputate, tortor id ultricies fermentum, enim est ullamcorper velit, vel pulvinar felis arcu non sapien. Sed vel turpis ac velit fermentum placerat. Donec vulputate, tortor id ultricies fermentum, enim est ullamcorper velit, vel pulvinar felis arcu non sapien.",
-});
+const emp = computed(() => ({
 
-const posts_total = ref(10);
+		name: employer.value.name,
+		establishment_date: employer.value.establishment_date,
+		created_at: employer.value.created_at,
+		id: employer.value.id,
+		profile_image: employer.value.profile_image,
+		email: employer.value.email,
+		description: employer.value.description,
+}))
+
+// const emp = ref({
+// 	name: employer.value.name,
+// 	establishment_date: employer.value.establishment_date,
+// 	created_at: employer.value.created_at,
+// 	id: employer.value.id,
+// 	profile_image: employer.value.profile_image,
+// 	email: employer.value.email,
+// 	description: employer.value.description,
+// });
 </script>

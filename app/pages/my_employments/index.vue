@@ -1,66 +1,31 @@
 <template>
-	<div class="flex flex-col gap-4 center">
-		<div class="flex flex-row gap-4 h-36">
-
+	<div class="flex flex-col gap-4 center ">
+		<div class="flex flex-row gap-4 h-36 overflow-y-hidden">
 			<EmployerCardButton
-					v-for="employment in employments"
-					:name="employment.name"
-					:role="employment.role"
-					:image="employment.image"
+				v-for="(employment, i) in employments"
+				@click="index = i"
+				:name="employment.name"
+				:role="employment.role"
+				:image="employment.image"
 			/>
-			<EmployerCardButtonAdd />
+			<EmployerCardButtonAdd/>
 		</div>
-
-		<EmployerPage />
+		
+		<EmployerPage
+			v-if="typeof selected !== 'undefined'"
+			:employer="selected.employer"
+			:posts="selected.posts"
+			:role="selected.role"
+		/>
 	</div>
 </template>
 
 <script setup lang="ts">
 import {employerGetByUser} from "~/queries";
+import {useMyEmployments} from "~/composables/my_employments.composable";
 
-export interface EmployerlistByUser {
-	id:         string;
-	created_at: Date;
-	employer:   Employer;
-	user:       User;
-	level:      string;
-}
+const { fill_employments, user_id, employments, selected, index } = useMyEmployments();
 
-export interface Employer {
-	id:                 string;
-	name:               string;
-	profile_image:      string;
-	modified_at:        Date;
-	location:           Location;
-	is_active:          boolean;
-	is_verified:        boolean;
-	email:              string;
-	establishment_date: Date;
-	description:        string;
-	created_at:         Date;
-}
-
-export interface Location {
-	department:   string;
-	id:           string;
-	municipality: string;
-	province:     string;
-}
-
-export interface User {
-	role: string;
-}
-
-const { user } = useUserStore()
-
-const employments:Ref<EmployerlistByUser[]> = ref([])
-
-const { data, error } = await useAsyncQuery(employerGetByUser, { "id": Number(user.id) });
-if (data.value && !error.value) employments.value = (data.value as any).EmployerlistByUser.map((e:EmployerlistByUser) => ({
-	image: e.employer.profile_image,
-	name: e.employer.name,
-	role: e.level,
-	id: e.id,
-	employer: e.employer
-}))
+const {data, error} = await useAsyncQuery(employerGetByUser, {"id": Number(user_id)});
+await fill_employments({data, error})
 </script>

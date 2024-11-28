@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 interface Props {
-	id: string
+	id: number,
   title: string,
   employer: string,
   image?: string,

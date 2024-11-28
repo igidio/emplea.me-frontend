@@ -2,27 +2,30 @@
 	<div class="flex flex-col gap-4 bg-violet-200 rounded-medium p-4">
 		<div class="flex flex-col gap-1">
 			<span>Eres:</span>
-			<span class="font-semibold">{{ descriptions[role].title }}</span>
+
+			<span class="font-semibold">{{ descriptions[level].title }}</span>
 		</div>
 		<div class="flex flex-col gap-1">
 			<span>Puedes:</span>
 			<ul>
-				<li v-for="l in descriptions[role].list">{{ l }}</li>
+				<li v-for="l in descriptions[level].list">{{ l }}</li>
 			</ul>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type { roleEnum } from "~/enums/role.enum";
+import {EmployerLevelEnum} from "~/enums";
 
 interface Props {
-	role: roleEnum; // TODO: Crear enum de role
+	role: string;
 }
-defineProps<Props>();
+const { role } = defineProps<Props>();
+
+const level = EmployerLevelEnum[role as keyof typeof EmployerLevelEnum]
 
 const descriptions = {
-	administrador: {
+	Administrador: {
 		title: "Administrador",
 		list: [
 			"Crear publicaciones",
@@ -32,7 +35,7 @@ const descriptions = {
 			"Cambiar la información del negocio.",
 		],
 	},
-	encargado: {
+	Encargado: {
 		title: "Encargado",
 		list: ["Crear y eliminar tus propias publicaciones"],
 	},

@@ -25,6 +25,13 @@ export default gql`
                 role
             }
             level
+            modified_at
+            post {
+                available
+                id
+                description
+                name
+            }
         }
     }
 `
