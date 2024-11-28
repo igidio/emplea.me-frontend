@@ -46,6 +46,7 @@ export default defineAppConfig({
 			variant: {
 				outline: "none",
 				none: "ring-0 shadow-none",
+				ghost: "opacity-50",
 			},
 		},
 
