@@ -19,10 +19,10 @@ export const my_posts_option: navigationOptionsInterface = {
 };
 export const my_services_option: navigationOptionsInterface = {
 	label: "⭐ Mis Servicios",
-	name: ''
+	name: 'payment'
 };
 export const premium_option: navigationOptionsInterface = {
 	label: "Sé un premium",
 	is_gold: true,
-	name: ''
+	name: 'payment'
 };
