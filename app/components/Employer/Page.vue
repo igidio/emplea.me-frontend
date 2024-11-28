@@ -9,7 +9,7 @@
 					:description="employer.description"
 				/>
 
-				<EmployerPosts />
+<!--				<EmployerPosts />-->
 			</div>
 
 			<div class="w-[20%] flex flex-col gap-4">

@@ -5,7 +5,7 @@ import type {
 import type { ContactInterface } from "./contact.interface";
 
 export interface UserInterface {
-	id: string;
+	id: number;
 	username: string;
 	contact: ContactInterface;
 	email: string;

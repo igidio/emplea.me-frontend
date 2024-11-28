@@ -56,7 +56,7 @@ export const useUserStore = defineStore("user", () => {
 			return user.value.role;
 		});
 
-	const is_premium = computed(() => true);
+	const is_premium = computed(() => false);
 
 	const logout_user = async () => {
 		delete_token();

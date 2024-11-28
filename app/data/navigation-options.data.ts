@@ -1,27 +1,28 @@
-import type { navigationOptionsInterface } from "~/interfaces/client.interface";
+import type {navigationOptionsInterface} from "~/interfaces/client.interface";
+
 
 export const jobs_option: navigationOptionsInterface = {
 	label: "Trabajos",
-	click: () => {},
+	name: ''
 };
 export const favorites_option: navigationOptionsInterface = {
 	label: "Mis Favoritos",
-	click: () => {},
+	name: ''
 };
 export const my_employments_option: navigationOptionsInterface = {
 	label: "Mis Negocios",
-	click: () => {},
+	name: 'my_employments'
 };
 export const my_posts_option: navigationOptionsInterface = {
 	label: "Mis Publicaciones",
-	click: () => {},
+	name: 'my_posts'
 };
 export const my_services_option: navigationOptionsInterface = {
 	label: "⭐ Mis Servicios",
-	click: () => {},
+	name: ''
 };
 export const premium_option: navigationOptionsInterface = {
 	label: "Sé un premium",
 	is_gold: true,
-	click: () => {},
+	name: ''
 };

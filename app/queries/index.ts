@@ -10,6 +10,7 @@ import confirmationRecoveryAccount from "./confirmationRecoveryAccount.query.js"
 import categoryGet from "./categoryGet.query.js";
 import locationGet from "./locationGet.query";
 import postFindOne from "./postFindOne.query";
+import employerGetByUser from "./employerGetByUser.query";
 
 
 export {
@@ -24,5 +25,6 @@ export {
 	confirmationRecoveryAccount,
 	categoryGet,
 	locationGet,
-	postFindOne
+	postFindOne,
+	employerGetByUser
 };
