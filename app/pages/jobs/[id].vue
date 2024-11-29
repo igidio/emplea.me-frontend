@@ -164,8 +164,10 @@ const skillLevelIcon = {
 	[skillLevelEnum.ADVANCED]: "ri:progress-8-line",
 };
 
+console.log(useRoute().params.id)
+console.log(typeof  useRoute().params.id)
 // GET DATA
-const {data, error} = await useAsyncQuery(postFindOne, { "postId": 1 });
+const {data, } = await useLazyAsyncQuery(postFindOne, { "postId": "2" });
 const post = (data.value as any).post
 
 const job = reactive({

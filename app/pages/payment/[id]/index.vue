@@ -11,7 +11,7 @@
 		</div>
 		<div class="flex flex-col gap-4 w-96">
 			<span class="font-semibold">Selecciona un método de pago</span>
-			<UButton color="primary" size="lg" label="Pagar con tarjeta"/>
+			<UButton color="primary" size="lg" label="Pagar con tarjeta" :to="`${useRoute().params.id}/order`"/>
 			<UButton color="primary" size="lg" label="Pagar con QR"/>
 			<UButton color="primary" size="lg" label="Pago presencial" @click="f2f = true"/>
 			<div class="rounded-medium bg-white p-4" v-if="f2f">
@@ -19,8 +19,8 @@
 				cual es la más cercana a tí por acá.
 			</div>
 		</div>
-		
-
+	
+	
 	</div>
 </template>
 

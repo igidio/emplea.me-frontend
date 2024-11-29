@@ -1,5 +1,5 @@
 export default gql`
-    query Post($postId: Int!) {
+    query Post($postId: String!) {
         post(id: $postId) {
             available
             category {

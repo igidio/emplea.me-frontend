@@ -7,9 +7,6 @@ import type {
 	SearchModelInterface,
 } from "~/interfaces/search-model.interface";
 import {usePostStore} from "~/stores/post.pinia";
-import searchOptionsData from "~/data/search/search-options.data";
-
-
 
 export function useSearch() {
 	const { categories, location_options } = usePostStore();
@@ -59,6 +56,8 @@ export function useSearch() {
 		const query = modifyQueryParams();
 		changeRoute(query);
 	};
+
+
 
 	return {
 		state,

@@ -110,6 +110,7 @@ import type {
 } from "~/interfaces/search-model.interface";
 import postFromRangeQuery from "~/queries/postFromRange.query";
 import type {PostInterface} from "~/interfaces";
+import modalitiesData from "~/data/search/modalities.data";
 
 const {searchOptions, state, sendSearchQuery} = useSearch();
 
@@ -219,8 +220,30 @@ if (import.meta.client) {
 get_job_list()
 
 watch(state, async () => {
+
 	list.value = []
+	total.value = null
 	current_skip.value = 1
+	
+
+	
 	await get_job_list()
 });
+
+watch( () => useRoute().path,
+	
+	(newPath, oldPath) => {
+		alert("newPath")
+		if (newPath === oldPath) {
+			alert("cambio de ruta")
+		}
+	}
+);
+
+// watch(useRoute().path, async () => {
+// 	alert("sadsadas")
+// 	list.value = []
+// 	current_skip.value = 1
+// 	await get_job_list()
+// });
 </script>
