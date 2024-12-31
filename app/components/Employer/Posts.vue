@@ -10,7 +10,8 @@
 					image: employerInfo.image,
 					title: post.name,
 					employer: employerInfo.name,
-					description: post.description
+					description: post.description,
+					location: post.location
 				}"
 			/>
 		</div>

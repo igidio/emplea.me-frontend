@@ -1,7 +1,7 @@
 <template>
 	<h5>Opciones</h5>
 	<UFormGroup label="Buscar">
-		<UInput size="lg" placeholder="Un trabajo" v-model="searchInput" />
+		<UInput size="lg" placeholder="Un trabajo" v-model="searchInput" @keyup.enter="sendSearchQuery()" />
 	</UFormGroup>
 	<UButton size="lg" @click="sendSearchQuery()">Buscar</UButton>
 
@@ -43,7 +43,6 @@
 	</div>
 
 	<UButton size="lg" color="white" @click="clear()">Limpiar</UButton>
-	<Add class="h-64" v-if="add"></Add>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +68,7 @@ const isOpen = defineModel<boolean>("isOpen", {
 });
 
 const searchInput = ref("");
+if (searchModel.value.searchQuery) searchInput.value = searchModel.value.searchQuery;
 
 const sendSearchQuery = () => {
 	searchModel.value.searchQuery = searchInput.value;

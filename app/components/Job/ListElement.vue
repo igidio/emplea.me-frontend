@@ -4,13 +4,14 @@
 	>
 		<div class="flex tablet:flex-row flex-col justify-between gap-4">
 			<div class="flex flex-row gap-4">
-				<img :src="(image) ? image : 'https://placehold.co/400'" class="w-16 rounded-small border border-gray-300" alt="Imagen de la empresa" />
+				<img :src="(image) ? image : 'https://placehold.co/400'" class="h-16 aspect-[1/1] rounded-small border border-gray-300" alt="Imagen de la empresa" />
 				<div class="flex flex-col">
-					<h4>{{ title }}</h4>
 					<span class="font-semibold">{{ employer }}</span>
+					<h4>{{ title }}</h4>
+					<span class="text-sm">{{`${location.department}, ${location.province}, ${location.municipality}`}}</span>
 				</div>
 			</div>
-			<div class="flex flex-col">
+			<div class="flex flex-col text-nowrap">
 				<UButton size="md" :to="'/jobs/' + id">Más detalles</UButton>
 			</div>
 		</div>
@@ -24,13 +25,16 @@
 </template>
 
 <script setup lang="ts">
+import type {LocationInterface} from "~/interfaces";
+
 interface Props {
 	id: number,
   title: string,
   employer: string,
   image?: string,
-  description: string
+  description: string,
+	location: LocationInterface
 }
 const props = defineProps< { props: Props }>()
-const { id, title, employer, image, description } = props.props
+const { id, title, employer, image, description, location } = props.props
 </script>

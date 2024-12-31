@@ -42,9 +42,6 @@
 					>
 					</USelectMenu>
 				</div>
-
-				{{ state.category }}
-
 				<h6>Modalidad</h6>
 				<div
 					class="flex flex-col flex-wrap tablet:flex-row gap-2 desktop:gap-4"

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	@apply scrollbar scrollbar-w-[3px] scrollbar-h-[3px] scrollbar-thumb-rounded-large scrollbar-thumb-violet-300;
+}
 
 body {
 	@apply bg-violet-50 text-base font-normal font-['Poppins'];
@@ -136,4 +139,14 @@ span.error {
 
 .center-text {
 	@apply text-center justify-center text-base;
+}
+
+.menu-fade {
+	@apply py-0 tablet:py-8 tablet:[mask:var(--mask)];
+	--mask: linear-gradient(to bottom,
+	rgba(0, 0, 0, 0) 0%,
+	rgba(0, 0, 0, 1) 5%,
+	rgba(0, 0, 0, 1) 95%,
+	rgba(0, 0, 0, 0) 100%
+	) 100% 50% / 100% 100% repeat-x;
 }

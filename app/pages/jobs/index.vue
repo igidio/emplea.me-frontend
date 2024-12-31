@@ -3,7 +3,7 @@
 	<div v-if="!loading">
 		<!-- Only for mobile viewports -->
 		<div
-				class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-2"
+			class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-2"
 		>
 			<h5>
 				<JobTitle :title="title"/>
@@ -13,12 +13,12 @@
 				{{ state.searchQuery }}</span
 			>
 			<div class="flex flex-wrap gap-2">
-				<UBadge :label="modality" v-for="modality in modalitiess"/>
+				<UBadge :label="modality" v-for="modality in modalities"/>
 			</div>
 			<UButton
-					color="black"
-					label="Opciones de búsqueda"
-					@click="isOpen = true"
+				color="black"
+				label="Opciones de búsqueda"
+				@click="isOpen = true"
 			/>
 		</div>
 		<!-- END: Only for mobile viewports -->
@@ -39,23 +39,24 @@
 
 					<div class="flex flex-col gap-4 w-full">
 						<div class="hidden desktop:flex flex-wrap gap-2">
-							<UBadge :label="modality" v-for="modality in modalitiess"/>
+							<UBadge :label="modality" v-for="modality in modalities"/>
 						</div>
 						<div class="flex flex-col gap-4">
 							<JobListElement
-									:props="{
+								:props="{
 									id: e.id,
 									title: e.name,
 									description: e.description,
 									employer: e.employer.name,
-									image: e.employer.profile_image
+									image: e.employer.profile_image,
+									location: e.employer.location
 								}"
-									v-for="e in list"
+								v-for="e in list"
 							/>
 							<!--<Add class="h-32"/>-->
 
 							<UButton block color="black" v-if="!locked && !loading_more"
-											 @click="async () => { current_skip++; await get_job_list()}">Cargar más
+							         @click="async () => { current_skip++; await get_job_list(true)}">Cargar más
 							</UButton>
 
 							<div class="w-full center-text p-4 bg-violet-100 rounded-medium" v-if="loading_more">
@@ -70,13 +71,14 @@
 				</UCard>
 			</div>
 			<div
-					class="w-[25%] hidden desktop:flex flex-col gap-4 sticky top-16 h-[80svh] overflow-x-auto p-1"
+				class="w-[25%] hidden desktop:flex flex-col gap-4 sticky top-16 h-[calc(100vh-70px)] overflow-x-auto p-1 menu-fade"
 			>
 				<JobSearchOptions
-						add
-						:search-options="searchOptions"
-						v-model:search-model="state"
-						v-model:isOpen="isOpen"
+					add
+					:search-options="searchOptions"
+					v-model:search-model="state"
+					v-model:isOpen="isOpen"
+
 				/>
 
 			</div>
@@ -84,17 +86,18 @@
 		<UModal v-model="isOpen">
 			<div class="p-4 rounded-medium flex flex-col gap-4">
 				<JobSearchOptions
-						fullscreen
-						!add
-						:search-options="searchOptions"
-						v-model:search-model="state"
-						v-model:isOpen="isOpen"
+					fullscreen
+					!add
+					:search-options="searchOptions"
+					v-model:search-model="state"
+					v-model:isOpen="isOpen"
+
 				/>
 				<UButton
-						size="lg"
-						label="Aplicar y cerrar"
-						@click="isOpen = false"
-						color="black"
+					size="lg"
+					label="Aplicar y cerrar"
+					@click="isOpen = false"
+					color="black"
 				/>
 
 			</div>
@@ -119,7 +122,7 @@ const loading = ref(true);
 const isOpen = ref(false);
 const loading_more = ref(false);
 const locked = ref(false)
-const total:Ref<null | number> = ref()
+const total: Ref<undefined | number> = ref(undefined)
 
 const list: Ref<PostInterface[]> = ref([]);
 
@@ -135,7 +138,7 @@ const title: ComputedRef<TitleInterface> = computed(() => ({
 	location: state.location?.name,
 }));
 
-const modalitiess: ComputedRef<string[]> = computed(() => {
+const modalities: ComputedRef<string[]> = computed(() => {
 	return state.modalities.reduce((acc: string[], e: ModalitiesInterface) => {
 		if (e.active) acc.push(e.name);
 		return acc;
@@ -155,11 +158,11 @@ onMounted(async () => {
 	if (route.query.search) state.searchQuery = route.query.search.toString();
 	if (route.query.category)
 		state.category = searchOptions.categories.find(
-				(e: any) => e.id == route.query.category
+			(e: any) => e.id == route.query.category
 		);
 	if (route.query.location)
 		state.location = searchOptions.locations.find(
-				(e: any) => e.id == route.query.location
+			(e: any) => e.id == route.query.location
 		);
 	loading.value = false;
 });
@@ -167,9 +170,9 @@ onMounted(async () => {
 const current_skip = ref(1)
 
 const list_total = computed(() =>
-		(total.value === 0) ? 'Ningún resultado' :
-				(total.value === 1) ? 'Un resultado' :
-						`${total.value} resultados`
+	(total.value === 0) ? 'Ningún resultado' :
+		(total.value === 1) ? 'Un resultado' :
+			`${total.value} resultados`
 )
 
 const search_additional_inputs = computed(() => ({
@@ -187,29 +190,37 @@ const search_additional_inputs = computed(() => ({
 	}
 }))
 
-const get_job_list = async () => {
-	loading_more.value = true
-	locked.value = false
+const {result, error, load, refetch} = useLazyQuery(postFromRangeQuery, search_additional_inputs.value);
 
-	const {result, error, load} = useLazyQuery(postFromRangeQuery, search_additional_inputs.value);
-	await load()
+const get_job_list = async (will_refetch = false) => {
+	loading_more.value = true;
+	locked.value = false;
+
+	//(will_refetch) ? await refetch(search_additional_inputs.value) : await load();
+	if (will_refetch) {
+		await refetch(search_additional_inputs.value)
+	} else {
+		await load()
+	}
 
 	const new_data = (result.value as any).postsFromRange;
 	if (new_data.found.length === 0) {
 		locked.value = true;
-		total.value = null
+		total.value = undefined
 	}
 	if (result.value && !error.value) list.value.push(...new_data.found);
 	total.value = new_data.total
 	loading_more.value = false
+
+	if (list.value.length === total.value) locked.value = true
 }
 
 if (import.meta.client) {
 	window.onscroll = async function (ev) {
 		if (Math.round(window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
 			if (!(locked.value || loading_more.value)) {
-				//await get_job_list()
-				current_skip.value++
+				current_skip.value++;
+				await get_job_list(true)
 			}
 
 		}
@@ -217,23 +228,22 @@ if (import.meta.client) {
 }
 
 watch(state, async () => {
-	list.value = []
-	total.value = null
 	current_skip.value = 1
-	await get_job_list()
+	sendSearchQuery()
+	list.value = []
+	await get_job_list(true)
 });
 
-watch( () => useRoute().path,
-	(newPath, oldPath) => {
-		alert("newPath")
-		if (newPath === oldPath) {
-			alert("cambio de ruta")
-		}
-	}
-);
+// watch( () => useRoute().path,
+// 	(newPath, oldPath) => {
+// 		alert("newPath")
+// 		if (newPath === oldPath) {
+// 			alert("cambio de ruta")
+// 		}
+// 	}
+// );
 
 // watch(useRoute().path, async () => {
-// 	alert("sadsadas")
 // 	list.value = []
 // 	current_skip.value = 1
 // 	await get_job_list()

@@ -15,6 +15,11 @@ export default gql`
                 employer {
                     name
                     profile_image
+                    location {
+                        department,
+                        municipality,
+                        province
+                    }
                 }
             }
         }

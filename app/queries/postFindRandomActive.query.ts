@@ -6,7 +6,12 @@ export default gql`
             description
             employer {
                 name
-                profile_image
+                profile_image,
+                location {
+                    department,
+                    municipality,
+                    province
+                }
             }
         }
     }
