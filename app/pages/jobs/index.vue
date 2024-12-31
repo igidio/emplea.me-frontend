@@ -142,10 +142,9 @@ const modalitiess: ComputedRef<string[]> = computed(() => {
 	}, []);
 });
 
-//watch(state, () => sendSearchQuery());
+onMounted(async () => {
+	await get_job_list()
 
-
-onMounted(() => {
 	if (route.query.modalities) {
 		const modalitiesFromQuery = route?.query.modalities.toString().split(",");
 		state.modalities.map((e: any) => {
@@ -192,14 +191,15 @@ const get_job_list = async () => {
 	loading_more.value = true
 	locked.value = false
 
-	const {data, error} = await useAsyncQuery(postFromRangeQuery, search_additional_inputs.value);
+	const {result, error, load} = useLazyQuery(postFromRangeQuery, search_additional_inputs.value);
+	await load()
 
-	const new_data = (data.value as any).postsFromRange;
+	const new_data = (result.value as any).postsFromRange;
 	if (new_data.found.length === 0) {
 		locked.value = true;
 		total.value = null
 	}
-	if (data.value && !error.value) list.value.push(...new_data.found);
+	if (result.value && !error.value) list.value.push(...new_data.found);
 	total.value = new_data.total
 	loading_more.value = false
 }
@@ -208,7 +208,7 @@ if (import.meta.client) {
 	window.onscroll = async function (ev) {
 		if (Math.round(window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
 			if (!(locked.value || loading_more.value)) {
-				await get_job_list()
+				//await get_job_list()
 				current_skip.value++
 			}
 
@@ -216,22 +216,14 @@ if (import.meta.client) {
 	};
 }
 
-
-get_job_list()
-
 watch(state, async () => {
-
 	list.value = []
 	total.value = null
 	current_skip.value = 1
-	
-
-	
 	await get_job_list()
 });
 
 watch( () => useRoute().path,
-	
 	(newPath, oldPath) => {
 		alert("newPath")
 		if (newPath === oldPath) {

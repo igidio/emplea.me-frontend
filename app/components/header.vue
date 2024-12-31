@@ -38,6 +38,6 @@ const isOpen = ref(false);
 
 <style scoped>
 .header {
-	@apply flex-row justify-between items-center h-16 p-4 my-4 sticky top-0 bg-violet-50 z-50;
+	@apply flex-row justify-between items-center h-16 px-4 py-4 sticky top-0 bg-violet-50 z-50 border-b-2;
 }
 </style>

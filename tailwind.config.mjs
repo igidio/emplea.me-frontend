@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
-	darkMode: "class",
+	//darkMode: "class",
 	theme: {
 		screens: {
 			tablet: "575px",

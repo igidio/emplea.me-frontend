@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
 	//ssr: false,
 	devtools: {enabled: true},
-	modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@nuxtjs/apollo", "@pinia/nuxt", "@nuxtjs/google-adsense"],
+	modules: [
+		"@nuxt/ui",
+		//"@nuxtjs/color-mode",
+		"@nuxtjs/apollo",
+		"@pinia/nuxt",
+		//"@nuxtjs/google-adsense"
+	],
 	runtimeConfig: {
 		public: {
 			server_host: process.env.SERVER_HOST,
@@ -25,10 +31,10 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	colorMode: {
-		preference: "light",
-		fallback: "light",
-	},
+	// colorMode: {
+	// 	preference: "light",
+	// 	fallback: "light",
+	// },
 	devServer: {
 		port: 5173,
 	},
