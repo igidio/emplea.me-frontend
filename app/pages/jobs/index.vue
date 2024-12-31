@@ -13,7 +13,12 @@
 				{{ state.searchQuery }}</span
 			>
 			<div class="flex flex-wrap gap-2">
-				<UBadge :label="modality" v-for="modality in modalities"/>
+				<UButton
+					:label="modality.name"
+					v-for="modality in modalities"
+					@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
+					size="sm"
+				/>
 			</div>
 			<UButton
 				color="black"
@@ -34,12 +39,17 @@
 						<span v-if="state.searchQuery"
 						>para "{{ state.searchQuery }}"</span
 						>
-						<span v-if="route.query.search">de {{ route.query.search }}</span>
 					</template>
 
 					<div class="flex flex-col gap-4 w-full">
+<!--						{{ state.modalities }}-->
 						<div class="hidden desktop:flex flex-wrap gap-2">
-							<UBadge :label="modality" v-for="modality in modalities"/>
+							<UButton
+								:label="modality.name"
+								v-for="modality in modalities"
+								@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
+								size="sm"
+							/>
 						</div>
 						<div class="flex flex-col gap-4">
 							<JobListElement
@@ -138,9 +148,9 @@ const title: ComputedRef<TitleInterface> = computed(() => ({
 	location: state.location?.name,
 }));
 
-const modalities: ComputedRef<string[]> = computed(() => {
-	return state.modalities.reduce((acc: string[], e: ModalitiesInterface) => {
-		if (e.active) acc.push(e.name);
+const modalities: ComputedRef<{name: string, id: number}[]> = computed(() => {
+	return state.modalities.reduce((acc: {name: string, id: number}[], e: ModalitiesInterface) => {
+		if (e.active) acc.push({name: e.name, id: e.id});
 		return acc;
 	}, []);
 });

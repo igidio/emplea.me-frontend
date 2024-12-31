@@ -1,6 +1,6 @@
 <template>
 
-	Trabajos
+	<span>Trabajos</span>
 	<span v-if="title.category">: {{ title.category }} </span>
 	<span v-if="title.location"> en {{ title.location }} </span>
 </template>

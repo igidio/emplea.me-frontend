@@ -15,6 +15,7 @@ export default defineAppConfig({
 			base: "trainsition-all",
 			font: "text-base font-semibold",
 			size: {
+				sm: "text-sm justify-center rounded-medium px-1",
 				md: "text-base justify-center rounded-medium px-2",
 				lg: "text-base justify-center rounded-large",
 			},
