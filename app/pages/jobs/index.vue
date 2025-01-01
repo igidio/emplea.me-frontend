@@ -206,7 +206,6 @@ const get_job_list = async (will_refetch = false) => {
 	loading_more.value = true;
 	locked.value = false;
 
-	//(will_refetch) ? await refetch(search_additional_inputs.value) : await load();
 	if (will_refetch) {
 		await refetch(search_additional_inputs.value)
 	} else {

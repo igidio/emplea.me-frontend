@@ -20,6 +20,7 @@ export const useUserStore = defineStore("user", () => {
 	const user: Ref<UserInterface> = ref({} as UserInterface);
 	const token: Ref<string> = ref("");
 	const initial_loading = ref(true);
+	const is_open_modal_login = ref(false);
 
 	const get_token = () => {
 		let token_from_storage = useCookie("token");
@@ -51,7 +52,7 @@ export const useUserStore = defineStore("user", () => {
 
 	const update_user = async () => {};
 
-	const user_role_computed: ComputedRef<AdminRolesEnum | ClientRolesEnum> =
+	const user_role: ComputedRef<AdminRolesEnum | ClientRolesEnum> =
 		computed(() => {
 			return user.value.role;
 		});
@@ -123,6 +124,7 @@ export const useUserStore = defineStore("user", () => {
 	return {
 		user,
 		token,
+		is_open_modal_login,
 		get_token,
 		set_token,
 		set_user,
@@ -130,7 +132,7 @@ export const useUserStore = defineStore("user", () => {
 		update_user,
 		logout_user,
 		// computed
-		user_role_computed,
+		user_role,
 		dropdown_options,
 		first_of_fist_name,
 		computed_navigation_options,

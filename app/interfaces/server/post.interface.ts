@@ -6,10 +6,10 @@ export interface PostInterface {
 	name: string;
 	description: string;
 	available: boolean;
-	modality: ModalityEnum;
+	modality: ModalityEnum | string;
 	is_featured: boolean;
 	salary?: number;
-	salary_type?: SalaryEnum;
+	salary_type?: SalaryEnum | string;
 	is_active: boolean;
 	location: LocationInterface;
 	category: CategoryInterface;

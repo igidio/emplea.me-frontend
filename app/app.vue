@@ -1,4 +1,5 @@
 <template>
+	<ModalLogin v-model:is_open="is_open_modal_login"/>
 	<div>
 		<UNotifications />
 		<NuxtLayout name="main">
@@ -18,4 +19,6 @@ useHead({
   },
   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
 })
+
+const { is_open_modal_login } = storeToRefs(useUserStore())
 </script>

@@ -11,7 +11,7 @@
 		/>
 		<div class="h-full flex flex-col gap-4">
 			<slot />
-			<div class="h-full flex" v-if="!user_role_computed">
+			<div class="h-full flex" v-if="!user_role">
 				<div class="self-center w-full flex flex-col gap-4">
 					<AuthButtons v-model="isOpen" />
 				</div>
@@ -89,10 +89,7 @@ import type {
 
 const isOpen = defineModel();
 
-const {
-	user_role_computed,
-}: { user_role_computed: Ref<AdminRolesEnum | ClientRolesEnum> } =
-	storeToRefs(userStore);
+const { user_role } = storeToRefs(userStore);
 </script>
 
 <style scoped>

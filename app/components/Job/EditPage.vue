@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { skillLevelEnum } from "~/enums/skill_level.enum";
+import { SkillLevelEnum } from "~/enums/skill_level.enum";
 
 const isOpen = ref(false);
 
@@ -88,21 +88,21 @@ const onSubmit = () => {
 const skills = ref([
 	{
 		name: "skill-1",
-		level: skillLevelEnum.ADVANCED,
+		level: SkillLevelEnum.ADVANCED,
 	},
 	{
 		name: "skill-2",
-		level: skillLevelEnum.INTERMEDIATE,
+		level: SkillLevelEnum.INTERMEDIATE,
 	},
 	{
 		name: "skill-3",
-		level: skillLevelEnum.BASIC,
+		level: SkillLevelEnum.BASIC,
 	},
 ]);
 
 const skillLevelIcon = {
-	[skillLevelEnum.BASIC]: "ri:progress-3-line",
-	[skillLevelEnum.INTERMEDIATE]: "ri:progress-4-line",
-	[skillLevelEnum.ADVANCED]: "ri:progress-8-line",
+	[SkillLevelEnum.BASIC]: "ri:progress-3-line",
+	[SkillLevelEnum.INTERMEDIATE]: "ri:progress-4-line",
+	[SkillLevelEnum.ADVANCED]: "ri:progress-8-line",
 };
 </script>
