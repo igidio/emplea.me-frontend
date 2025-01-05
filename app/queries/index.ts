@@ -11,6 +11,7 @@ import categoryGet from "./categoryGet.query.js";
 import locationGet from "./locationGet.query";
 import postFindOne from "./postFindOne.query";
 import employerGetByUser from "./employerGetByUser.query";
+import employerFindOne from "./employerFindOne.query";
 
 
 export {
@@ -26,5 +27,6 @@ export {
 	categoryGet,
 	locationGet,
 	postFindOne,
-	employerGetByUser
+	employerGetByUser,
+	employerFindOne
 };

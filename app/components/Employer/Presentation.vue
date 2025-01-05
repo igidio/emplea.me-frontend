@@ -11,12 +11,17 @@
 					<div class="flex flex-col">
 						<div class="flex flex-col gap-2">
 							<h3>{{ data.name }}</h3>
-							<item icon="ri:calendar-line" :label="data.establishment_date!"/>
+							<item icon="ri:calendar-line" :label="data.establishment_date"/>
 							<item icon="ri:calendar-line" :label="data.email"/>
 						</div>
 					</div>
 				</div>
-				<UButton icon="ri:ball-pen-fill" class="h-fit">Editar</UButton>
+				<UButton
+					icon="ri:ball-pen-fill"
+					class="h-fit"
+					label="Editar"
+					v-if="data.can_modify"
+				/>
 			</div>
 
 			<hr/>
@@ -34,6 +39,7 @@ interface Props {
 	establishment_date: Date|string,
 	email: string,
 	description: string,
+	can_modify: boolean
 }
 
 defineProps<{ data: Props }>();

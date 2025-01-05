@@ -31,52 +31,29 @@
 </template>
 
 <script setup lang="ts">
-import {employerGetByUser} from "~/queries";
+import {employerFindOne, employerGetByUser} from "~/queries";
 import {useMyEmployments} from "~/composables/my_employments.composable";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
+
 const loading = ref(false)
 
-const { fill_employments, user_id, employments, selected, index } = useMyEmployments();
-const data = ref<EmployerInterface|undefined>(undefined)
+const {fill_employments, user_id, employments, selected, index} = useMyEmployments();
+const data = ref<{
+	employer: EmployerInterface,
+	employerUser: EmployerUserInterface
+} | undefined>(undefined)
 
-const {data: employerGetByUserData, error} = await useAsyncQuery<{ EmployerlistByUser: EmployerUserInterface[]}>(employerGetByUser, {"id": Number(user_id)});
+const {data: employerGetByUserData, error} = await useAsyncQuery<{
+	EmployerlistByUser: EmployerUserInterface[]
+}>(employerGetByUser, {"id": Number(user_id)});
 await fill_employments({data: employerGetByUserData, error})
-console.log(employerGetByUserData.value)
 
-const query = gql`
-query Employer($employerId: Int!) {
-  employer(id: $employerId) {
-    id
-    name
-    modified_at
-    location {
-      id
-    }
-    is_active
-    establishment_date
-    email
-    description
-    post {
-      available
-      name
-      location {
-        municipality
-        province
-        department
-      }
-      is_active
-      is_featured
-      id
-      description
-    }
-    profile_image
-    created_at
-    is_verified
-  }
-}
-`
-
-const { result: EmploymentData, load, refetch } = useLazyQuery<{ employer: EmployerInterface }>(query, {"employerId": 1})
+const {result: EmploymentData, load, refetch} = useLazyQuery<{
+	findOneEmployer: {
+		employer: EmployerInterface,
+		employerUser: EmployerUserInterface
+	}
+}>(employerFindOne, {"findOneEmployerId": 1})
 load()
 
 
@@ -84,8 +61,8 @@ const get_employer = async (i: number) => {
 	loading.value = true
 	data.value = undefined
 	const employer_user = employerGetByUserData.value?.EmployerlistByUser[i];
-	await refetch({"employerId": Number(employer_user?.employer.id)})
-	data.value = EmploymentData.value?.employer
+	await refetch({"findOneEmployerId": Number(employer_user?.employer.id)})
+	data.value = EmploymentData.value?.findOneEmployer
 	loading.value = false
 }
 </script>

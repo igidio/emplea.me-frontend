@@ -1,6 +1,6 @@
 <template>
 	<UCard class="h-fit flex flex-col gap-2">
-		<span class="font-bold text-md my-2 inline-block">Información adicional</span>
+		<span class="font-bold text-md mb-4 inline-block">Información adicional</span>
 		<div class="flex flex-col gap-2">
 			<item
 				icon="ri:calendar-event-line"

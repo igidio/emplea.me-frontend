@@ -2,7 +2,12 @@
 	<UCard>
 		<template #header>Publicaciones</template>
 		<div class="flex flex-col gap-4">
-			<UButton icon="ri:add-circle-line" size="lg">Agregar</UButton>
+			<UButton
+				icon="ri:add-circle-line"
+				size="lg"
+				v-if="employerUser"
+				label="Agregar"
+			/>
 			<JobListElement
 				v-for="post in posts"
 				:props="{
@@ -20,9 +25,7 @@
 </template>
 
 <script setup lang="ts">
-
-
-import type {PostInterface} from "~/interfaces";
+import type {EmployerUserInterface, PostInterface} from "~/interfaces";
 
 interface Props {
 	employerInfo: {
@@ -30,7 +33,8 @@ interface Props {
 		name: string,
 		id: string|number
 	}
-	posts: PostInterface[]
+	posts: PostInterface[],
+	employerUser: EmployerUserInterface|null
 }
 defineProps<Props>()
 </script>
