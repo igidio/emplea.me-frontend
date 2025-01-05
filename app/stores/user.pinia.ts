@@ -137,5 +137,6 @@ export const useUserStore = defineStore("user", () => {
 		first_of_fist_name,
 		computed_navigation_options,
 		computed_image,
+		is_premium
 	};
 });

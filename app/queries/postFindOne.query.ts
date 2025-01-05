@@ -1,33 +1,98 @@
-export default gql`
-    query Post($postId: String!) {
-        post(id: $postId) {
-            available
-            category {
-                icon
-                id
-                name
+export default (show_employer_info:boolean = false) => {
+    return (show_employer_info) ?  gql`
+        query Post($id: Int!) {
+            post(id: $id) {
+                post {
+                    id
+                    name
+                    description
+                    available
+                    modality
+                    is_featured
+                    salary
+                    salary_type
+                    is_active
+                    created_at
+                    modified_at
+                    location {
+                        id
+                        municipality
+                        province
+                        department
+                    }
+                    category {
+                        id
+                        name
+                        icon
+                        created_at
+                        modified_at
+                    }
+                    employer {
+                        id
+                        name
+                        description
+                        establishment_date
+                        email
+                        profile_image
+                        is_verified
+                        is_active
+                        created_at
+                        modified_at
+                    }
+                }
+                info {
+                    type
+                    can_modify
+                    show_employer
+                }
             }
-            created_at
-            description
-            employer {
-                email
-                name
-                profile_image
-                id
-            }
-            is_active
-            is_featured
-            location {
-                department
-                municipality
-                province
-                id
-            }
-            name
-            modality
-            modified_at
-            salary
-            salary_type
         }
-    }
-`;
+    ` : gql`
+        query Post($id: Int!) {
+            post(id: $id) {
+                post {
+                    id
+                    name
+                    description
+                    available
+                    modality
+                    is_featured
+                    salary
+                    salary_type
+                    is_active
+                    created_at
+                    modified_at
+                    location {
+                        id
+                        municipality
+                        province
+                        department
+                    }
+                    category {
+                        id
+                        name
+                        icon
+                        created_at
+                        modified_at
+                    }
+                    employer {
+                        id
+                        name
+                        description
+                        establishment_date
+                        profile_image
+                        is_verified
+                        is_active
+                        created_at
+                        modified_at
+                    }
+                }
+                info {
+                    type
+                    can_modify
+                    show_employer
+                }
+            }
+        }
+    `
+};

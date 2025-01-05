@@ -10,7 +10,7 @@
 
 						:variant="!option.is_gold ? 'ghost' : undefined"
 						:color="option.is_gold ? 'gold' : undefined"
-
+						size="sm"
 				>{{ option.label }}
 				</UButton
 				>
@@ -19,8 +19,8 @@
 		</div>
 	</div>
 
-	<div class="flex flex-row gap-4">
-		<Notifications/>1
+	<div class="flex flex-row gap-2">
+		<Notifications/>
 
 		<UButton
 				variant="ghost"
