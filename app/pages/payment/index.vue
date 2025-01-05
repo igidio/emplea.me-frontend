@@ -5,7 +5,7 @@
 		<span>⭐ Destacar tus trabajos aumentan el alcance para llenar una vacante.</span>
 		</div>
 		
-		<div class="flex flex-row gap-4 h-96">
+		<div class="flex flex-col desktop:flex-row gap-4 desktop:h-96 w-96 desktop:w-fit">
 			<PaymentOptionCard
 				:props="plan"
 				:current="current === index"

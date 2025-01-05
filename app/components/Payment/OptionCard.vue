@@ -1,11 +1,15 @@
 <template>
-	<div class="flex flex-col rounded-large p-4 text-center place-content-between h-full" :class="color">
+	<div
+		class="flex tablet:flex-row desktop:flex-col rounded-large p-4 text-center place-content-between h-full shadow shadow-black/20"
+
+		:class="color"
+	>
 		<div class="flex flex-col">
 			<span class="font-semibold">{{ name }}</span>
 			<span class="font-black text-5xl">{{ price }} {{ currency }}</span>
 			<span class="font-semibold mb-4">Beneficios</span>
 			<ul>
-				<li v-for="benefit in benefits">{{ benefit }}</li>
+				<li v-for="benefit in benefits" class="text-sm">{{ benefit }}</li>
 			</ul>
 		</div>
 		
