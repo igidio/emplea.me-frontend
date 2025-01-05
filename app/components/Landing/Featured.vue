@@ -9,6 +9,7 @@
 						title: data.name,
 						description: data.description,
 						employer: data.employer.name,
+						employer_id: data.employer.id,
 						image: data.employer.profile_image,
 						location: data.employer.location
 					}"

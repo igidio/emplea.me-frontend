@@ -107,6 +107,5 @@ onDone((result) => {
 const onSubmit = async () => {
 	await login({ loginInput: state });
 	//useRouter().go(0);
-	useToast().add({ title: "Inicio de sesión exitoso." });
 };
 </script>

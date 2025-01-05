@@ -250,6 +250,6 @@ const skillLevelIcon = {
 // // GET DATA
 
 const show_info = () => {
-	is_open_modal_login.value = true;
+	if ( user_role === undefined ) is_open_modal_login.value = true;
 };
 </script>

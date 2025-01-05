@@ -1,4 +1,5 @@
 import type {LocationInterface} from "~/interfaces/location.interface";
+import type {PostInterface} from "~/interfaces/server/post.interface";
 
 export interface EmployerInterface {
 	id:                 string;
@@ -6,10 +7,11 @@ export interface EmployerInterface {
 	profile_image:      string;
 	modified_at:        Date;
 	location:           LocationInterface;
+	post?:						 PostInterface[];
 	is_active:          boolean;
 	is_verified:        boolean;
 	email:              string;
 	establishment_date: Date;
 	description:        string;
-	created_at:         Date;
+	created_at:         Date | string;
 }

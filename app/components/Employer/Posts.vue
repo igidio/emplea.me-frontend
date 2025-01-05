@@ -11,7 +11,8 @@
 					title: post.name,
 					employer: employerInfo.name,
 					description: post.description,
-					location: post.location
+					location: post.location,
+					employer_id: employerInfo.id
 				}"
 			/>
 		</div>
@@ -19,12 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import type {PostInterface} from "~/interfaces/server/post.interface";
+
+
+import type {PostInterface} from "~/interfaces";
 
 interface Props {
 	employerInfo: {
 		image: string,
 		name: string,
+		id: string|number
 	}
 	posts: PostInterface[]
 }

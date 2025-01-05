@@ -13,6 +13,7 @@ export default gql`
                 name
                 description
                 employer {
+                    id
                     name
                     profile_image
                     location {

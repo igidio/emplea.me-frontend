@@ -1,16 +1,16 @@
 <template>
-	<UCard class="h-fit">
-		<template #header>Información adicional</template>
+	<UCard class="h-fit flex flex-col gap-2">
+		<span class="font-bold text-md my-2 inline-block">Información adicional</span>
 		<div class="flex flex-col gap-2">
 			<item
 				icon="ri:calendar-event-line"
 				small="Activo desde"
-				:regular="created_at"
+				:regular="created_at.toString()"
 			/>
 			<item
 				icon="ri:calculator-line"
 				small="Número de publicaciones"
-				:regular="posts_total"
+				:regular="total.toString()"
 			/>
 		</div>
 	</UCard>
@@ -18,8 +18,8 @@
 
 <script setup lang="ts">
 interface Props {
-	posts_total: string;
-	created_at: string;
+	total: number;
+	created_at: Date | string;
 }
 
 defineProps<Props>();

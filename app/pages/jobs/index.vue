@@ -59,7 +59,8 @@
 									description: e.description,
 									employer: e.employer.name,
 									image: e.employer.profile_image,
-									location: e.employer.location
+									location: e.employer.location,
+									employer_id: e.employer.id
 								}"
 								v-for="e in list"
 							/>

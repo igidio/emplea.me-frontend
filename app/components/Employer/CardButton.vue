@@ -1,6 +1,10 @@
 <template>
 	<UButton color="white" class="flex flex-col gap-1 items-center rounded-medium w-64 center-text">
-			<img :src="image ? image : 'https://placehold.co/400'" class="w-16 h-auto rounded-medium" alt="Logo de empresa"/>
+			<img
+				:src="image ? image : 'https://placehold.co/400'"
+				class="w-16 h-auto rounded-medium border border-slate-200"
+				alt="Logo de empresa"
+			/>
 			<span class="font-semibold">{{ name }}</span>
 			<span class="font-medium">{{ EmployerLevelEnum[role as keyof typeof EmployerLevelEnum] }}</span>
 	</UButton>

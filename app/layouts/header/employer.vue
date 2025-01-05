@@ -20,7 +20,7 @@
 	</div>
 
 	<div class="flex flex-row gap-4">
-		<Notifications/>
+		<Notifications/>1
 
 		<UButton
 				variant="ghost"

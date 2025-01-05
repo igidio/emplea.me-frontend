@@ -6,7 +6,10 @@
 			<div class="flex flex-row gap-4">
 				<img :src="(image) ? image : 'https://placehold.co/400'" class="h-16 aspect-[1/1] rounded-small border border-gray-300" alt="Imagen de la empresa" />
 				<div class="flex flex-col">
-					<span class="font-semibold">{{ employer }}</span>
+					<NuxtLink :to="`/employer/${employer_id}`">
+						<span class="font-semibold">{{ employer }}</span>
+					</NuxtLink>
+
 					<h4>{{ title }}</h4>
 					<span class="text-sm">{{`${location.department}, ${location.province}, ${location.municipality}`}}</span>
 				</div>
@@ -31,10 +34,11 @@ interface Props {
 	id: number,
   title: string,
   employer: string,
+	employer_id: number|string,
   image?: string,
   description: string,
 	location: LocationInterface
 }
 const props = defineProps< { props: Props }>()
-const { id, title, employer, image, description, location } = props.props
+const { id, title, employer, image, description, location, employer_id } = props.props
 </script>
