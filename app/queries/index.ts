@@ -12,7 +12,7 @@ import locationGet from "./locationGet.query";
 import postFindOne from "./postFindOne.query";
 import employerGetByUser from "./employerGetByUser.query";
 import employerFindOne from "./employerFindOne.query";
-
+import paymentCreateTransaction from "./paymentCreateTransaction.query";
 
 export {
 	getUserByToken,
@@ -28,5 +28,6 @@ export {
 	locationGet,
 	postFindOne,
 	employerGetByUser,
-	employerFindOne
+	employerFindOne,
+	paymentCreateTransaction,
 };

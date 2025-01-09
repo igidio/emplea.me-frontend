@@ -21,11 +21,12 @@
 		<div class="flex flex-col tablet:max-w-[50%] gap-2">
 
 			<UCard>
+				<!--				:schema="order_schema"-->
 				<UForm
 					@submit.prevent="submit_form()"
 					:state="state"
 					class="flex flex-col gap-4"
-					:schema="order_schema"
+
 				>
 					<!-- Card Number -->
 					<div>
@@ -141,9 +142,12 @@ import type {PlanInterface} from "~/interfaces";
 import {plans} from "~/data/plans.data";
 import {order_schema} from "~/schemas/order.schema";
 import allowed_cards from "~/data/allowed-cards.data";
+import {paymentCreateTransaction} from "~/queries";
 
 const exchangeRate = 6.91
 const is_invalid_expiration_date: Ref<undefined | string> = ref(undefined)
+
+const {mutate, loading} = useMutation(paymentCreateTransaction)
 
 const state = reactive({
 	card_number: '',
@@ -193,9 +197,18 @@ const format_expiry = () => {
 	state.expiry = value
 }
 
-const submit_form = () => {
-
+const submit_form = async () => {
 	let card_token = allowed_cards[state.card_number.replace(/[^\d]/g, '') as keyof typeof allowed_cards]
-	console.log(card_token ? card_token : "tok_visa_chargeDeclined")
+
+	const variables = {
+		"input": {
+			"amount": Number((plan.price / exchangeRate).toFixed(2))*100,
+			"currency": "usd",
+			"token": card_token ? card_token : "tok_visa_chargeDeclined"
+		}
+	}
+
+	await mutate(variables);
+
 }
 </script>

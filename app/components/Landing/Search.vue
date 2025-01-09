@@ -26,7 +26,7 @@
 						:options="searchOptions.locations"
 						option-attribute="name"
 						size="lg"
-						class="tablet:w-[50%]"
+						class="grow"
 					/>
 
 					<USelectMenu

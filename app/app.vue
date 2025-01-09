@@ -9,6 +9,10 @@
 </template>
 
 <script setup lang="ts">
+import {useUserStore} from "~/stores/user.pinia";
+import {usePostStore} from "~/stores/post.pinia";
+import {categoryGet, getUserByToken, locationGet} from "~/queries";
+
 useHead({
   title: 'Bienvenidos a Empleame',
   meta: [
@@ -21,4 +25,30 @@ useHead({
 })
 
 const { is_open_modal_login } = storeToRefs(useUserStore())
+
+const userStore = useUserStore();
+const postStore = usePostStore();
+
+const {getToken} = useApollo();
+
+getToken();
+const {data, error, status} = await useAsyncQuery(getUserByToken, {
+	server: true,
+});
+
+if (data && !error.value)
+	userStore.set_user((data.value as any).getUserByToken);
+
+// Categorías
+const get_categories = async() => {
+	const {data} = await useAsyncQuery(categoryGet, {server: true});
+	postStore.set_categories((data.value as any).allCategories);
+}
+const get_locations = async () => {
+	const {data} = await useAsyncQuery(locationGet, {server: true});
+	postStore.set_locations((data.value as any).allLocations);
+}
+
+get_categories()
+get_locations()
 </script>

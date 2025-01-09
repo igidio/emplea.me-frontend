@@ -5,7 +5,6 @@ export default {
 	"5200828282828210": "tok_mastercard_debit",
 	"378282246310005": "tok_amex",
 	"6200000000000005": "tok_unionpay",
-	"6200000000000047": "tok_unionpay_debit",
 	
 	"4000000000000002": "tok_visa_chargeDeclined",
 	"4000000000000259": "tok_visa_chargeDeclinedInsufficientFunds",

@@ -8,6 +8,7 @@ const colorInput = {
 export default defineAppConfig({
 	icon: {},
 	primary: "violet",
+	gray: "gray",
 	ui: {
 		primary: "violet",
 
