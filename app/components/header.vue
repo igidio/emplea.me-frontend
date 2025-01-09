@@ -6,9 +6,10 @@
 	</header>
 
 	<header class="header flex tablet:hidden">
-		<NuxtLink to="/">
+		<NuxtLink to="/" v-if="!['ADMIN', 'SUPERUSER'].includes(user.role)">
 			<Logo />
 		</NuxtLink>
+		<div v-else/>
 
 		<UButton variant="ghost" icon="ri:menu-fill" @click="isOpen = true" />
 	</header>

@@ -1,10 +1,7 @@
 <template>
-	<!-- {{ userStore.initial_loading }} -->
-	<Loading v-if="status == 'pending'"/>
-
 	<div
 			class="flex flex-col tablet:mb-0 tablet:place-content-between h-screen content-between"
-			:class="status && 'success'"
+			:class="'success'"
 	>
 		<div>
 			<Header/>

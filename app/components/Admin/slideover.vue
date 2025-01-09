@@ -1,12 +1,10 @@
 <template>
 	<div
-		class="min-w-20 bg-white sticky top-0 h-screen border-r p-4 transition-all"
+		class="min-w-20 bg-white sticky top-0 h-screen border-r p-4"
 	>
 		<AdminMenu :is_collapsed="is_collapsed" :collapse="collapse"/>
 	</div>
 	<div>
-		<UButton label="Open" @click="is_open = true"/>
-
 		<USlideover
 			v-model="is_open"
 			side="left"

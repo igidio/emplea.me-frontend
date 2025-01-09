@@ -10,7 +10,7 @@
 		</div>
 		<LandingCategories />
 		<hr />
-		<div class="flex flex-col tablet:flex-row gap-4">
+		<div class="flex flex-col desktop:flex-row gap-4">
 			<LandingFeatured class="basis-[75%]" />
 			<Add class="basis-[25%]" />
 		</div>

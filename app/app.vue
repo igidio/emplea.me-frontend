@@ -2,7 +2,7 @@
 	<ModalLogin v-model:is_open="is_open_modal_login"/>
 	<div>
 		<UNotifications />
-		<NuxtLayout name="main">
+		<NuxtLayout :name="(['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) ? 'admin' : 'main'">
 			<NuxtPage />
 		</NuxtLayout>
 	</div>
@@ -12,6 +12,7 @@
 import {useUserStore} from "~/stores/user.pinia";
 import {usePostStore} from "~/stores/post.pinia";
 import {categoryGet, getUserByToken, locationGet} from "~/queries";
+import {AdminRolesEnum} from "~/enums/server/roles.enum";
 
 useHead({
   title: 'Bienvenidos a Empleame',

@@ -1,7 +1,7 @@
 <template>
 	<div
-		class="min-w-44 bg-white sticky top-0 h-screen border-r p-4 transition-all"
-		:class="is_collapsed && 'min-w-20'"
+		class="bg-white h-screen border-r p-4 transition-all"
+		:class="is_collapsed ? 'w-20' : 'w-44'"
 	>
 		<AdminMenu
 			v-model:is_collapsed="is_collapsed"
