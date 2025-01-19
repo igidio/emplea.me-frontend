@@ -2,7 +2,7 @@
 
 		<NuxtLink to="/">
 			<div class="w-full mb-4 align flex flex-row justify-center border-b pb-3">
-				<Logo is_admin/>
+				<Logo :is_admin="true"/>
 				<span class="font-black italic text-[16px] align-bottom self-center"
 				      v-if="!is_collapsed"
 				>EMPLEAME</span>

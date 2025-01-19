@@ -1,6 +1,14 @@
 <template>
 	<UCard>
-		<template #header>Perfil de aplicante de trabajo</template>
+		<template #header>
+			<div class="flex flex-row place-content-between">
+			Perfil de aplicante de trabajo
+			<UButton
+				icon="ri:file-edit-fill"
+				v-if="can_edit"
+			>Editar</UButton>
+			</div>
+		</template>
 
 		<div class="flex flex-row w-full">
 			<div class="flex flex-col w-full gap-4">
@@ -48,9 +56,22 @@
 </template>
 
 <script setup lang="ts">
+import {seekerGetOneByUser} from "~/queries";
+
+interface Props {
+	can_edit: boolean;
+}
+withDefaults(defineProps<Props>(), {
+	can_edit: false,
+})
 const current_place_computed = computed(() => {
 	return `La Paz - Bolivia`;
 });
+
+
+
+const { result } = await useQuery(seekerGetOneByUser)
+console.log(result.value)
 
 const education = [
 	{

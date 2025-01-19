@@ -8,7 +8,7 @@
 			<div
 				class="w-48 h-full relative image-container self-center tablet:self-auto"
 			>
-				<img :src="computed_image" alt="" class="rounded-full h-fit" />
+				<img :src="computed_image" alt="" class="rounded-full h-fit border-2" />
 				<UButton
 					icon="ri:pencil-fill"
 					color="white"

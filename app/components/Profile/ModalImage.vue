@@ -10,7 +10,7 @@
 				<img
 					:src="computed_image"
 					alt=""
-					class="rounded-full h-fit w-64 self-center"
+					class="rounded-full h-fit w-64 self-center border"
 				/>
 				<div class="flex flex-col gap-2 self-center w-full tablet:w-auto">
 					<span class="font-semibold"

@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 interface Props {
-	is_admin: boolean
+	is_admin?: boolean
 }
 withDefaults(defineProps<Props>(), {
 	is_admin: false

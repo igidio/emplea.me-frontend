@@ -13,6 +13,7 @@ import postFindOne from "./postFindOne.query";
 import employerGetByUser from "./employerGetByUser.query";
 import employerFindOne from "./employerFindOne.query";
 import paymentCreateTransaction from "./paymentCreateTransaction.query";
+import seekerGetOneByUser from "./seekerGetOneByUser.query";
 
 export {
 	getUserByToken,
@@ -30,4 +31,5 @@ export {
 	employerGetByUser,
 	employerFindOne,
 	paymentCreateTransaction,
+	seekerGetOneByUser,
 };
