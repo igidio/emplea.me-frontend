@@ -3,11 +3,13 @@
 		<template #header>
 			<div class="flex flex-row place-content-between">
 				Perfil de aplicante de trabajo
-				<UButton
-					icon="ri:file-edit-fill"
-					v-if="can_edit"
-				>Editar
-				</UButton>
+				<NuxtLink to="profile/edit">
+					<UButton
+						icon="ri:file-edit-fill"
+						v-if="can_edit"
+					>Editar
+					</UButton>
+				</NuxtLink>
 			</div>
 		</template>
 

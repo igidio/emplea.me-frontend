@@ -4,11 +4,13 @@ import { GenderEnum } from "./gender.enum";
 import { ModalityEnum } from "./modality.enum";
 import { SalaryEnum } from "./salary.enum";
 import { SkillLevelEnum } from "./server/seeker_skill.enum";
+import { DegreeEnum } from "./server/degree.enum";
 
 export {
 	EmployerLevelEnum,
 	GenderEnum,
 	ModalityEnum,
 	SalaryEnum,
-	SkillLevelEnum
+	SkillLevelEnum,
+	DegreeEnum
 }
