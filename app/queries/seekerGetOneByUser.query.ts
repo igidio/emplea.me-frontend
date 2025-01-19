@@ -44,6 +44,7 @@ export default gql`
                 social {
                     id
                     name
+                    icon
                     prefix
                     slug
                 }
@@ -53,6 +54,10 @@ export default gql`
                 level
                 created_at
                 modified_at
+                skill {
+                    id
+                    name
+                }
             }
         }
     }

@@ -1,9 +1,11 @@
-import type {seekerInterface} from "~/interfaces";
+import type {instituteInterface, seekerInterface} from "~/interfaces";
 
 export interface educationInterface {
 	id?: number;
+	title: string;
 	degree: string;
-	institution: string;
-	completion_year: number;
+	institute: instituteInterface;
+	starting_year?: number;
+	completion_year?: number;
 	seeker: seekerInterface;
 }

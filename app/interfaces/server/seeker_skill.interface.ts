@@ -3,9 +3,9 @@ import {SkillLevelEnum} from "~/enums";
 
 export interface seekerSkillInterface {
 	id?: number;
-	seeker: seekerInterface;
-	skill: skillInterface;
-	level: SkillLevelEnum;
+	seeker?: seekerInterface;
+	skill?: skillInterface;
+	level: string;
 	created_at?: Date;
 	modified_at?: Date;
 }

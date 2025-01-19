@@ -2,54 +2,90 @@
 	<UCard>
 		<template #header>
 			<div class="flex flex-row place-content-between">
-			Perfil de aplicante de trabajo
-			<UButton
-				icon="ri:file-edit-fill"
-				v-if="can_edit"
-			>Editar</UButton>
+				Perfil de aplicante de trabajo
+				<UButton
+					icon="ri:file-edit-fill"
+					v-if="can_edit"
+				>Editar
+				</UButton>
 			</div>
 		</template>
 
-		<div class="flex flex-row w-full">
+		<div class="flex flex-col tablet:flex-row w-full gap-4">
 			<div class="flex flex-col w-full gap-4">
 				<item
 					icon="ri:map-pin-2-fill"
-					:label="current_place_computed"
+					:label="`${seeker.location?.province} - ${seeker.location?.municipality} - ${seeker.location?.department}`"
 					label_bold="Lugar actual"
 				/>
 
-				<h6>Educación</h6>
-				<item
-					icon="ri:school-fill"
-					:label="item.title"
-					:small="`${item.starting_year} - ${item.completion_year}`"
-					:label_bold="item.institution"
-					v-for="item in education"
-				/>
-				<h6>Experiencia laboral</h6>
-				<div class="flex flex-col gap-2" v-for="item in experience">
+				<div
+					v-if="seeker.experience && seeker.experience.length > 0"
+					class="flex flex-col gap-3"
+				>
+					<h6>Educación</h6>
 					<item
-						icon="ri:briefcase-4-fill"
-						:label="item.company_name"
-						:label_bold="item.job_title"
-						:small="`${item.start_date} - ${item.end_date}`"
-						:description="item.job_description"
+						v-for="e in seeker.education"
+						icon="ri:school-fill"
+						:label="e.title"
+						:small="`
+						${(e.starting_year) && e.starting_year}
+						${(e.starting_year && e.completion_year) ? ' - ' : ''}
+						${(e.completion_year) && e.completion_year}`"
+						:label_bold="e.institute.name"
 					/>
+				</div>
+				<div
+					v-if="seeker.experience && seeker.experience.length > 0"
+					class="flex flex-col gap-3"
+				>
+
+					<h6>Experiencia laboral</h6>
+					<div class="flex flex-col gap-2" v-for="e in seeker.experience">
+						<item
+							icon="ri:briefcase-4-fill"
+							:label="e.company"
+							:label_bold="e.title"
+							:small="`
+							${e.start_date && new Date(e.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
+							${(e.start_date && e.end_date) && ' - '}
+							${e.end_date && new Date(e.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`"
+							:description="e.description"
+						/>
+					</div>
 				</div>
 			</div>
 
 			<div class="flex flex-col w-full gap-4">
-				<h4>Habilidades</h4>
-				<item
-					icon="ri:tools-fill"
-					:label="item.level"
-					:label_bold="item.name"
-					v-for="item in skills"
-				/>
-				<h6>Redes sociales</h6>
-				<NuxtLink v-for="item in social" :to="item.link">
-					<item icon="ri:tiktok-fill" :label="item.name" one_line />
-				</NuxtLink>
+				<div
+					v-if="seeker.seeker_skill && seeker.seeker_skill.length > 0"
+					class="flex flex-col gap-3"
+				>
+					<h6>Habilidades</h6>
+					<item
+						v-for="e in seeker.seeker_skill"
+						:icon="(e.level) ? skill_level_icon[e.level as keyof typeof skill_level_icon] : 'ri:checkbox-blank-circle-line' "
+						:label="e.level ? SkillLevelEnum[e.level as keyof typeof SkillLevelEnum] : ' '"
+						:label_bold="e.skill?.name"
+					/>
+				</div>
+				<div
+					v-if="seeker.seeker_social && seeker.seeker_social.length > 0"
+					class="flex flex-col gap-3"
+				>
+					<h6>Redes sociales</h6>
+					<NuxtLink
+						v-for="e in seeker.seeker_social"
+						:to="e.social.prefix + e.identifier"
+						target="_blank"
+					>
+						<item
+							:icon="e.social.icon"
+							:label="`${e.name} - ${e.social.name}`"
+							one_line
+						/>
+					</NuxtLink>
+				</div>
 			</div>
 		</div>
 	</UCard>
@@ -57,135 +93,25 @@
 
 <script setup lang="ts">
 import {seekerGetOneByUser} from "~/queries";
+import type {seekerInterface} from "~/interfaces";
+import {SkillLevelEnum} from "~/enums";
+
+const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 
 interface Props {
 	can_edit: boolean;
 }
+
 withDefaults(defineProps<Props>(), {
 	can_edit: false,
 })
-const current_place_computed = computed(() => {
-	return `La Paz - Bolivia`;
-});
 
+const {data} = await useAsyncQuery<{ seekerFindByUser: seekerInterface }>(seekerGetOneByUser)
+seeker.value = data.value?.seekerFindByUser!
 
-
-const { result } = await useQuery(seekerGetOneByUser)
-console.log(result.value)
-
-const education = [
-	{
-		title: "Ingeniería de Sistemas",
-		institution: "Universidad Mayor de San Andrés",
-		deegree: "Licenciatura",
-		starting_year: 2018,
-		completion_year: 2022,
-	},
-	{
-		title: "Ingeniería de Sistemas",
-		institution: "Universidad Mayor de San Andrés",
-		deegree: "Licenciatura",
-		starting_year: 2018,
-		completion_year: 2022,
-	},
-	{
-		title: "Ingeniería de Sistemas",
-		institution: "Universidad Mayor de San Andrés",
-		deegree: "Licenciatura",
-		starting_year: 2018,
-		completion_year: 2022,
-	},
-];
-
-const experience = [
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-	{
-		start_date: 2020,
-		end_date: 2021,
-		job_title: "Desarrollador de software",
-		company_name: "Empresa de desarrollo",
-		job_description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus.",
-	},
-];
-
-const skills = [
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-	{
-		name: "JavaScript",
-		level: "Avanzado",
-	},
-];
-const social = [
-	{
-		name: "LinkedIn",
-		link: "https://www.linkedin.com/in/username",
-	},
-	{
-		name: "GitHub",
-		link: "https://www.github.com/username",
-	},
-	{
-		name: "Twitter",
-		link: "https://www.twitter.com/username",
-	},
-];
+const skill_level_icon = {
+	'BASIC': 'ri:progress-2-line',
+	'INTERMEDIATE': 'ri:progress-5-line',
+	'ADVANCED': 'ri:progress-8-line',
+}
 </script>

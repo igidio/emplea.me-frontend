@@ -3,6 +3,7 @@ export interface socialInterface {
 	name: string;
 	prefix: string;
 	slug: string;
+	icon: string;
 	created_at?: Date;
 	modified_at?: Date;
 }
