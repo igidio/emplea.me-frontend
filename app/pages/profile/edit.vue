@@ -1,6 +1,5 @@
 <template>
 	<GoToPrevious/>
-	<UButton @click="reload()">sadsadsa</UButton>
 	<UCard>
 		<template #header>Editar perfil de aplicante</template>
 		<div class="grid grid-cols-1 desktop:grid-cols-2 gap-4">
@@ -24,8 +23,12 @@
 							:social="social"
 							:reload="reload"
 						/>
+					<ProfileAddSocial
+						:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
+						:social="social!"
+						:reload="reload"
+					/>
 					</div>
-					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
 				</div>
 			</div>
 

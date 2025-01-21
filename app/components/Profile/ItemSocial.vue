@@ -37,29 +37,15 @@
 		@submit="submit"
 	>
 
-		<div class="w-full flex flex-row gap-4 overflow-hidden">
-			<div class="flex flex-col w-1/2 gap-2">
-				<UFormGroup label="Nombre de perfil" class="grow" name="name">
+		<div class="w-full flex flex-col gap-4">
+			<div class="flex flex-row gap-2">
+				<UFormGroup label="Nombre de perfil" class="w-1/2" name="name">
 					<UInput
 						color="gray"
 						placeholder="Nombre de perfil"
 						v-model="state.name"
 					/>
 				</UFormGroup>
-				<UFormGroup
-					label="Identificador"
-					class="grow"
-					:help="`${state.social.prefix}${state.identifier}`"
-					name="identifier"
-				>
-					<UInput
-						v-model="state.identifier"
-						color="gray"
-						placeholder="Nombre Apellido"
-					/>
-				</UFormGroup>
-			</div>
-			<div class="flex flex-col grow">
 				<UFormGroup label="Red social" class="grow" name="social">
 					<USelectMenu
 						v-model="state.social"
@@ -67,6 +53,20 @@
 						option-attribute="name"
 						size="md"
 						color="gray"
+					/>
+				</UFormGroup>
+			</div>
+			<div class="flex flex-col grow">
+				<UFormGroup
+					label="Identificador"
+					class="grow"
+					:help="(state.social?.prefix) && `${state.social?.prefix}${state.identifier}`"
+					name="identifier"
+				>
+					<UInput
+						v-model="state.identifier"
+						color="gray"
+						placeholder="Nombre Apellido"
 					/>
 				</UFormGroup>
 			</div>
@@ -78,7 +78,7 @@
 			}}</span>
 		<div class="flex flex-row gap-2 h-fit self-end">
 			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="loading" @click="cancel()"/>
-			<UButton color="black" label="Guardar" size="sm" class="h-fit" :loading="loading" type="submit"/>
+			<UButton color="black" label="Guardar" size="sm" class="h-fit" :loading="loading" :disabled="is_the_same" type="submit"/>
 		</div>
 	</UForm>
 
@@ -88,6 +88,7 @@
 import type {socialInterface} from "~/interfaces";
 import * as yup from "yup";
 import {seekerSocialDelete, seekerSocialUpdate} from "~/queries";
+import {seeker_social_schema} from "~/schemas";
 
 const loading = ref(false)
 
@@ -128,22 +129,9 @@ const reset = () => {
 	state.social = p.props.social;
 }
 
-const schema = yup.object({
-	name: yup.string().max(60, 'El número máximo de carácteres es de 60').required('El nombre de perfil es requerido'),
-	identifier: yup.string().matches(/^[a-zA-Z0-9_]*$/, "Solo letras y números").max(60, 'El número máximo de carácteres es de 60').required('El identificador es requerido'),
-	social: yup.object().shape({
-		id: yup.number().required()
-	})
-})
+const schema = yup.object(seeker_social_schema)
 
-const variables = ref({
-	id: p.props.id,
-	name: state.name,
-	identifier: state.identifier,
-	social: state.social.id!
-})
-
-const {mutate, error} = useMutation(seekerSocialUpdate(variables.value))
+const {mutate, error} = useMutation(seekerSocialUpdate)
 const {mutate: mutate_delete_seekerSocial,} = useMutation(seekerSocialDelete)
 
 const submit = async () => {
@@ -152,7 +140,7 @@ const submit = async () => {
 		"updateSeekerSocialInput": {
 			"identifier": state.identifier,
 			"name": state.name,
-			"social": state.social.id!
+			"social": Number(state.social.id!)
 		},
 		"seekerSocialUpdateId": Number(p.props.id)
 	})
@@ -162,6 +150,7 @@ const submit = async () => {
 			await p.reload()
 			reset()
 		}).catch((e: Error) => {
+			//console.log(e)
 		}).finally(() => {
 			loading.value = false;
 		})
@@ -177,4 +166,8 @@ const delete_item = async () => {
 		loading.value = false;
 	})
 }
+
+const is_the_same = computed(() => {
+	return state.name === p.props.name && state.identifier === p.props.identifier && state.social.id === p.props.social.id
+})
 </script>

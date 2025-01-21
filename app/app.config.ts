@@ -104,7 +104,7 @@ export default defineAppConfig({
 				base: "text-base",
 			},
 			error: "font-semibold text-base text-red-500",
-			help: "text-black text-sm",
+			help: "text-black text-sm overflow-hidden text-ellipsis",
 			default: {
 				size: "sm",
 			},
