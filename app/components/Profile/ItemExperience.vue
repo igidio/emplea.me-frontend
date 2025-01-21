@@ -23,6 +23,9 @@
 </template>
 
 <script setup lang="ts">
+import type {socialInterface} from "~/interfaces";
+import {socialFindAll} from "~/queries";
+
 interface Props {
 	company: string;
 	title: string;
@@ -31,6 +34,4 @@ interface Props {
 	description: string;
 }
 defineProps<{ props: Props }>();
-
-//const {} = useAsyncQuery()
 </script>

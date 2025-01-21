@@ -10,13 +10,16 @@
 						<ProfileItemSocial
 							v-for="e in seeker.seeker_social"
 							:props="{
-							name: e.social!.name,
-							identifier: e.identifier,
-							social: {
-								name: e.social!.name,
-								icon: e.social!.icon
-							}
-						}"
+								name: e.name,
+								identifier: e.identifier,
+								social: {
+									name: e.social!.name,
+									icon: e.social!.icon,
+									prefix: e.social!.prefix,
+									id: e.social!.id
+								}
+							}"
+							:social="social"
 						/>
 					</div>
 
@@ -63,16 +66,16 @@
 				<h6>Experiencia laboral</h6>
 				<div class="flex flex-col gap-4">
 					<div class="flex flex-col gap-4 h-full justify-between">
-					<ItemExperience
-						v-for="e in seeker.experience"
-						:props="{
+						<ItemExperience
+							v-for="e in seeker.experience"
+							:props="{
 							company: e.company,
 							title: e.title,
 							start_date: e.start_date,
 							end_date: e.end_date,
 							description: e.description
 						}"
-					/>
+						/>
 					</div>
 					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
 				</div>
@@ -83,15 +86,16 @@
 </template>
 
 <script setup lang="ts">
-import type {seekerInterface} from "~/interfaces";
-import {seekerGetOneByUser} from "~/queries";
-import {SkillLevelEnum} from "~/enums";
+import type {seekerInterface, socialInterface} from "~/interfaces";
+import {seekerGetOneByUser, socialFindAll} from "~/queries";
 import ItemExperience from "~/components/Profile/ItemExperience.vue";
 
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
+const social: Ref<socialInterface[] | undefined> = ref([])
 
 const {data} = await useAsyncQuery<{ seekerFindByUser: seekerInterface }>(seekerGetOneByUser)
 seeker.value = data.value?.seekerFindByUser!
 
-console.log(seeker.value)
+const social_data = await useAsyncQuery<{ socialFindAll: socialInterface[] }>(socialFindAll)
+social.value = social_data.data.value?.socialFindAll
 </script>

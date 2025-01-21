@@ -1,8 +1,8 @@
-import { _white } from "#tailwind-config/theme/accentColor";
+import {_white} from "#tailwind-config/theme/accentColor";
 
 const colorInput = {
-	white: { solid: "bg-white text-black", outline: "ring-0" },
-	gray: { solid: "bg-white" },
+	white: {solid: "bg-white text-black", outline: "ring-0"},
+	gray: {solid: "bg-white"},
 };
 
 export default defineAppConfig({
@@ -11,7 +11,7 @@ export default defineAppConfig({
 	gray: "gray",
 	ui: {
 		primary: "violet",
-
+		
 		button: {
 			base: "trainsition-all",
 			font: "text-base font-semibold",
@@ -51,7 +51,7 @@ export default defineAppConfig({
 				ghost: "opacity-50",
 			},
 		},
-
+		
 		card: {
 			background: "bg-white",
 			rounded: "rounded-large",
@@ -60,7 +60,7 @@ export default defineAppConfig({
 				base: "font-semibold text-2xl",
 			},
 		},
-
+		
 		input: {
 			base: "focus:ring-2 focus:ring-violet-400",
 			size: {
@@ -131,19 +131,18 @@ export default defineAppConfig({
 				size: "sm",
 			},
 		},
-		modal: {
-			rounded: "rounded-large",
-		},
 		selectMenu: {
-			base: "m-1",
 			option: {
 				size: "text-base",
 				rounded: "rounded-small",
 				padding: "p-2",
 			},
-			padding: "py-4",
+			select: 'min-h-10'
+		},
+		modal: {
 			rounded: "rounded-large",
 		},
+		
 		badge: {
 			rounded: "rounded-small",
 		},
