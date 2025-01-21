@@ -16,6 +16,7 @@ import paymentCreateTransaction from "./paymentCreateTransaction.query";
 import seekerGetOneByUser from "./seekerGetOneByUser.query";
 import socialFindAll from "./socialFindAll.query";
 import seekerSocialUpdate from "./seekerSocialUpdate.query";
+import seekerSocialDelete from "./seekerSocialDelete.query";
 
 export {
 	getUserByToken,
@@ -35,5 +36,6 @@ export {
 	paymentCreateTransaction,
 	seekerGetOneByUser,
 	socialFindAll,
-	seekerSocialUpdate
+	seekerSocialUpdate,
+	seekerSocialDelete
 };

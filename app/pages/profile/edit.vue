@@ -1,5 +1,6 @@
 <template>
 	<GoToPrevious/>
+	<UButton @click="reload()">sadsadsa</UButton>
 	<UCard>
 		<template #header>Editar perfil de aplicante</template>
 		<div class="grid grid-cols-1 desktop:grid-cols-2 gap-4">
@@ -21,9 +22,9 @@
 								}
 							}"
 							:social="social"
+							:reload="reload"
 						/>
 					</div>
-
 					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
 				</div>
 			</div>
@@ -90,12 +91,21 @@
 import type {seekerInterface, socialInterface} from "~/interfaces";
 import {seekerGetOneByUser, socialFindAll} from "~/queries";
 import ItemExperience from "~/components/Profile/ItemExperience.vue";
+import Buttons from "~/components/Auth/Buttons.vue";
 
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 const social: Ref<socialInterface[] | undefined> = ref([])
 
 const {data} = await useAsyncQuery<{ seekerFindByUser: seekerInterface }>(seekerGetOneByUser)
 seeker.value = data.value?.seekerFindByUser!
+
+const {result, refetch} = useQuery<{ seekerFindByUser: seekerInterface }>(seekerGetOneByUser, {}, {prefetch: false})
+
+const reload = async () => {
+	await refetch()
+	console.log(result.value)
+	seeker.value = result.value?.seekerFindByUser!
+}
 
 const social_data = await useAsyncQuery<{ socialFindAll: socialInterface[] }>(socialFindAll)
 social.value = social_data.data.value?.socialFindAll

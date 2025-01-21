@@ -1,26 +1,31 @@
 <template>
 	<div
-		class="flex flex-row gap-4 place-content-between border-primary p-4 rounded-medium dotted w-full"
+		class="flex flex-row gap-4 place-content-between border-primary p-4 rounded-medium dotted w-full overflow-hidden"
 		v-if="!is_editable"
 	>
-		<div class="flex flex-row gap-4">
-			<IconFill :name="props.social.icon"/>
-			<div class="flex flex-col">
-				<span class="text-sm">{{ props.social?.name }}</span>
-				<span class="font-semibold">{{ `${props.name}` }}</span>
-				<NuxtLink :to="`${props.social.prefix}${props.identifier}`"><span>{{
-						`${props.social.prefix}${props.identifier}`
-					}}</span></NuxtLink>
+		<div class="flex flex-col w-full gap-1">
+			<div class="flex flex-row gap-4 place-content-between">
+				<div class="flex flex-row gap-2 truncate text-wrap">
+					<IconFill :name="props.social.icon"/>
+					<div class="flex flex-col gap-1">
+						<span class="text-sm">{{ props.social?.name }}</span>
+						<span class="font-semibold">{{ `${props.name}` }}</span>
+					</div>
+				</div>
 
+				<div class="flex flex-row gap-2 h-fit">
+					<UButton color="black" size="sm" class="h-fit" label="Editar" @click="is_editable = true"/>
+					<UButton color="red" size="sm" class="h-fit" label="Eliminar" @click="delete_item()"/>
+				</div>
 			</div>
+			<NuxtLink
+				class="text-ellipsis overflow-hidden hyper"
+				:to="`${props.social.prefix}${props.identifier}`"
+			>{{
+					`${props.social.prefix}${props.identifier}`
+				}}
+			</NuxtLink>
 		</div>
-
-		<div class="flex flex-row gap-2 h-fit">
-			<UButton color="black" label="Editar" @click="is_editable = true"/>
-			<UButton color="red" label="Eliminar"/>
-		</div>
-
-
 	</div>
 
 
@@ -32,7 +37,7 @@
 		@submit="submit"
 	>
 
-		<div class="w-full flex flex-row gap-4">
+		<div class="w-full flex flex-row gap-4 overflow-hidden">
 			<div class="flex flex-col w-1/2 gap-2">
 				<UFormGroup label="Nombre de perfil" class="grow" name="name">
 					<UInput
@@ -66,9 +71,14 @@
 				</UFormGroup>
 			</div>
 		</div>
+		<span class="error text-right" v-if="error">{{
+				error.name === 'ApolloError'
+					? 'Los valores introducidos no son válidos, es posible que ya exista un identificador en la misma red social ya registrada'
+					: error.message
+			}}</span>
 		<div class="flex flex-row gap-2 h-fit self-end">
-			<UButton color="red" label="Cancelar" :loading="loading" @click="cancel()"/>
-			<UButton color="black" label="Guardar" :loading="loading" type="submit"/>
+			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="loading" @click="cancel()"/>
+			<UButton color="black" label="Guardar" size="sm" class="h-fit" :loading="loading" type="submit"/>
 		</div>
 	</UForm>
 
@@ -77,7 +87,7 @@
 <script setup lang="ts">
 import type {socialInterface} from "~/interfaces";
 import * as yup from "yup";
-import {seekerSocialUpdate} from "~/queries";
+import {seekerSocialDelete, seekerSocialUpdate} from "~/queries";
 
 const loading = ref(false)
 
@@ -94,6 +104,7 @@ interface Props {
 		};
 	}
 	social: socialInterface[] | undefined
+	reload: () => Promise<void>
 }
 
 const p = defineProps<Props>();
@@ -118,8 +129,8 @@ const reset = () => {
 }
 
 const schema = yup.object({
-	name: yup.string().required('El nombre de perfil es requerido'),
-	identifier: yup.string().matches(/^[a-zA-Z0-9_]*$/, "Solo letras y números").required('El identificador es requerido'),
+	name: yup.string().max(60, 'El número máximo de carácteres es de 60').required('El nombre de perfil es requerido'),
+	identifier: yup.string().matches(/^[a-zA-Z0-9_]*$/, "Solo letras y números").max(60, 'El número máximo de carácteres es de 60').required('El identificador es requerido'),
 	social: yup.object().shape({
 		id: yup.number().required()
 	})
@@ -132,7 +143,8 @@ const variables = ref({
 	social: state.social.id!
 })
 
-const { mutate } = useMutation(seekerSocialUpdate(variables.value))
+const {mutate, error} = useMutation(seekerSocialUpdate(variables.value))
+const {mutate: mutate_delete_seekerSocial,} = useMutation(seekerSocialDelete)
 
 const submit = async () => {
 	loading.value = true;
@@ -144,15 +156,25 @@ const submit = async () => {
 		},
 		"seekerSocialUpdateId": Number(p.props.id)
 	})
-		.then((r) => {
+		.then(async (r) => {
 			is_editable.value = false;
 			useToast().add({title: r?.data.seekerSocialUpdate})
-			set()
-		}).catch((e) => {
-			console.log(e.data)
-			console.log(e.message)
+			await p.reload()
+			reset()
+		}).catch((e: Error) => {
 		}).finally(() => {
 			loading.value = false;
 		})
+}
+
+const delete_item = async () => {
+	await mutate_delete_seekerSocial({"seekerSocialDeleteId": Number(p.props.id)}).then(async (r) => {
+		loading.value = true;
+		useToast().add({title: r?.data.seekerSocialDelete})
+		await p.reload()
+	}).catch((e: Error) => {
+	}).finally(() => {
+		loading.value = false;
+	})
 }
 </script>

@@ -3,7 +3,7 @@
 		<template #header>
 			<div class="flex flex-row place-content-between">
 				Perfil de aplicante de trabajo
-				<NuxtLink to="profile/edit">
+				<NuxtLink to="/profile/edit">
 					<UButton
 						icon="ri:file-edit-fill"
 						v-if="can_edit"
