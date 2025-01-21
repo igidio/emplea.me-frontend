@@ -29,6 +29,7 @@
 		v-else
 		:state="state"
 		:schema="schema"
+		@submit="submit"
 	>
 
 		<div class="w-full flex flex-row gap-4">
@@ -66,8 +67,8 @@
 			</div>
 		</div>
 		<div class="flex flex-row gap-2 h-fit self-end">
-			<UButton color="red" label="Cancelar" @click="cancel()"/>
-			<UButton color="black" label="Guardar"/>
+			<UButton color="red" label="Cancelar" :loading="loading" @click="cancel()"/>
+			<UButton color="black" label="Guardar" :loading="loading" type="submit"/>
 		</div>
 	</UForm>
 
@@ -76,9 +77,13 @@
 <script setup lang="ts">
 import type {socialInterface} from "~/interfaces";
 import * as yup from "yup";
+import {seekerSocialUpdate} from "~/queries";
+
+const loading = ref(false)
 
 interface Props {
 	props: {
+		id: number;
 		name: string;
 		identifier: string;
 		social: {
@@ -103,6 +108,10 @@ const state = reactive({
 
 const cancel = () => {
 	is_editable.value = false;
+	reset()
+}
+
+const reset = () => {
 	state.name = p.props.name;
 	state.identifier = p.props.identifier;
 	state.social = p.props.social;
@@ -115,4 +124,35 @@ const schema = yup.object({
 		id: yup.number().required()
 	})
 })
+
+const variables = ref({
+	id: p.props.id,
+	name: state.name,
+	identifier: state.identifier,
+	social: state.social.id!
+})
+
+const { mutate } = useMutation(seekerSocialUpdate(variables.value))
+
+const submit = async () => {
+	loading.value = true;
+	await mutate({
+		"updateSeekerSocialInput": {
+			"identifier": state.identifier,
+			"name": state.name,
+			"social": state.social.id!
+		},
+		"seekerSocialUpdateId": Number(p.props.id)
+	})
+		.then((r) => {
+			is_editable.value = false;
+			useToast().add({title: r?.data.seekerSocialUpdate})
+			set()
+		}).catch((e) => {
+			console.log(e.data)
+			console.log(e.message)
+		}).finally(() => {
+			loading.value = false;
+		})
+}
 </script>

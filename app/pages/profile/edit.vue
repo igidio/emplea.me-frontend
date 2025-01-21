@@ -10,6 +10,7 @@
 						<ProfileItemSocial
 							v-for="e in seeker.seeker_social"
 							:props="{
+								id: e.id!,
 								name: e.name,
 								identifier: e.identifier,
 								social: {

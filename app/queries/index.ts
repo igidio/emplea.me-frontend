@@ -15,6 +15,7 @@ import employerFindOne from "./employerFindOne.query";
 import paymentCreateTransaction from "./paymentCreateTransaction.query";
 import seekerGetOneByUser from "./seekerGetOneByUser.query";
 import socialFindAll from "./socialFindAll.query";
+import seekerSocialUpdate from "./seekerSocialUpdate.query";
 
 export {
 	getUserByToken,
@@ -34,4 +35,5 @@ export {
 	paymentCreateTransaction,
 	seekerGetOneByUser,
 	socialFindAll,
+	seekerSocialUpdate
 };
