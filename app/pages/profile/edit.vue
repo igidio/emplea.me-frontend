@@ -23,11 +23,11 @@
 							:social="social"
 							:reload="reload"
 						/>
-					<ProfileAddSocial
-						:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
-						:social="social!"
-						:reload="reload"
-					/>
+						<ProfileAddSocial
+							:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
+							:social="social!"
+							:reload="reload"
+						/>
 					</div>
 				</div>
 			</div>
@@ -39,10 +39,12 @@
 						<ProfileItemSkill
 							v-for="e in seeker.seeker_skill"
 							:props="{
-							name: e.skill!.name,
-							level: e.level,
-							icon: e.level
-						}"
+								id: e.id!,
+								skill: e.skill!,
+								level: e.level,
+								icon: e.level,
+								reload: reload
+							}"
 						/>
 					</div>
 					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
@@ -94,7 +96,6 @@
 import type {seekerInterface, socialInterface} from "~/interfaces";
 import {seekerGetOneByUser, socialFindAll} from "~/queries";
 import ItemExperience from "~/components/Profile/ItemExperience.vue";
-import Buttons from "~/components/Auth/Buttons.vue";
 
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 const social: Ref<socialInterface[] | undefined> = ref([])

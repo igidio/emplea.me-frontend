@@ -18,6 +18,8 @@ import socialFindAll from "./socialFindAll.query";
 import seekerSocialUpdate from "./seekerSocialUpdate.query";
 import seekerSocialDelete from "./seekerSocialDelete.query";
 import seekerSocialCreate from "./seekerSocialCreate.query";
+import seekerSkillUpdate from "./seekerSkillUpdate.query";
+import seekerFindAny from "./seekerFindAny.query";
 
 export {
 	getUserByToken,
@@ -39,5 +41,7 @@ export {
 	socialFindAll,
 	seekerSocialUpdate,
 	seekerSocialDelete,
-	seekerSocialCreate
+	seekerSocialCreate,
+	seekerSkillUpdate,
+	seekerFindAny
 };
