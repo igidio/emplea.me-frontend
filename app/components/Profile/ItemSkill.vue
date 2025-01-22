@@ -172,7 +172,7 @@ const submit = async () => {
 		}
 	}).then(async (e) => {
 		await props.reload()
-		useToast().add({title: e?.data.seekerSkillUpdate})
+		useToast().add({title: e?.data?.seekerSkillUpdate})
 		is_editable.value = false;
 	}).catch((e: Error) => {
 		//console.log(e)

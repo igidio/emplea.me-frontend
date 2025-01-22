@@ -15,6 +15,7 @@ export default gql`
                 title
                 starting_year
                 completion_year
+                subtitle
                 degree
                 institute {
                     id

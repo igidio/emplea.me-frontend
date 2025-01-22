@@ -64,11 +64,14 @@
 						<ProfileItemEducation
 							v-for="e in seeker.education"
 							:props="{
-							institute: e.institute.name,
-							degree: e.degree,
-							starting_year: e.starting_year,
-							completion_year: e.completion_year,
-						}"
+								id: e.id!,
+								institute: e.institute,
+								degree: e.degree,
+								starting_year: e.starting_year,
+								completion_year: e.completion_year,
+								subtitle: e.subtitle
+							}"
+							:reload="reload"
 						/>
 					</div>
 					<UButton color="black" icon="ri:add-fill" label="Agregar"/>

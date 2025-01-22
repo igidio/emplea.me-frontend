@@ -136,7 +136,7 @@ const {
 	skillFindAny: skillInterface[]
 }>(seekerFindAny)
 
-const search_skill = async (q: string) => {
+const search_skill = async (q: string) => {1
 	console.log(q)
 	const search = await find_any_skill({
 		"findAnySeekerInput": {
