@@ -21,7 +21,7 @@
 
 		<div class="flex flex-row gap-2 h-fit">
 			<UButton color="black" label="Editar" @click="is_editable = true" size="sm" class="h-fit"/>
-			<UButton color="red" label="Eliminar" size="sm" class="h-fit"/>
+			<UButton color="red" label="Eliminar" size="sm" class="h-fit" @click="delete_skill" />
 		</div>
 	</div>
 
@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import {SkillLevelEnum} from "~/enums";
 import {seeker_skill_schema} from "~/schemas";
-import {seekerFindAny, seekerSkillUpdate} from "~/queries";
+import {seekerFindAny, seekerSkillDelete, seekerSkillUpdate} from "~/queries";
 import type {skillInterface} from "~/interfaces";
 import {filter_input_menu} from "~/helpers";
 import type {Reactive} from "vue";
@@ -101,6 +101,7 @@ interface Props {
 }
 
 const {props} = defineProps<{ props: Props }>();
+const reactiveProps = toRef(props)
 
 const skill_level_icon = {
 	'BASIC': 'ri:progress-2-line',
@@ -130,7 +131,7 @@ const {
 	mutate: update,
 	loading,
 	error
-} = useMutation(seekerSkillUpdate)
+} = useMutation<{ seekerSkillUpdate: string }>(seekerSkillUpdate)
 
 const {
 	mutate: find_any_skill,
@@ -140,7 +141,6 @@ const {
 }>(seekerFindAny)
 
 const search_skill = async (q: string) => {
-	console.log(q)
 	const search = await find_any_skill({
 		"findAnySeekerInput": {
 			"filter": q,
@@ -166,13 +166,30 @@ const is_the_same = computed(() => {
 const submit = async () => {
 	await update({
 		"updateSeekerSkillInput": {
-			"id": Number(props.id),
+			"id": Number(reactiveProps.value.id),
 			"level": state.level,
 			"name": state.skill.name
 		}
-	}).then(async () => {
+	}).then(async (e) => {
 		await props.reload()
+		useToast().add({title: e?.data.seekerSkillUpdate})
 		is_editable.value = false;
+	}).catch((e: Error) => {
+		//console.log(e)
+	})
+}
+
+const {
+	mutate: delete_skill_mutation,
+	loading: loading_delete_skill,
+} = useMutation<{seekerSkillDelete: string }>(seekerSkillDelete)
+
+const delete_skill = async () => {
+	await delete_skill_mutation({
+		"seekerSkillDeleteId": Number(reactiveProps.value.id)
+	}).then(async (r) => {
+		await props.reload()
+		useToast().add({title: r?.data?.seekerSkillDelete})
 	}).catch((e: Error) => {
 		//console.log(e)
 	})

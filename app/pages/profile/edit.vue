@@ -22,6 +22,7 @@
 							}"
 							:social="social"
 							:reload="reload"
+							:key="'social'+e.id"
 						/>
 						<ProfileAddSocial
 							:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
@@ -45,9 +46,14 @@
 								icon: e.level,
 								reload: reload
 							}"
+							:key="'skill'+e.id"
 						/>
 					</div>
-					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
+					<ProfileAddSkill
+						:data_exists="!!(seeker.seeker_skill && seeker.seeker_skill.length > 0)"
+						:reload="reload"
+					/>
+
 				</div>
 			</div>
 

@@ -19,6 +19,8 @@ import seekerSocialUpdate from "./seekerSocialUpdate.query";
 import seekerSocialDelete from "./seekerSocialDelete.query";
 import seekerSocialCreate from "./seekerSocialCreate.query";
 import seekerSkillUpdate from "./seekerSkillUpdate.query";
+import seekerSkillDelete from "./seekerSkillDelete.query";
+import seekerSkillCreate from "./seekerSkillCreate.query";
 import seekerFindAny from "./seekerFindAny.query";
 
 export {
@@ -43,5 +45,7 @@ export {
 	seekerSocialDelete,
 	seekerSocialCreate,
 	seekerSkillUpdate,
-	seekerFindAny
+	seekerFindAny,
+	seekerSkillDelete,
+	seekerSkillCreate
 };
