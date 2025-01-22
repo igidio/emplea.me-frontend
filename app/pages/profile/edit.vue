@@ -73,6 +73,7 @@
 								subtitle: e.subtitle
 							}"
 							:reload="reload"
+							:key="'education'+e.id"
 						/>
 					</div>
 					<ProfileAddEducation

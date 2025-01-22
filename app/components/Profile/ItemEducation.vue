@@ -21,7 +21,7 @@
 
 		<div class="flex flex-row gap-2 h-fit">
 			<UButton color="black" label="Editar" @click="is_editable = true" size="sm"/>
-			<UButton color="red" label="Eliminar" size="sm"/>
+			<UButton color="red" label="Eliminar" size="sm" :loading="loading_delete_skill" @click="delete_skill"/>
 		</div>
 	</div>
 
@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import {DegreeEnum} from "~/enums";
 import type {instituteInterface, skillInterface} from "~/interfaces";
-import {educationUpdate, instituteFindAny, seekerSkillUpdate} from "~/queries";
+import {educationDelete, educationUpdate, instituteFindAny, seekerSkillUpdate} from "~/queries";
 import {enum_to_array, filter_input_menu, set_education_years} from "~/helpers";
 import {education_schema} from "~/schemas";
 
@@ -195,5 +195,21 @@ const reset = () => {
 	state.completion_year = p.props.completion_year
 	state.subtitle = p.props.subtitle
 	state.title = p.props.title
+}
+
+const {
+	mutate: delete_education_mutation,
+	loading: loading_delete_skill,
+} = useMutation<{educationDelete: string }>(educationDelete)
+
+const delete_skill = async () => {
+	await delete_education_mutation({
+		"educationDeleteId": Number(p.props.id)
+	}).then(async (r) => {
+		await p.reload()
+		useToast().add({title: r?.data?.educationDelete})
+	}).catch((e: Error) => {
+		//console.log(e)
+	})
 }
 </script>
