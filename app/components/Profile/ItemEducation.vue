@@ -9,7 +9,8 @@
 			/>
 			<div class="flex flex-col">
 				<span class="font-semibold">{{ props.institute.name }}</span>
-				<span>{{
+				<span>{{ props.title }}</span>
+				<span class="text-sm">{{
 						DegreeEnum[props.degree as keyof typeof DegreeEnum]
 					}} {{ props.subtitle && ` - ${props.subtitle}` }}</span>
 				<span class="text-sm">
@@ -33,12 +34,19 @@
 	>
 		<div class="w-full flex flex-col gap-4">
 			<div class="flex flex-col gap-4">
+				<UFormGroup label="Título" class="grow" name="title" required>
+					<UInput
+						color="gray"
+						placeholder=""
+						v-model="state.title"
+					/>
+				</UFormGroup>
 				<div class="flex flex-row gap-2">
 					<UFormGroup
 						label="Institución educativa"
 						class="w-full"
 						name="institute"
-						:help="(state.institute) ? `Selección: ${state.institute.name}` : 'Selecciona o crea una habilidad'"
+						:help="(state.institute) ? `Selección: ${state.institute.name}` : 'Selecciona una institución educativa'"
 						required
 					>
 						<UInputMenu
@@ -105,6 +113,7 @@ import {education_schema} from "~/schemas";
 interface Props {
 	id: number,
 	institute: instituteInterface;
+	title: string;
 	subtitle: string;
 	degree: string;
 	starting_year?: number;
@@ -114,6 +123,7 @@ interface Props {
 const p = defineProps<{ props: Props, reload: () => Promise<void> }>();
 const schema = education_schema
 const state = reactive({
+	title: p.props.title,
 	institute: p.props.institute,
 	subtitle: p.props.subtitle,
 	degree: p.props.degree,
@@ -137,7 +147,7 @@ const {
 const search_institute = async (q: string) => {
 	const search = await find_any_institute({
 		"findAnyInstituteInput": {
-			"filter": "Uni",
+			"filter": q,
 			"limit": 10,
 			"offset": 0
 		}
@@ -158,11 +168,11 @@ const {
 } = useMutation<{ educationUpdate: string }>(educationUpdate)
 
 const submit = async () => {
-	console.log("dssadas")
 	await update({
 		"updateEducationInput": {
 			"id": Number(p.props.id),
 			"institute": state.institute.name,
+			"title": state.title,
 			"degree": state.degree,
 			"starting_year": state.starting_year,
 			"completion_year": state.completion_year,
@@ -184,5 +194,6 @@ const reset = () => {
 	state.starting_year = p.props.starting_year
 	state.completion_year = p.props.completion_year
 	state.subtitle = p.props.subtitle
+	state.title = p.props.title
 }
 </script>

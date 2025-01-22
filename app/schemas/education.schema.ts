@@ -2,8 +2,10 @@ import * as yup from "yup";
 
 export const education_schema = yup.object({
 	institute: yup.object().required('La institución es requerida').nonNullable('La institución no puede ser nula'),
+	title: yup.string().required('El título es requerido').max(60, 'La cantidad máxima de caracteres es de 100'),
+	degree: yup.string().required('El grado es requerido'),
 	subtitle: yup.string()
-		.max(60, 'La cantidad máxima de caracteres es de 60'),
+		.max(60, 'La cantidad máxima de caracteres es de 60').notRequired(),
 	starting_year: yup.number()
 		.transform((value) => Number.isNaN(value) ? null : value )
 		.nullable()

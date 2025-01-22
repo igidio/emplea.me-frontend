@@ -13,7 +13,5 @@ export const set_education_years = (
 		return `Empezó el ${starting_year}`;
 	} else if (!starting_year && completion_year) {
 		return `Terminó en ${completion_year}`;
-	} else {
-		return 'No especificado';
 	}
 }

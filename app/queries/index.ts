@@ -24,6 +24,7 @@ import seekerSkillCreate from "./seekerSkillCreate.query";
 import seekerFindAny from "./seekerFindAny.query";
 import instituteFindAny from "./instituteFindAny.query";
 import educationUpdate from "./educationUpdate.query";
+import educationCreate from "./educationCreate.query";
 
 export {
 	getUserByToken,
@@ -51,5 +52,6 @@ export {
 	seekerSkillDelete,
 	seekerSkillCreate,
 	instituteFindAny,
-	educationUpdate
+	educationUpdate,
+	educationCreate
 };

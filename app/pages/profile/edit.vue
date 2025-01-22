@@ -65,6 +65,7 @@
 							v-for="e in seeker.education"
 							:props="{
 								id: e.id!,
+								title: e.title,
 								institute: e.institute,
 								degree: e.degree,
 								starting_year: e.starting_year,
@@ -74,7 +75,10 @@
 							:reload="reload"
 						/>
 					</div>
-					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
+					<ProfileAddEducation
+						:data_exists="!!(seeker.experience && seeker.experience.length > 0)"
+						:reload="reload"
+					/>
 				</div>
 			</div>
 
