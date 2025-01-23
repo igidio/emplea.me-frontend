@@ -8,11 +8,8 @@
 				icon="ri:briefcase-4-fill"
 				:label="props.company"
 				:label_bold="props.title"
-				:small="`
-							${props.start_date && new Date(props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
-							${(props.start_date && props.end_date) && ' - '}
-							${props.end_date && new Date(props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`"
-				:description="props.description"
+				:small="date_ranges"
+				:description="props.description ? props.description : undefined"
 			/>
 		</div>
 
@@ -94,7 +91,7 @@
 				<UTextarea
 					color="gray"
 					size="md"
-					v-model="props.description"
+					v-model="state.description"
 				/>
 			</UFormGroup>
 		</div>
@@ -114,8 +111,10 @@
 <script setup lang="ts">
 import {experience_schema} from "~/schemas/experience.schema";
 import {split_date} from "../../helpers";
+import {experienceUpdate} from "~/queries";
 
 interface Props {
+	id: number,
 	title: string,
 	start_date: Date | undefined,
 	end_date: Date | undefined,
@@ -123,9 +122,9 @@ interface Props {
 	description: string,
 }
 
-const p = defineProps<{ props: Props }>();
+const p = defineProps<{ props: Props, reload: () => Promise<void> }>();
 
-const is_editable = ref(true);
+const is_editable = ref(false);
 const schema = experience_schema
 
 const state_error = reactive({
@@ -137,7 +136,6 @@ const state_error = reactive({
 
 const state = reactive({
 	title: p.props.title,
-	institute: null as any,
 	company: p.props.company,
 	description: p.props.description,
 	starting_year: (p.props.start_date) ? split_date(p.props.start_date).year : null,
@@ -186,17 +184,52 @@ const validate = () => {
 		state_error.starting_month = 'El mes de finalización debe ser mayor al mes';
 		return false
 	}
-		return true;
-	}
+	return true;
+}
 
-	const {loading: experience_update_loading} = useMutation<{ educationUpdate: string }>()
+const {
+	mutate: experience_update_mutate,
+	loading: experience_update_loading
+} = useMutation<{ educationUpdate: string }>(experienceUpdate)
 
-	const submit = () => {
-		if (!validate()) return;
-		console.log("submited")
-	}
-
-	const cancel = () => {
+const submit = async () => {
+	if (!validate()) return;
+	console.log(state)
+	console.log(p.props.id)
+	await experience_update_mutate({
+		"updateExperienceInput": {
+			"id": Number(p.props.id),
+			"title": state.title,
+			"company": state.company,
+			"description": state.description && state.description,
+			"starting_month": state.starting_month && Number(state.starting_month),
+			"starting_year": state.starting_year && Number(state.starting_year),
+			"completion_month": state.completion_month && Number(state.completion_month),
+			"completion_year": state.completion_year && Number(state.completion_year),
+		}
+	}).then(async (r) => {
+		await p.reload()
+		console.log(r)
+		useToast().add({title: "Experiencia actualizada exitósamente."})
 		is_editable.value = false
-	}
+	}).catch((e: Error) => {
+		console.log(e)
+	})
+}
+
+const date_ranges = computed(() => {
+	if (!p.props.start_date && !p.props.end_date) return ''
+
+	if (p.props.start_date && p.props.end_date)
+		return `${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} - ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+	else if (p.props.start_date && !p.props.end_date)
+		return `Desde ${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+	else if (!p.props.start_date && p.props.end_date)
+		return `Hasta ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+
+})
+
+const cancel = () => {
+	is_editable.value = false
+}
 </script>

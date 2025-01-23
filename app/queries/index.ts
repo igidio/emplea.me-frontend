@@ -26,6 +26,7 @@ import instituteFindAny from "./instituteFindAny.query";
 import educationUpdate from "./educationUpdate.query";
 import educationCreate from "./educationCreate.query";
 import educationDelete from "./educationDelete.query";
+import experienceUpdate from "./experienceUpdate.query";
 
 export {
 	getUserByToken,
@@ -55,5 +56,7 @@ export {
 	instituteFindAny,
 	educationUpdate,
 	educationCreate,
-	educationDelete
+	educationDelete,
+	// experience
+	experienceUpdate
 };

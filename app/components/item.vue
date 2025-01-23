@@ -16,9 +16,9 @@
 				{{ label }}
 			</span>
 			<span class="text-sm" v-if="small && !one_line">{{ small }}</span>
-			<span class="text-sm" v-if="description && !one_line">{{
+			<p class="text-sm break-all" v-if="description && !one_line">{{
 				description
-			}}</span>
+			}}</p>
 		</div>
 		<div class="flex flex-col" v-if="small && regular">
 			<span class="text-sm">{{ small }}</span>

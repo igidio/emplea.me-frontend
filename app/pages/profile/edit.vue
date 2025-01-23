@@ -90,12 +90,14 @@
 						<ItemExperience
 							v-for="e in seeker.experience"
 							:props="{
-							company: e.company,
-							title: e.title,
-							start_date: e.start_date,
-							end_date: e.end_date,
-							description: e.description
+								id: e.id!,
+								company: e.company,
+								title: e.title,
+								start_date: e.start_date,
+								end_date: e.end_date,
+								description: e.description
 						}"
+							:reload="reload"
 						/>
 					</div>
 					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
