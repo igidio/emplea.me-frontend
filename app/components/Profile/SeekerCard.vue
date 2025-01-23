@@ -16,13 +16,14 @@
 		<div class="flex flex-col tablet:flex-row w-full gap-4">
 			<div class="flex flex-col w-full gap-4">
 				<item
+					v-if="seeker.location"
 					icon="ri:map-pin-2-fill"
 					:label="`${seeker.location?.province} - ${seeker.location?.municipality} - ${seeker.location?.department}`"
 					label_bold="Lugar actual"
 				/>
 
 				<div
-					v-if="seeker.experience && seeker.experience.length > 0"
+					v-if="seeker.education && seeker.education.length > 0"
 					class="flex flex-col gap-3"
 				>
 					<h6>Educación</h6>
@@ -30,10 +31,7 @@
 						v-for="e in seeker.education"
 						icon="ri:school-fill"
 						:label="e.title"
-						:small="`
-						${(e.starting_year) && e.starting_year}
-						${(e.starting_year && e.completion_year) ? ' - ' : ''}
-						${(e.completion_year) && e.completion_year}`"
+						:small="set_education_years(e)"
 						:label_bold="e.institute.name"
 					/>
 				</div>
@@ -48,10 +46,7 @@
 							icon="ri:briefcase-4-fill"
 							:label="e.company"
 							:label_bold="e.title"
-							:small="`
-							${e.start_date && new Date(e.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
-							${(e.start_date && e.end_date) && ' - '}
-							${e.end_date && new Date(e.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`"
+							:small="get_date_mmyy({start_date: e.start_date, end_date: e.end_date})"
 							:description="e.description"
 						/>
 					</div>
@@ -97,6 +92,7 @@
 import {seekerGetOneByUser} from "~/queries";
 import type {seekerInterface} from "~/interfaces";
 import {SkillLevelEnum} from "~/enums";
+import {get_date_mmyy, set_education_years} from "~/helpers";
 
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 

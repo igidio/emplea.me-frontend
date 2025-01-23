@@ -29,6 +29,7 @@ import educationDelete from "./educationDelete.query";
 import experienceUpdate from "./experienceUpdate.query";
 import experienceCreate from "./experienceCreate.query";
 import experienceDelete from "./experienceDelete.query";
+import seekerChangeLocation from "./seekerChangeLocation.query";
 
 export {
 	getUserByToken,
@@ -59,6 +60,7 @@ export {
 	educationUpdate,
 	educationCreate,
 	educationDelete,
+	seekerChangeLocation,
 	// experience
 	experienceUpdate,
 	experienceCreate,

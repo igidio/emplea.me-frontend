@@ -8,3 +8,4 @@ export { filter_input_menu } from "./filter_input_menu";
 export { enum_to_array } from "./enum_to_array";
 export { set_education_years } from "./set_education_years.helper";
 export { split_date } from "./split_date";
+export { get_date_mmyy } from "./get_date_mmyy.helper";

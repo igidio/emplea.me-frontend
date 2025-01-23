@@ -14,7 +14,8 @@
 		</div>
 
 		<div class="flex flex-row gap-2 h-fit">
-			<UButton color="black" label="Editar" size="sm" @click="is_editable = true" :disabled="experience_delete_loading"/>
+			<UButton color="black" label="Editar" size="sm" @click="is_editable = true"
+			         :disabled="experience_delete_loading"/>
 			<UButton color="red" label="Eliminar" size="sm" @click="delete_experience" :disabled="experience_delete_loading"/>
 		</div>
 	</div>
@@ -110,7 +111,7 @@
 
 <script setup lang="ts">
 import {experience_schema} from "~/schemas/experience.schema";
-import {split_date} from "~/helpers";
+import {get_date_mmyy, split_date} from "~/helpers";
 import {experienceDelete, experienceUpdate} from "~/queries";
 import {months} from "~/data/months";
 
@@ -201,20 +202,7 @@ const submit = async () => {
 	})
 }
 
-const date_ranges = computed(() => {
-	if (!p.props.start_date && !p.props.end_date) return ''
-
-	if (p.props.start_date && p.props.end_date)
-		return `${new Date(p.props.start_date).toLocaleDateString('es-ES', {
-			month: 'long',
-			year: 'numeric'
-		})} - ${new Date(p.props.end_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
-	else if (p.props.start_date && !p.props.end_date)
-		return `Desde ${new Date(p.props.start_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
-	else if (!p.props.start_date && p.props.end_date)
-		return `Hasta ${new Date(p.props.end_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
-
-})
+const date_ranges = computed(() => get_date_mmyy({start_date: p.props.start_date, end_date: p.props.end_date}))
 
 const cancel = () => {
 	is_editable.value = false

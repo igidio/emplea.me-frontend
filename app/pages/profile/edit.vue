@@ -3,10 +3,18 @@
 	<UCard>
 		<template #header>Editar perfil de aplicante</template>
 		<div class="grid grid-cols-1 desktop:grid-cols-2 gap-4">
+
+			<div class="flex flex-col w-full gap-4 col-span-2">
+				<ProfileItemLocation
+					:location= "seeker.location"
+					:reload="reload"
+				/>
+			</div>
+
 			<div class="flex flex-col w-full gap-4">
 				<h6>Redes sociales</h6>
-				<div class="flex flex-col gap-4">
-					<div class="flex flex-col gap-4 h-full justify-between">
+				<div class="flex flex-col gap-4 h-full justify-between">
+					<div class="flex flex-col gap-4" v-if="seeker.seeker_social && seeker.seeker_social.length > 0">
 						<ProfileItemSocial
 							v-for="e in seeker.seeker_social"
 							:props="{
@@ -24,19 +32,19 @@
 							:reload="reload"
 							:key="'social'+e.id"
 						/>
-						<ProfileAddSocial
-							:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
-							:social="social!"
-							:reload="reload"
-						/>
 					</div>
+					<ProfileAddSocial
+						:data_exists="!!(seeker.seeker_social && seeker.seeker_social.length > 0)"
+						:social="social!"
+						:reload="reload"
+					/>
 				</div>
 			</div>
 
 			<div class="flex flex-col w-full gap-4">
 				<h6>Habilidades</h6>
 				<div class="flex flex-col gap-4 h-full justify-between">
-					<div class="flex flex-col gap-4">
+					<div class="flex flex-col gap-4" v-if="seeker.seeker_skill && seeker.seeker_skill.length > 0">
 						<ProfileItemSkill
 							v-for="e in seeker.seeker_skill"
 							:props="{
@@ -60,7 +68,7 @@
 			<div class="flex flex-col w-full gap-4">
 				<h6>Educación</h6>
 				<div class="flex flex-col gap-4 h-full justify-between">
-					<div class="flex flex-col gap-4">
+					<div class="flex flex-col gap-4" v-if="seeker.education && seeker.education.length > 0">
 						<ProfileItemEducation
 							v-for="e in seeker.education"
 							:props="{
@@ -77,7 +85,7 @@
 						/>
 					</div>
 					<ProfileAddEducation
-						:data_exists="!!(seeker.experience && seeker.experience.length > 0)"
+						:data_exists="(seeker.education && seeker.education.length > 0)!"
 						:reload="reload"
 					/>
 				</div>
@@ -85,8 +93,8 @@
 
 			<div class="flex flex-col w-full gap-4">
 				<h6>Experiencia laboral</h6>
-				<div class="flex flex-col gap-4">
-					<div class="flex flex-col gap-4 h-full justify-between">
+				<div class="flex flex-col gap-4 h-full justify-between">
+					<div class="flex flex-col gap-4" v-if="seeker.experience && seeker.experience.length > 0">
 						<ItemExperience
 							v-for="e in seeker.experience"
 							:props="{
