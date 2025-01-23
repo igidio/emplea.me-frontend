@@ -171,5 +171,8 @@ export default defineAppConfig({
 			width: "w-full tablet:w-1/2 desktop:w-[40%] sm:w-96",
 			container: "px-4 sm:px-6 py-6 space-y-3 overflow-y-auto",
 		},
+		textarea: {
+			rounded: 'rounded-medium',
+		}
 	},
 });
