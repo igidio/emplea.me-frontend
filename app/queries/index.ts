@@ -28,6 +28,7 @@ import educationCreate from "./educationCreate.query";
 import educationDelete from "./educationDelete.query";
 import experienceUpdate from "./experienceUpdate.query";
 import experienceCreate from "./experienceCreate.query";
+import experienceDelete from "./experienceDelete.query";
 
 export {
 	getUserByToken,
@@ -60,5 +61,6 @@ export {
 	educationDelete,
 	// experience
 	experienceUpdate,
-	experienceCreate
+	experienceCreate,
+	experienceDelete
 };

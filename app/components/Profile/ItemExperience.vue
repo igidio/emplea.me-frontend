@@ -14,8 +14,8 @@
 		</div>
 
 		<div class="flex flex-row gap-2 h-fit">
-			<UButton color="black" label="Editar" size="sm" @click="is_editable = true"/>
-			<UButton color="red" label="Eliminar" size="sm"/>
+			<UButton color="black" label="Editar" size="sm" @click="is_editable = true" :disabled="experience_delete_loading"/>
+			<UButton color="red" label="Eliminar" size="sm" @click="delete_experience" :disabled="experience_delete_loading"/>
 		</div>
 	</div>
 
@@ -96,7 +96,7 @@
 			</UFormGroup>
 		</div>
 
-				<span class="error" v-if="experience_update_error">{{ experience_update_error.message }}</span>
+		<span class="error" v-if="experience_update_error">{{ experience_update_error.message }}</span>
 
 		<div class="flex flex-row gap-2 h-fit self-end">
 			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="experience_update_loading"
@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import {experience_schema} from "~/schemas/experience.schema";
 import {split_date} from "~/helpers";
-import {experienceUpdate} from "~/queries";
+import {experienceDelete, experienceUpdate} from "~/queries";
 import {months} from "~/data/months";
 
 interface Props {
@@ -205,11 +205,14 @@ const date_ranges = computed(() => {
 	if (!p.props.start_date && !p.props.end_date) return ''
 
 	if (p.props.start_date && p.props.end_date)
-		return `${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} - ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+		return `${new Date(p.props.start_date).toLocaleDateString('es-ES', {
+			month: 'long',
+			year: 'numeric'
+		})} - ${new Date(p.props.end_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
 	else if (p.props.start_date && !p.props.end_date)
-		return `Desde ${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+		return `Desde ${new Date(p.props.start_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
 	else if (!p.props.start_date && p.props.end_date)
-		return `Hasta ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
+		return `Hasta ${new Date(p.props.end_date).toLocaleDateString('es-ES', {month: 'long', year: 'numeric'})}`
 
 })
 
@@ -226,5 +229,22 @@ const reset = () => {
 	state.starting_month = (p.props.start_date) ? split_date(p.props.start_date).month_index : null
 	state.completion_year = (p.props.end_date) ? split_date(p.props.end_date).year : null
 	state.completion_month = (p.props.end_date) ? split_date(p.props.end_date).month_index : null
+}
+
+const {
+	mutate: experience_delete_mutate,
+	loading: experience_delete_loading,
+} = useMutation<{ experienceDelete: string }>(experienceDelete)
+
+const delete_experience = async () => {
+	await experience_delete_mutate({
+		"experienceDeleteId": Number(p.props.id)
+	}).then(async (r) => {
+		await p.reload()
+		console.log(r)
+		useToast().add({title: "Experiencia laboral eliminada exitósamente."})
+	}).catch((e: Error) => {
+		console.log(e)
+	})
 }
 </script>
