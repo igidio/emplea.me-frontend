@@ -1,22 +1,20 @@
 <template>
-	<div
-		class="flex flex-row gap-4 place-content-between border-primary p-4 rounded-medium dotted w-full"
-		v-if="!is_editable"
-	>
-		<div class="flex flex-row gap-4">
-			<item
-				icon="ri:briefcase-4-fill"
-				:label="props.company"
-				:label_bold="props.title"
-				:small="date_ranges"
-				:description="props.description ? props.description : undefined"
-			/>
+	<div v-if="!is_editable" class="flex flex-col gap-2">
+		<div
+			class="flex flex-row gap-4 place-content-between p-4 rounded-medium dotted w-full overflow-hidden"
+			v-if="!data_exists"
+		>
+			<span class="text-center w-full font-semibold text-violet-600">
+				Prueba agregando elementos
+			</span>
 		</div>
-
-		<div class="flex flex-row gap-2 h-fit">
-			<UButton color="black" label="Editar" size="sm" @click="is_editable = true"/>
-			<UButton color="red" label="Eliminar" size="sm"/>
-		</div>
+		<UButton
+			color="black"
+			icon="ri:add-fill"
+			block
+			label="Agregar"
+			@click="is_editable = true"
+		/>
 	</div>
 
 	<UForm
@@ -96,12 +94,12 @@
 			</UFormGroup>
 		</div>
 
-				<span class="error" v-if="experience_update_error">{{ experience_update_error.message }}</span>
+		<span class="error" v-if="experience_create_error">{{ experience_create_error.message }}</span>
 
 		<div class="flex flex-row gap-2 h-fit self-end">
-			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="experience_update_loading"
+			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="experience_create_loading"
 			         @click="cancel()"/>
-			<UButton color="black" label="Guardar" size="sm" class="h-fit" :loading="experience_update_loading"
+			<UButton color="black" label="Guardar" size="sm" class="h-fit" :loading="experience_create_loading"
 			         type="submit"/>
 		</div>
 
@@ -109,23 +107,18 @@
 </template>
 
 <script setup lang="ts">
+import {experienceCreate} from "~/queries";
 import {experience_schema} from "~/schemas/experience.schema";
-import {split_date} from "~/helpers";
-import {experienceUpdate} from "~/queries";
 import {months} from "~/data/months";
 
+const is_editable = ref(false)
+
 interface Props {
-	id: number,
-	title: string,
-	start_date: Date | undefined,
-	end_date: Date | undefined,
-	company: string,
-	description: string,
+	data_exists: boolean
+	reload: () => Promise<void>
 }
 
-const p = defineProps<{ props: Props, reload: () => Promise<void> }>();
-
-const is_editable = ref(false);
+const p = defineProps<Props>()
 const schema = experience_schema
 
 const state_error = reactive({
@@ -136,13 +129,13 @@ const state_error = reactive({
 })
 
 const state = reactive({
-	title: p.props.title,
-	company: p.props.company,
-	description: p.props.description,
-	starting_year: (p.props.start_date) ? split_date(p.props.start_date).year : null,
-	starting_month: (p.props.start_date) ? split_date(p.props.start_date).month_index : null,
-	completion_year: (p.props.end_date) ? split_date(p.props.end_date).year : null,
-	completion_month: (p.props.end_date) ? split_date(p.props.end_date).month_index : null,
+	title: '',
+	company: '',
+	description: '',
+	starting_year: null,
+	starting_month: null,
+	completion_year: null,
+	completion_month: null,
 });
 
 const validate = () => {
@@ -173,20 +166,19 @@ const validate = () => {
 }
 
 const {
-	mutate: experience_update_mutate,
-	loading: experience_update_loading,
-	error: experience_update_error
-} = useMutation<{ educationUpdate: string }>(experienceUpdate)
+	mutate: experience_create_mutate,
+	loading: experience_create_loading,
+	error: experience_create_error
+} = useMutation<{ experienceCreate: string }>(experienceCreate)
 
 const submit = async () => {
 	if (!validate()) return;
-	await experience_update_mutate({
-		"updateExperienceInput": {
-			"id": Number(p.props.id),
+	await experience_create_mutate({
+		"createExperienceInput": {
 			"title": state.title,
 			"company": state.company,
 			"description": state.description && state.description,
-			"starting_month": (state.starting_month) ? Number(state.starting_month) : null,
+			"starting_month": state.starting_month ? Number(state.starting_month) : null,
 			"starting_year": state.starting_year ? Number(state.starting_year) : null,
 			"completion_month": state.completion_month ? Number(state.completion_month) : null,
 			"completion_year": state.completion_year ? Number(state.completion_year) : null,
@@ -194,24 +186,13 @@ const submit = async () => {
 	}).then(async (r) => {
 		await p.reload()
 		console.log(r)
-		useToast().add({title: "Experiencia laboral actualizada exitósamente."})
+		useToast().add({title: "Experiencia laboral creada exitósamente."})
 		is_editable.value = false
+		reset()
 	}).catch((e: Error) => {
 		console.log(e)
 	})
 }
-
-const date_ranges = computed(() => {
-	if (!p.props.start_date && !p.props.end_date) return ''
-
-	if (p.props.start_date && p.props.end_date)
-		return `${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} - ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
-	else if (p.props.start_date && !p.props.end_date)
-		return `Desde ${new Date(p.props.start_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
-	else if (!p.props.start_date && p.props.end_date)
-		return `Hasta ${new Date(p.props.end_date).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
-
-})
 
 const cancel = () => {
 	is_editable.value = false
@@ -219,12 +200,12 @@ const cancel = () => {
 }
 
 const reset = () => {
-	state.title = p.props.title
-	state.company = p.props.company
-	state.description = p.props.description
-	state.starting_year = (p.props.start_date) ? split_date(p.props.start_date).year : null
-	state.starting_month = (p.props.start_date) ? split_date(p.props.start_date).month_index : null
-	state.completion_year = (p.props.end_date) ? split_date(p.props.end_date).year : null
-	state.completion_month = (p.props.end_date) ? split_date(p.props.end_date).month_index : null
+	state.title = ''
+	state.company = ''
+	state.description = ''
+	state.starting_year = null
+	state.starting_month = null
+	state.completion_year = null
+	state.completion_month = null
 }
 </script>

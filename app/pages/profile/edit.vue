@@ -98,9 +98,13 @@
 								description: e.description
 						}"
 							:reload="reload"
+							:key="'experience'+e.id"
 						/>
 					</div>
-					<UButton color="black" icon="ri:add-fill" label="Agregar"/>
+					<ProfileAddExperience
+						:data_exists="!!(seeker.experience && seeker.experience.length > 0)"
+						:reload="reload"
+					/>
 				</div>
 			</div>
 

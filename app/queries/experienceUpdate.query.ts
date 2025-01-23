@@ -1,5 +1,5 @@
 export default gql`
-    query Query($updateExperienceInput: UpdateExperienceInput!) {
+    mutation ExperienceUpdate($updateExperienceInput: UpdateExperienceInput!) {
         experienceUpdate(updateExperienceInput: $updateExperienceInput)
     }
 `
