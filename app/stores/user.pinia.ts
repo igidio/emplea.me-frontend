@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
-import type { UserInterface } from "~/interfaces";
+import {defineStore} from "pinia";
+import type {UserInterface} from "~/interfaces";
 import {
 	RolesEnum,
 	type AdminRolesEnum,
 	type ClientRolesEnum,
 } from "~/enums/server/roles.enum";
-import type { navigationOptionsInterface } from "~/interfaces/client.interface";
+import type {navigationOptionsInterface} from "~/interfaces/client.interface";
 
 import {
 	favorites_option,
@@ -21,12 +21,12 @@ export const useUserStore = defineStore("user", () => {
 	const token: Ref<string> = ref("");
 	const initial_loading = ref(true);
 	const is_open_modal_login = ref(false);
-
+	
 	const get_token = () => {
 		let token_from_storage = useCookie("token");
 		if (token_from_storage.value) token.value = token_from_storage.value;
 	};
-
+	
 	const set_token = (
 		new_token: string,
 		set_to_storage: boolean = true,
@@ -42,34 +42,37 @@ export const useUserStore = defineStore("user", () => {
 		}
 		token.value = new_token;
 	};
-
+	
 	const delete_token = () => {
 		const cookie = useCookie("token");
 		cookie.value = undefined;
 	};
-
+	
 	const set_user = (new_user: UserInterface) => (user.value = new_user);
-
-	const update_user = async () => {};
-
+	
+	const update_user = async () => {
+	};
+	
 	const user_role: ComputedRef<AdminRolesEnum | ClientRolesEnum> =
 		computed(() => {
 			return user.value.role;
 		});
-
+	
 	const is_premium = computed(() => false);
-
+	
 	const logout_user = async () => {
-		delete_token();
-		user.value = {} as UserInterface;
-
 		await useRouter().push({
 			path: "/",
+		})
+		await new Promise((resolve) => {
+			setTimeout(() => resolve('Promesa'), 1);
 		});
-		//useRouter().go(0);
-		useToast().add({ title: "Sesión finalizada" });
+		delete_token();
+		user.value = {} as UserInterface;
+		useToast().add({title: "Sesión finalizada"});
+		
 	};
-
+	
 	const dropdown_options: ComputedRef<any[][]> = computed(() => {
 		let profile = {
 			label: "Ver perfil",
@@ -78,28 +81,29 @@ export const useUserStore = defineStore("user", () => {
 				useRouter().push("/profile");
 			},
 		};
-
+		
 		let payment = {
 			label: "Pagos",
 			shortcuts: ["P"],
-			click: () => {},
-		};
-
-		let logout = {
-			label: "Cerrar sesión",
-			shortcuts: ["P"],
 			click: () => {
-				logout_user();
 			},
 		};
-
+		
+		let logout = {
+			label: "Cerrar sesión",
+			shortcuts: ["C"],
+			click: async () => {
+				await logout_user();
+			},
+		};
+		
 		if (user.value.role === RolesEnum.EMPLOYER.toUpperCase()) {
 			return [[profile, payment, logout]];
 		} else {
 			return [[profile, logout]];
 		}
 	});
-
+	
 	const computed_navigation_options: ComputedRef<navigationOptionsInterface[]> =
 		computed(() => {
 			let cases: any = {
@@ -109,18 +113,18 @@ export const useUserStore = defineStore("user", () => {
 			is_premium.value
 				? cases.EMPLOYER.push(my_services_option)
 				: cases.EMPLOYER.push(premium_option);
-
+			
 			return cases[user.value.role];
 		});
-
+	
 	const first_of_fist_name = computed(
 		() => user.value.contact.first_name.split(" ")[0]
 	);
-
+	
 	const computed_image = computed(() =>
 		user.value.image ? user.value.image : "/images/empleame_user_silhouette.png"
 	);
-
+	
 	return {
 		user,
 		token,

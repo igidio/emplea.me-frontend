@@ -8,7 +8,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 	
 	const { getToken } = useApollo();
 	
-	
 	await getToken();
 	const { data, error } = await useAsyncQuery(getUserByToken, { server: true });
 	

@@ -5,14 +5,14 @@
 			:popper="{ placement: 'bottom-start' }"
 		>
 			<button
-				class="white text-base rounded-large flex-row gap-1 overflow-hidden w-32 justify-between shadow-sm hidden desktop:flex"
+				class="white text-base rounded-large flex-row gap-1 overflow-hidden w-32 justify-between shadow-sm hidden desktop:flex border"
 			>
 				<span
 					class="text-base font-semibold self-center ml-3 inline-block w-full truncate"
 					>{{ first_of_fist_name }}</span
 				>
 
-				<img class="h-8 rounded-full" :src="computed_image" />
+				<img class="h-8 rounded-full border" :src="computed_image" />
 			</button>
 
 			<button>

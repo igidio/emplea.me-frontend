@@ -15,9 +15,14 @@
 			/>
 		</div>
 	</div>
+
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+	middleware: 'role',
+})
+
 const user = useUserStore()
 const {user_role} = user
 </script>
