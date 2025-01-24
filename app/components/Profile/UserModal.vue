@@ -19,7 +19,7 @@
 						/>
 					</UFormGroup>
 
-					<UFormGroup label="Correo electónico" name="email">
+					<UFormGroup label="Correo electrónico" name="email">
 						<UInput
 							placeholder="correo_electronico@mail.com"
 							size="lg"

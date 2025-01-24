@@ -1,6 +1,15 @@
 <template>
 	<ProfileUserModal v-model="modal_user" />
-	<ProfileModalContact v-model="modal_contact" />
+	<ProfileModalContact
+		v-model="modal_contact"
+		:props="{
+			last_name: user.contact.last_name,
+			first_name: user.contact.first_name,
+			phone: user.contact.phone,
+			gender: user.contact.gender,
+			date_of_birth: user.contact.date_of_birth,
+		}"
+	/>
 	<ProfileModalImage v-model="modal_image" />
 	<ProfileModalPassword v-model="modal_password" />
 	<UCard>
@@ -24,7 +33,7 @@
 				>
 					<div class="flex flex-col gap-2 items-center tablet:items-start">
 						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
-						<span>{{ get_gender_computed }} | {{ get_age_computed }}</span>
+						<span>{{ (get_gender_computed && get_gender_computed !== GenderEnum.OTHER ) && `${get_gender_computed} |` }} {{ get_age_computed }}</span>
 					</div>
 					<UDropdown
 						:items="items"
@@ -90,6 +99,7 @@
 
 <script setup lang="ts">
 import { get_age, get_date, get_gender } from "~/helpers";
+import {GenderEnum} from "../../enums";
 
 const modal_user = ref(false);
 const modal_contact = ref(false);

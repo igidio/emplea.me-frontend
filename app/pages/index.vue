@@ -11,8 +11,8 @@
 		<LandingCategories />
 		<hr />
 		<div class="flex flex-col desktop:flex-row gap-4">
-			<LandingFeatured class="basis-[75%]" />
-			<Add class="basis-[25%]" />
+			<LandingFeatured class="grow" />
+			<Add class="w-40" />
 		</div>
 		<Add class="h-32" />
 	</div>

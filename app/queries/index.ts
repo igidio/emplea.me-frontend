@@ -30,6 +30,7 @@ import experienceUpdate from "./experienceUpdate.query";
 import experienceCreate from "./experienceCreate.query";
 import experienceDelete from "./experienceDelete.query";
 import seekerChangeLocation from "./seekerChangeLocation.query";
+import contactUpdate from "./contactUpdate.query";
 
 export {
 	getUserByToken,
@@ -38,6 +39,8 @@ export {
 	userUpdate,
 	uploadImage,
 	deleteImage,
+	// contact
+	contactUpdate,
 	confirmationCreateForgotPassword,
 	confirmationVerifyToken,
 	confirmationRecoveryAccount,
