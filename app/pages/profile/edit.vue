@@ -125,6 +125,11 @@ import type {seekerInterface, socialInterface} from "~/interfaces";
 import {seekerGetOneByUser, socialFindAll} from "~/queries";
 import ItemExperience from "~/components/Profile/ItemExperience.vue";
 
+definePageMeta({
+	middleware: 'role',
+	roles: ['SEEKER', 'SUPERUSER']
+})
+
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 const social: Ref<socialInterface[] | undefined> = ref([])
 
