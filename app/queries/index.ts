@@ -31,6 +31,8 @@ import experienceCreate from "./experienceCreate.query";
 import experienceDelete from "./experienceDelete.query";
 import seekerChangeLocation from "./seekerChangeLocation.query";
 import contactUpdate from "./contactUpdate.query";
+// USER
+import userChangePassword from "./userChangePassword.query";
 
 export {
 	getUserByToken,
@@ -67,5 +69,6 @@ export {
 	// experience
 	experienceUpdate,
 	experienceCreate,
-	experienceDelete
+	experienceDelete,
+	userChangePassword
 };

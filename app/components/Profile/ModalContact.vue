@@ -31,7 +31,7 @@
 							size="md"
 							v-model="state.phone"
 							color="gray"
-							:ui="{ leading: { padding: { md: 'pl-[45px]'} } }"
+							:ui="{ leading: { padding: { md: 'pl-[46px]'} } }"
 						>
 							<template #leading>
 								<span class="font-bold dark:text-gray-400 text-xs">+591</span>
