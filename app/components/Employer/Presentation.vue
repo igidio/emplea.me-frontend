@@ -4,7 +4,7 @@
 			<div class="flex flex-row justify-between p-4">
 				<div class="flex flex-row gap-4">
 					<img
-						:src="data.profile_image ? data.profile_image : 'https://placehold.co/400'"
+						:src="data.profile_image ? data.profile_image : '/images/empleame_employer_silhouette.png'"
 						class="w-24 aspect-[1:1] rounded-medium border border-slate-200"
 						alt="Logo de empresa"
 					/>

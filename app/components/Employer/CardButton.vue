@@ -1,7 +1,7 @@
 <template>
 	<UButton color="white" class="flex flex-col gap-1 items-center rounded-medium w-64 center-text">
 			<img
-				:src="image ? image : 'https://placehold.co/400'"
+				:src="image ? image : '/images/empleame_employer_silhouette.png'"
 				class="w-16 h-auto rounded-medium border border-slate-200"
 				alt="Logo de empresa"
 			/>

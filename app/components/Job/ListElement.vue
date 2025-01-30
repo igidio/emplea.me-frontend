@@ -4,7 +4,7 @@
 	>
 		<div class="flex tablet:flex-row flex-col justify-between gap-4">
 			<div class="flex flex-row gap-4">
-				<img :src="(image) ? image : 'https://placehold.co/400'" class="h-16 aspect-[1/1] rounded-small border border-gray-300" alt="Imagen de la empresa" />
+				<img :src="(image) ? image : '/images/empleame_employer_silhouette.png'" class="h-16 aspect-[1/1] rounded-small border border-gray-300" alt="Imagen de la empresa" />
 				<div class="flex flex-col">
 					<NuxtLink :to="`/employer/${employer_id}`">
 						<span class="font-semibold">{{ employer }}</span>

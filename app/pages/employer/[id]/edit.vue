@@ -21,7 +21,7 @@
 						class="w-48 h-full relative image-container self-center tablet:self-auto"
 					>
 						<img
-							:src="employer.profile_image ? employer.profile_image : 'https://placehold.co/400'"
+							:src="employer.profile_image ? employer.profile_image : '/images/empleame_employer_silhouette.png'"
 							class="h-36 aspect-[1:1] rounded-medium border border-slate-200"
 							alt="Logo de empresa"
 						/>
