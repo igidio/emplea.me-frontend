@@ -8,7 +8,8 @@
 					establishment_date: data.employer.establishment_date,
 					email: data.employer.email,
 					description: data.employer.description,
-					can_modify: can_modify
+					can_modify: can_modify,
+					id: data.employer.id
 				}"/>
 				<EmployerPosts
 					:employer-info="{ image: data.employer.profile_image, name: data.employer.name, id: data.employer.id }"

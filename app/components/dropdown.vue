@@ -12,13 +12,14 @@
 					>{{ first_of_fist_name }}</span
 				>
 
-				<img class="h-8 rounded-full border" :src="computed_image" />
+				<img class="h-8 rounded-full border" :src="computed_image.value" alt="Imagen de perfil" />
 			</button>
 
 			<button>
 				<img
 					class="h-8 rounded-full tablet:block desktop:hidden"
-					:src="computed_image"
+					:src="computed_image.value"
+					alt="Imagen de perfil"
 				/>
 			</button>
 		</UDropdown>

@@ -23,6 +23,11 @@
 				:label="current ? 'Activo' : 'Seleccionar'"
 				:disabled="current"
 			/>
+			<UButton
+				class="w-fit self-center"
+				:label="current ? 'Activo' : 'Seleccionar'"
+				:disabled="current"
+			/>
 		</NuxtLink>
 	</div>
 
@@ -32,11 +37,16 @@
 <script setup lang="ts">
 import type {PlanInterface} from "~/interfaces";
 
+interface Props {
+	props: PlanInterface,
+	current?: boolean,
+	index?: number,
+	show_select_button?: boolean
+}
+
 const props = withDefaults(
-	defineProps<{ props: PlanInterface, current?: boolean, index: number, show_select_button: boolean }>(),
-	{
-		show_select_button: true
-	}
+	defineProps<Props>(),
+	{ show_select_button: true }
 )
 const {name, price, currency, benefits, color} = props.props
 </script>

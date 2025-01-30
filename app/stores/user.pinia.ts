@@ -121,8 +121,10 @@ export const useUserStore = defineStore("user", () => {
 		() => user.value.contact.first_name.split(" ")[0]
 	);
 	
-	const computed_image = computed(() =>
-		user.value.image ? user.value.image : "/images/empleame_user_silhouette.png"
+	const computed_image = computed(() => ({
+		value: user.value.image ? user.value.image : "/images/empleame_user_silhouette.png",
+		exists: !!user.value.image,
+	})
 	);
 	
 	return {

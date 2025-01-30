@@ -109,5 +109,9 @@ export default defineNuxtConfig({
 	future: {
 		compatibilityVersion: 4,
 	},
+	css: [
+		"@vuepic/vue-datepicker/dist/main.css",
+		"~/assets/css/vue-datepicker.css"
+	],
 	compatibilityDate: "2024-08-10",
 });

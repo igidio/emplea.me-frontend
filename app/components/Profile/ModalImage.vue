@@ -8,13 +8,13 @@
 				v-if="image_url === ''"
 			>
 				<img
-					:src="computed_image"
+					:src="computed_image.value"
 					alt=""
 					class="rounded-full h-fit w-64 self-center border"
 				/>
 				<div class="flex flex-col gap-2 self-center w-full tablet:w-auto">
 					<span class="font-semibold"
-						>Seleccione una imagen desde su ordenador:</span
+					>Seleccione una imagen desde su ordenador:</span
 					>
 					<UInput
 						type="file"
@@ -28,10 +28,11 @@
 					<span class="mb-4">Formatos permitidos: jpg, jpeg, png</span>
 					<UButton
 						color="black"
-						v-if="user.image"
+						v-if="computed_image.exists"
 						:loading="loading"
 						@click="delete_image()"
-						>Eliminar</UButton
+					>Eliminar
+					</UButton
 					>
 				</div>
 			</div>
@@ -43,6 +44,7 @@
 					:image="image"
 					:image_url="image_url"
 					:delete_preview="delete_preview"
+					:update="update"
 					v-model="isOpen"
 				/>
 			</div>
@@ -57,11 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { deleteImage } from "~/queries";
-
-const isOpen = defineModel({ required: true, default: false });
-
-const { user, computed_image } = storeToRefs(useUserStore());
+const isOpen = defineModel({required: true, default: false});
+const props = defineProps<{
+	computed_image: { value: string, exists: boolean },
+	delete: () => Promise<void>,
+	update: {
+		query: string,
+		on_change: (new_image: any) => void
+	},
+	loading: boolean
+}>()
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const image_url = ref("");
@@ -80,16 +87,13 @@ const onFileChange = () => {
 	reader.readAsArrayBuffer(image.value);
 };
 
-const { mutate, loading } = useMutation(deleteImage);
-
 const delete_preview = () => {
 	image.value = null;
 	image_url.value = "";
 };
 
-const delete_image = () => {
-	mutate();
-	useToast().add({ title: "Tu imagen ha sido eliminada" });
-	user.value.image = "";
+const delete_image = async () => {
+	useToast().add({title: "La imagen ha sido eliminada"});
+	await props.delete()
 };
 </script>

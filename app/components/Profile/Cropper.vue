@@ -22,10 +22,10 @@
 			/>
 
 			<div class="flex flex-col gap-2 w-32 self-end">
-				<UButton color="black" @click="delete_preview()" :loading="loading"
+				<UButton color="black" @click="delete_preview()" :disabled="loading"
 					>Cancelar</UButton
 				>
-				<UButton @click="send_image()" :loading="loading">Subir</UButton>
+				<UButton @click="send_image()" :disabled="loading">Subir</UButton>
 			</div>
 		</div>
 		<span class="error" v-if="error">{{ "error" }}</span>
@@ -43,6 +43,10 @@ interface props {
 	image_url: string;
 	image: File;
 	delete_preview: () => void;
+	update: {
+		query: string,
+		on_change: (new_image: any) => void
+	},
 }
 const props = defineProps<props>();
 const { image, delete_preview } = toRefs(props);
@@ -62,14 +66,12 @@ const onCropChange = ({ coordinates }: any) => {
 
 const send_image = async () => {
 	loading.value = true;
-	const { user } = storeToRefs(useUserStore());
 
 	const formData = new FormData();
 	formData.append(
 		"operations",
 		JSON.stringify({
-			query:
-				"mutation UploadImage($body: UploadDto!) {uploadImage(body: $body)}",
+			query: props.update.query,
 			variables: {
 				body: {
 					image: null,
@@ -85,7 +87,6 @@ const send_image = async () => {
 		})
 	);
 	formData.append("0", image.value);
-
 	try {
 		const response = await fetch("http://localhost:3000/graphql", {
 			method: "POST",
@@ -97,13 +98,10 @@ const send_image = async () => {
 		});
 
 		let data = await response.json();
-		console.log(data);
-		console.log(data.data.uploadImage);
-
-		user.value.image = data.data.uploadImage;
-		isOpen.value = false;
-		props.delete_preview();
+		props.update.on_change(data.data.uploadImage as string);
 		useToast().add({ title: "Imagen subida exitosamente" });
+		isOpen.value = false;
+		props.delete_preview()
 	} catch (err) {
 		error.value = err;
 	}

@@ -11,17 +11,19 @@
 					<div class="flex flex-col">
 						<div class="flex flex-col gap-2">
 							<h3>{{ data.name }}</h3>
-							<item icon="ri:calendar-line" :label="data.establishment_date"/>
+							<item icon="ri:calendar-line" :label="'Fundado el ' + new Date(data.establishment_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })"/>
 							<item icon="ri:calendar-line" :label="data.email"/>
 						</div>
 					</div>
 				</div>
-				<UButton
-					icon="ri:ball-pen-fill"
-					class="h-fit"
-					label="Editar"
-					v-if="data.can_modify"
-				/>
+				<NuxtLink :to="`/employer/${data.id}/edit`">
+					<UButton
+						icon="ri:ball-pen-fill"
+						class="h-fit"
+						label="Editar"
+						v-if="data.can_modify"
+					/>
+				</NuxtLink>
 			</div>
 
 			<hr/>
@@ -36,10 +38,11 @@
 interface Props {
 	profile_image: string,
 	name: string,
-	establishment_date: Date|string,
+	establishment_date: Date | string,
 	email: string,
 	description: string,
-	can_modify: boolean
+	can_modify: boolean,
+	id: string
 }
 
 defineProps<{ data: Props }>();

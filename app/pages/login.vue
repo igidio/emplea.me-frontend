@@ -19,7 +19,8 @@
 							v-model="state.usernameOrEmail"
 							size="lg"
 							color="gray"
-							placeholder="nombreusuario / correoeletronico@mail.com"
+							placeholder="@nombreusuario / correoeletronico@mail.com"
+							autocomplete="username"
 						/>
 					</UFormGroup>
 
@@ -30,6 +31,7 @@
 							size="lg"
 							color="gray"
 							type="password"
+							autocomplete="current-password"
 						/>
 					</UFormGroup>
 

@@ -5,12 +5,14 @@
 				Pago presencial
 			</template>
 
-			<div class="flex flex-col tablet:flex-row gap-8">
+			<div class="flex flex-col tablet:flex-col gap-8">
 				<p>Apersónate en una de las sucursales de Empleame que tenemos en el país, puedes conocer
 					cual es la más cercana a tí por acá.</p>
 
+				<div class="w-full text-end ">
+					<UButton class="self-end" color="black" label="Cerrar" @click="is_open = false"/>
+				</div>
 
-				<UButton class="self-end" color="black" label="Cerrar" @click="is_open = false"/>
 			</div>
 
 		</UCard>

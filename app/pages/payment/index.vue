@@ -19,6 +19,11 @@
 
 
 <script setup lang="ts">
+definePageMeta({
+	middleware: 'role',
+	roles: ['EMPLOYER']
+})
+
 import {plans} from "~/data/plans.data";
 const current = ref(0)
 </script>

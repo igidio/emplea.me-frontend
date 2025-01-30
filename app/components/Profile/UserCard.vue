@@ -10,14 +10,20 @@
 			date_of_birth: user.contact.date_of_birth,
 		}"
 	/>
-	<ProfileModalImage v-model="modal_image" />
+	<ProfileModalImage
+		v-model="modal_image"
+		:delete="delete_image"
+		:update="update_image"
+		:loading="loading"
+		:computed_image="computed_image"
+	/>
 	<ProfileModalPassword v-model="modal_password" />
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
 				class="w-48 h-full relative image-container self-center tablet:self-auto"
 			>
-				<img :src="computed_image" alt="" class="rounded-full h-fit border" />
+				<img :src="computed_image.value" alt="" class="rounded-full h-fit border" />
 				<UButton
 					icon="ri:pencil-fill"
 					color="white"
@@ -100,6 +106,7 @@
 <script setup lang="ts">
 import { get_age, get_date, get_gender } from "~/helpers";
 import {GenderEnum} from "../../enums";
+import {deleteImage} from "~/queries";
 
 const modal_user = ref(false);
 const modal_contact = ref(false);
@@ -107,7 +114,11 @@ const modal_image = ref(false);
 const modal_password = ref(false);
 
 const userStore = useUserStore();
-const { user, computed_image } = storeToRefs(userStore);
+const store = storeToRefs(userStore);
+const { computed_image } = store;
+const { user } = storeToRefs(userStore);
+
+//user.value.image = "http://res.cloudinary.com/dlhevrkcz/image/upload/v1738274786/m5hoqjb0udfbvluxrpsc.jpg"
 
 const get_age_computed = computed(() => {
 	return `${get_age(new Date(user.value.contact.date_of_birth))} años`;
@@ -136,6 +147,22 @@ const items = [
 		},
 	],
 ];
+
+const { mutate: delete_image_mutation, loading } = useMutation(deleteImage);
+
+const delete_image = async () => {
+	await delete_image_mutation()
+	user.value.image = null
+};
+
+const update_image = {
+	query: "mutation UploadImage($body: UploadDto!) {uploadImage(body: $body)}",
+	on_change: ( new_image: string ) => {
+		user.value.image = new_image
+	}
+}
+
+
 </script>
 
 <style>

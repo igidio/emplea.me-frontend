@@ -114,10 +114,7 @@
 
 <script setup lang="ts">
 import {contactUpdate, userUpdate} from "~/queries";
-
 import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
-import "~/assets/css/vue-datepicker.css";
 import {contact_schema} from "~/schemas";
 import * as yup from "yup";
 import {GenderEnum} from "~/enums";
