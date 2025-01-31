@@ -12,7 +12,7 @@
 						<div class="flex flex-col gap-2">
 							<h3>{{ data.name }}</h3>
 							<item icon="ri:calendar-line" :label="'Fundado el ' + new Date(data.establishment_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })"/>
-							<item icon="ri:calendar-line" :label="data.email"/>
+							<item icon="ri:mail-line" :label="data.email"/>
 						</div>
 					</div>
 				</div>

@@ -118,8 +118,6 @@ const store = storeToRefs(userStore);
 const { computed_image } = store;
 const { user } = storeToRefs(userStore);
 
-//user.value.image = "http://res.cloudinary.com/dlhevrkcz/image/upload/v1738274786/m5hoqjb0udfbvluxrpsc.jpg"
-
 const get_age_computed = computed(() => {
 	return `${get_age(new Date(user.value.contact.date_of_birth))} años`;
 });
@@ -159,7 +157,8 @@ const update_image = {
 	query: "mutation UploadImage($body: UploadDto!) {uploadImage(body: $body)}",
 	on_change: ( new_image: string ) => {
 		user.value.image = new_image
-	}
+	},
+	field: "uploadImage",
 }
 
 

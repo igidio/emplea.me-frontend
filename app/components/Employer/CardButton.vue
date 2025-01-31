@@ -17,7 +17,7 @@ import {EmployerLevelEnum} from "~/enums";
 interface Props {
 	name: string;
 	role: string;
-	image: string;
+	image?: string;
 }
 
 defineProps<Props>();

@@ -141,6 +141,10 @@ span.error {
 	@apply text-center justify-center text-base;
 }
 
+.full-content {
+	@apply h-[calc(100vh-330px)];
+}
+
 .menu-fade {
 	@apply py-0 tablet:py-8 tablet:[mask:var(--mask)];
 	--mask: linear-gradient(to bottom,

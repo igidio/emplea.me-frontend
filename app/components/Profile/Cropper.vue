@@ -23,7 +23,8 @@
 
 			<div class="flex flex-col gap-2 w-32 self-end">
 				<UButton color="black" @click="delete_preview()" :disabled="loading"
-					>Cancelar</UButton
+				>Cancelar
+				</UButton
 				>
 				<UButton @click="send_image()" :disabled="loading">Subir</UButton>
 			</div>
@@ -33,11 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { Cropper, CircleStencil } from "vue-advanced-cropper";
+import {Cropper, CircleStencil} from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
-const isOpen = defineModel({ required: true, default: false });
-const { user } = storeToRefs(useUserStore());
+const isOpen = defineModel({required: true, default: false});
+const {user} = storeToRefs(useUserStore());
 
 interface props {
 	image_url: string;
@@ -45,11 +46,13 @@ interface props {
 	delete_preview: () => void;
 	update: {
 		query: string,
-		on_change: (new_image: any) => void
+		on_change: (new_image: any) => void,
+		field: string
 	},
 }
+
 const props = defineProps<props>();
-const { image, delete_preview } = toRefs(props);
+const {image, delete_preview} = toRefs(props);
 const error = ref();
 const loading = ref(false);
 
@@ -60,8 +63,8 @@ const image_properties = ref({
 	top: null,
 });
 
-const onCropChange = ({ coordinates }: any) => {
-	image_properties.value = { ...coordinates };
+const onCropChange = ({coordinates}: any) => {
+	image_properties.value = {...coordinates};
 };
 
 const send_image = async () => {
@@ -87,6 +90,7 @@ const send_image = async () => {
 		})
 	);
 	formData.append("0", image.value);
+
 	try {
 		const response = await fetch("http://localhost:3000/graphql", {
 			method: "POST",
@@ -98,11 +102,12 @@ const send_image = async () => {
 		});
 
 		let data = await response.json();
-		props.update.on_change(data.data.uploadImage as string);
-		useToast().add({ title: "Imagen subida exitosamente" });
+		props.update.on_change(data.data[props.update.field] as string);
+		useToast().add({title: "Imagen subida exitosamente"});
 		isOpen.value = false;
 		props.delete_preview()
 	} catch (err) {
+		console.log(err)
 		error.value = err;
 	}
 

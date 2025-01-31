@@ -23,11 +23,7 @@
 				:label="current ? 'Activo' : 'Seleccionar'"
 				:disabled="current"
 			/>
-			<UButton
-				class="w-fit self-center"
-				:label="current ? 'Activo' : 'Seleccionar'"
-				:disabled="current"
-			/>
+
 		</NuxtLink>
 	</div>
 

@@ -65,9 +65,10 @@ const props = defineProps<{
 	delete: () => Promise<void>,
 	update: {
 		query: string,
-		on_change: (new_image: any) => void
+		on_change: (new_image: any) => void,
+		field: string
 	},
-	loading: boolean
+	loading: boolean,
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null);

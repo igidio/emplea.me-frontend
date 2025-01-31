@@ -8,11 +8,11 @@
 				:role="employment.role"
 				:image="employment.image"
 			/>
-			<EmployerCardButtonAdd/>
+			<EmployerCardButtonAdd v-if="employments.length < 4"/>
 		</div>
 
 		<div
-			class="h-[calc(100vh-330px)] w-full flex items-center justify-center"
+			class="full-content w-full flex items-center justify-center"
 			v-if="loading"
 		>
 			<UIcon
@@ -34,6 +34,11 @@
 import {employerFindOne, employerGetByUser} from "~/queries";
 import {useMyEmployments} from "~/composables/my_employments.composable";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['EMPLOYER']
+})
 
 const loading = ref(false)
 

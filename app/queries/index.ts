@@ -33,6 +33,8 @@ import seekerChangeLocation from "./seekerChangeLocation.query";
 import contactUpdate from "./contactUpdate.query";
 // USER
 import userChangePassword from "./userChangePassword.query";
+import deleteEmployerImage from "./deleteEmployerImage.query";
+import employerUpdate from "./employerUpdate.query";
 
 export {
 	getUserByToken,
@@ -70,5 +72,7 @@ export {
 	experienceUpdate,
 	experienceCreate,
 	experienceDelete,
-	userChangePassword
+	userChangePassword,
+	deleteEmployerImage,
+	employerUpdate
 };

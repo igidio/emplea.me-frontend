@@ -1,7 +1,7 @@
 <template>
 	<GoToPrevious/>
 	<div
-		class="flex flex-col tablet:flex-row gap-4 w-full justify-center"
+		class="flex flex-col tablet:flex-row gap-8 w-full justify-center"
 		v-if="current_plan"
 	>
 
@@ -12,7 +12,7 @@
 				:show_select_button="false"
 			/>
 		</div>
-		<div class="flex flex-col gap-4 w-full tablet:w-96">
+		<div class="flex flex-col gap-4 w-full tablet:w-96 justify-center">
 			<span class="font-semibold">Selecciona un método de pago</span>
 			<UButton color="primary" size="lg" label="Pagar con tarjeta" :to="`${useRoute().params.id}/order`"/>
 			<UButton

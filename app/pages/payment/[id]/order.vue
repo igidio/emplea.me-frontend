@@ -1,24 +1,33 @@
 <template>
-	<div class="flex flex-col tablet:flex-row gap-4 w-full">
+	<div class="bg-violet-200 rounded-large p-4 justify-between row mb-4 desktop:hidden flex">
+		<div class="flex flex-col text-end w-full">
+			<span class="font-bold">Plan {{ plan.name }}</span>
+			<span class="font-black text-5xl">{{ plan.price }} {{ plan.currency }}</span>
+			<span class="font-bold">{{ (plan.price / exchangeRate).toFixed(2) }} USD (Dólar americano)</span>
+		</div>
+	</div>
+	<div class="flex flex-col desktop:flex-row gap-4 w-full">
 
 		<div class="flex flex-col gap-4 grow">
-			<div class="bg-violet-200 rounded-large p-4 justify-between flex row">
-				<div class="flex flex-col">
+
+			<div class="h-full align-middle justify-end place-items-center place-content-center">
+				<div class="w-64">
+					<PaymentCardPreview
+						:is_card_flipped="is_card_flipped"
+						:card="state"
+					/>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col desktop:max-w-[50%] gap-4">
+			<div class="bg-violet-200 rounded-large p-4 justify-between row hidden desktop:flex">
+				<div class="flex flex-col text-end w-full">
 					<span class="font-bold">Plan {{ plan.name }}</span>
 					<span class="font-black text-5xl">{{ plan.price }} {{ plan.currency }}</span>
 					<span class="font-bold">{{ (plan.price / exchangeRate).toFixed(2) }} USD (Dólar americano)</span>
 				</div>
 			</div>
-
-			<div class="w-64 self-center">
-				<PaymentCardPreview
-					:is_card_flipped="is_card_flipped"
-					:card="state"
-				/>
-			</div>
-		</div>
-
-		<div class="flex flex-col tablet:max-w-[50%] gap-2">
 
 			<UCard>
 				<!--				:schema="order_schema"-->
@@ -122,13 +131,16 @@
 				</UForm>
 			</UCard>
 
-			<div class="flex flex-col gap-1 text-end">
+			<div class="flex flex-col gap-0 text-end">
 				<div class="flex flex-row items-center self-end">
-					<span class="font-semibold mr-2">Impulsado por</span>
+					<span class="font-semibold mr-1">Impulsado por</span>
 					<UIcon name="fa-brands:stripe" size="30px"></UIcon>
 				</div>
-				<NuxtLink class="hyper"><span class="text-sm">Términos</span></NuxtLink>
-				<NuxtLink class="hyper"><span class="text-sm">Privacidad</span></NuxtLink>
+				<div class="flex flex-col gap-1">
+					<NuxtLink class="hyper text-sm">Términos</NuxtLink>
+					<NuxtLink class="hyper text-sm">Privacidad</NuxtLink>
+				</div>
+
 			</div>
 		</div>
 
@@ -202,7 +214,7 @@ const submit_form = async () => {
 
 	const variables = {
 		"input": {
-			"amount": Number((plan.price / exchangeRate).toFixed(2))*100,
+			"amount": Number((plan.price / exchangeRate).toFixed(2)) * 100,
 			"currency": "usd",
 			"token": card_token ? card_token : "tok_visa_chargeDeclined"
 		}

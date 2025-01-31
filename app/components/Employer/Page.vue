@@ -38,8 +38,6 @@
 			</div>
 		</div>
 	</div>
-
-	{{ data.employerUser }}
 </template>
 
 <script setup lang="ts">
