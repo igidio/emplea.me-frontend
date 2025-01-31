@@ -35,6 +35,7 @@ import contactUpdate from "./contactUpdate.query";
 import userChangePassword from "./userChangePassword.query";
 import deleteEmployerImage from "./deleteEmployerImage.query";
 import employerUpdate from "./employerUpdate.query";
+import employerCreate from "./employerCreate.query";
 
 export {
 	getUserByToken,
@@ -74,5 +75,6 @@ export {
 	experienceDelete,
 	userChangePassword,
 	deleteEmployerImage,
-	employerUpdate
+	employerUpdate,
+	employerCreate
 };

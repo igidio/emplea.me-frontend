@@ -20,6 +20,8 @@
 
 			<div class="w-[20%] flex flex-col gap-4">
 
+
+
 				<div v-if="can_modify" class="flex flex-col gap-4">
 					<span class="font-semibold">Menú de administrador</span>
 					<div class="flex flex-col gap-2">

@@ -26,8 +26,8 @@
 				</NuxtLink>
 			</div>
 
-			<hr/>
-			<p class="text-justify">{{ data.description }}</p>
+			<hr v-if="data.description || data.description !== ''" />
+			<p class="text-justify" v-if="data.description || data.description !== ''">{{ data.description }}</p>
 		</div>
 	</UCard>
 </template>

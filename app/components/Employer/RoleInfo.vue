@@ -7,7 +7,7 @@
 		</div>
 		<div class="flex flex-col gap-1">
 			<span>Puedes:</span>
-			<ul>
+			<ul class="list-inside list-disc">
 				<li v-for="l in descriptions[level].list">{{ l }}</li>
 			</ul>
 		</div>

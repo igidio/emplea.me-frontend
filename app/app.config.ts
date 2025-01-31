@@ -173,6 +173,14 @@ export default defineAppConfig({
 		},
 		textarea: {
 			rounded: 'rounded-medium',
+		},
+		alert: {
+			rounded: 'rounded-medium',
+			color: {
+				violet: {
+					solid: 'bg-violet-100 text-violet-500',
+				}
+			}
 		}
 	},
 });

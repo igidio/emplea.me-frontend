@@ -8,8 +8,8 @@ export const employer_schema = yup.object({
 		.max(40, "El nombre debe tener como mucho 100 caracteres"),
 	email: yup
 		.string()
-		.email("El email debe ser válido")
-		.required("El email es obligatorio"),
+		.email("El correo electrónico debe ser válido")
+		.required("El correo electrónico es obligatorio"),
 	description: yup
 		.string()
 		.max(2000, "La descripción debe tener como mucho 2000 caracteres"),
