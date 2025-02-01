@@ -43,7 +43,7 @@ definePageMeta({
 const loading = ref(false)
 
 const {fill_employments, user_id, employments, selected, index} = useMyEmployments();
-const data = ref<{
+const result = ref<{
 	employer: EmployerInterface,
 	employerUser: EmployerUserInterface
 } | undefined>(undefined)

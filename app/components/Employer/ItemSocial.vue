@@ -1,0 +1,3 @@
+<template>
+	sadsada
+</template>

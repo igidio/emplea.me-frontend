@@ -36,6 +36,10 @@ import userChangePassword from "./userChangePassword.query";
 import deleteEmployerImage from "./deleteEmployerImage.query";
 import employerUpdate from "./employerUpdate.query";
 import employerCreate from "./employerCreate.query";
+// PHONE
+import phoneUpdate from "./phoneUpdate.query";
+import phoneCreate from "./phoneCreate.query";
+import phoneDelete from "./phoneDelete.query";
 
 export {
 	getUserByToken,
@@ -76,5 +80,9 @@ export {
 	userChangePassword,
 	deleteEmployerImage,
 	employerUpdate,
-	employerCreate
+	employerCreate,
+	// phone
+	phoneUpdate,
+	phoneCreate,
+	phoneDelete
 };

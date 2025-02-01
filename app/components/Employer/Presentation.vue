@@ -10,7 +10,7 @@
 					/>
 					<div class="flex flex-col">
 						<div class="flex flex-col gap-2">
-							<h3>{{ data.name }}</h3>
+							<h3>{{ result.name }}</h3>
 							<item icon="ri:calendar-line" :label="'Fundado el ' + new Date(data.establishment_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })"/>
 							<item icon="ri:mail-line" :label="data.email"/>
 						</div>
@@ -27,7 +27,7 @@
 			</div>
 
 			<hr v-if="data.description || data.description !== ''" />
-			<p class="text-justify" v-if="data.description || data.description !== ''">{{ data.description }}</p>
+			<p class="text-justify" v-if="data.description || data.description !== ''">{{ result.description }}</p>
 		</div>
 	</UCard>
 </template>
@@ -45,5 +45,5 @@ interface Props {
 	id: string
 }
 
-defineProps<{ data: Props }>();
+defineProps<{ result: Props }>();
 </script>

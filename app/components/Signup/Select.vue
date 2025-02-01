@@ -12,14 +12,14 @@
 			variant="outline"
 			size="lg"
 			class="w-full"
-			v-for="(data, index) in signupData"
+			v-for="(result, index) in signupData"
 			@click="
 				() => {
 					selection = index;
 					modify_query_params({ selection: index });
 				}
 			"
-			>{{ data.message }}</UButton
+			>{{ result.message }}</UButton
 		>
 		{{ selection }}
 	</div>

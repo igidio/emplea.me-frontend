@@ -96,7 +96,7 @@ const send_image = async () => {
 			method: "POST",
 			body: formData,
 			headers: {
-				"x-apollo-operation-name": "multipart/form-data",
+				"x-apollo-operation-name": "multipart/form-result",
 				Authorization: "Bearer " + useCookie("token").value,
 			},
 		});

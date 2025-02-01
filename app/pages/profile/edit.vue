@@ -140,7 +140,6 @@ const {result, refetch} = useQuery<{ seekerFindByUser: seekerInterface }>(seeker
 
 const reload = async () => {
 	await refetch()
-	console.log(result.value)
 	seeker.value = result.value?.seekerFindByUser!
 }
 
