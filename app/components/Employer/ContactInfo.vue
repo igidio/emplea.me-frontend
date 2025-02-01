@@ -1,6 +1,6 @@
 <template>
 	<UCard>
-		<span class="font-bold inline-block mb-4">Información de la empresa</span>
+		<h6 class="font-bold inline-block mb-4">Contacto</h6>
 
 
 		<div class="flex flex-col relative overflow-hidden gap-2">
@@ -25,26 +25,25 @@
 			/>
 
 			<div class="flex flex-col desktop:flex-col tablet:flex-row gap-2">
-				<div class="flex flex-col grow">
-					<span class="font-semibold mb-2">Contacto telefónico</span>
+				<div class="flex flex-col grow" v-if="computed_phone && computed_phone.length > 0">
+					<span class="font-semibold mb-2">Teléfono</span>
 					<div class="flex flex-col gap-2">
-
 						<itemLink
 							:icon="phone.icon"
 							:label="phone.label.toString()"
 							:link="phone.link"
-							v-for="phone in phones"
+							v-for="phone in computed_phone"
 						/>
 					</div>
 				</div>
-				<div class="flex flex-col grow">
+				<div class="flex flex-col grow" v-if="computed_social_media && computed_social_media.length > 0">
 					<span class="font-semibold mb-2">Redes sociales</span>
-					<div class="flex flex-col gap-2" v-if="employer.social_media.length > 0">
+					<div class="flex flex-col gap-2">
 						<itemLink
 							:icon="social.icon"
 							:label="social.label"
 							:link="social.link"
-							v-for="social in social_media"
+							v-for="social in computed_social_media"
 						/>
 					</div>
 				</div>
@@ -54,9 +53,49 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-	phones: PhoneInterface[];
-}
+import type {EmployerSocialInterface, PhoneInterface} from "~/interfaces";
 
-defineProps<Props>();
+const userStore = useUserStore()
+const {user_role} = userStore
+const {is_open_modal_login} = storeToRefs(userStore);
+
+interface Props {
+	phone?: PhoneInterface[]
+	social_media?: EmployerSocialInterface[];
+	info?: {
+		type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
+		can_modify: boolean;
+		show_employer: boolean;
+	},
+	is_hidden: boolean;
+}
+const props = defineProps<Props>();
+
+const show_info = () => {
+	if (user_role === undefined) is_open_modal_login.value = true;
+};
+
+const computed_phone = computed(() => {
+	if (!props.phone) return [];
+	return props.phone.map((e) => {
+		let object: any = {
+			label: e.phone,
+			icon: e.has_whatsapp ? "ri:whatsapp-line" : "ri:phone-line",
+		};
+
+		if (e.has_whatsapp) object.link = `https://wa.me/591${e.phone}`;
+		return object;
+	})
+	}
+);
+
+const computed_social_media = computed(() => {
+	if (!props.social_media) return [];
+	return props.social_media.map((e) => ({
+		label: e.name,
+		icon: e.social.icon,
+		link: `${e.social.prefix}${e.identifier}`,
+	}))
+	}
+);
 </script>

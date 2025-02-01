@@ -57,6 +57,7 @@ const cases = {
                     is_active
                     modified_at
                     phone {
+                        has_whatsapp
                         id
                         phone
                     }
@@ -75,6 +76,13 @@ const cases = {
                     employer_social {
                         id
                         name
+                        social {
+                            icon
+                            id
+                            name
+                            prefix
+                            slug
+                        }
                         identifier
                         created_at
                         modified_at
@@ -117,6 +125,7 @@ const cases = {
                     created_at
                     modified_at
                     phone {
+                        has_whatsapp
                         id
                         phone
                     }
@@ -138,6 +147,13 @@ const cases = {
                         identifier
                         created_at
                         modified_at
+                        social {
+                            icon
+                            id
+                            name
+                            prefix
+                            slug
+                        }
                     }
                 }
                 employerUser {

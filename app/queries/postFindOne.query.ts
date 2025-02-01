@@ -38,6 +38,25 @@ export default (show_employer_info:boolean = false) => {
                         is_active
                         created_at
                         modified_at
+                        employer_social {
+                            social {
+                                icon
+                                id
+                                name
+                                prefix
+                                slug
+                            }
+                            name
+                            modified_at
+                            identifier
+                            id
+                            created_at
+                        }
+                        phone {
+                            has_whatsapp
+                            id
+                            phone
+                        }
                     }
                 }
                 info {

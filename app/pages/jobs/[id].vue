@@ -92,11 +92,17 @@
 			</div>
 
 			<EmployerInfo
-				:profile_image="employer.profile_image!"
-				:name="employer.name!"
-				:id="employer.id!"
+				:profile_image="post?.employer.profile_image!"
+				:name="post?.employer.name!"
+				:id="post?.id!.toString()!"
 			/>
 
+			<EmployerContactInfo
+				:phone="data?.post.post.employer.phone"
+				:social_media="data?.post.post.employer.employer_social"
+				:info="data?.post.info"
+				:is_hidden="is_hidden"
+			/>
 
 		</div>
 	</div>
@@ -104,7 +110,6 @@
 </template>
 
 <script setup lang="ts">
-import socialMediaData from "~/data/social_media.data";
 import {SkillLevelEnum} from "~/enums/skill_level.enum";
 import {postFindOne} from "~/queries";
 import type {PostInterface} from "~/interfaces";
@@ -114,7 +119,6 @@ const route = useRoute();
 const is_hidden = ref(true);
 
 const userStore = useUserStore()
-const {user_role} = userStore
 const {is_open_modal_login, is_premium} = storeToRefs(userStore);
 
 const {data} = await useAsyncQuery<
@@ -128,7 +132,7 @@ const {data} = await useAsyncQuery<
 			}
 		}
 	}
->(postFindOne(), {"id": Number(route.params.id)});
+>(postFindOne(true), {"id": Number(route.params.id)});
 
 const post = data.value?.post.post
 const info = data.value?.post.info
@@ -144,105 +148,8 @@ const job = reactive({
 	salary: post?.salary,
 	salary_type: SalaryEnum[post?.salary_type as keyof typeof SalaryEnum],
 	description: post?.description,
-	info: [
-		{
-			label: "Lugar",
-			icon: "ri:map-pin-2-line",
-			value: `${post?.location.department}, ${post?.location.municipality}, ${post?.location.province}`,
-		},
-		{
-			label: "Modalidad",
-			icon: "ri:time-line",
-			value: ModalityEnum[post?.modality as keyof typeof ModalityEnum],
-		},
-		{
-			label: "Salario",
-			icon: "ri:copper-coin-line",
-			value: (post?.salary !== null ? `${post?.salary} Bs. -` : '') + `${SalaryEnum[post?.salary_type as keyof typeof SalaryEnum]}`,
-		},
-		{
-			label: "Fecha de publicación",
-			icon: "ri:calendar-line",
-			value: post?.modified_at,
-		}
-	],
-	skills: [
-		{
-			name: "Habilidad 1",
-			level: SkillLevelEnum.ADVANCED,
-		},
-		{
-			name: "Habilidad 2",
-			level: SkillLevelEnum.INTERMEDIATE,
-		},
-		{
-			name: "Habilidad 3",
-			level: SkillLevelEnum.BASIC,
-		},
-	],
 	is_available: post?.available,
 });
-
-const employer = reactive({
-	name: post?.employer.name,
-	id: post?.employer.id,
-	profile_image: post?.employer.profile_image,
-	website: "employer-website",
-	phones: [
-		{number: 76543210, has_whatsapp: true},
-		{
-			number: 76543211,
-			has_whatsapp: false,
-		},
-		{
-			number: 76543212,
-			has_whatsapp: true,
-		},
-		{number: 76543213, has_whatsapp: false},
-	],
-	social_media: [
-		{
-			profile_name: "user1",
-			is_verified: true,
-			social_media: 1,
-		},
-		{
-			profile_name: "user1",
-			is_verified: true,
-			social_media: 2,
-		},
-		{
-			profile_name: "user1",
-			is_verified: true,
-			social_media: 3,
-		},
-		{
-			profile_name: "user1",
-			is_verified: true,
-			social_media: 4,
-		},
-	],
-});
-
-const social_media = computed(() =>
-	employer.social_media.map((e: any) => ({
-		label: socialMediaData[e.social_media]!.type,
-		icon: socialMediaData[e.social_media]!.icon,
-		link: `${socialMediaData[e.social_media]!.prefixUrl}${e.profile_name}`,
-	}))
-);
-
-const phones = computed(() =>
-	employer.phones.map((e: any) => {
-		let object: any = {
-			label: e.number,
-			icon: e.has_whatsapp ? "ri:whatsapp-line" : "ri:phone-line",
-		};
-
-		if (e.has_whatsapp) object.link = `https://wa.me/591${e.number}`;
-		return object;
-	})
-);
 
 const skillLevelIcon = {
 	[SkillLevelEnum.BASIC]: "ri:progress-3-line",
@@ -253,10 +160,6 @@ const skillLevelIcon = {
 // console.log(useRoute().params.id)
 // console.log(typeof  useRoute().params.id)
 // // GET DATA
-
-const show_info = () => {
-	if (user_role === undefined) is_open_modal_login.value = true;
-};
 
 const computed_image = computed(() =>
 	"/images/empleame_user_silhouette.png"

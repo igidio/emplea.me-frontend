@@ -7,7 +7,6 @@
 			class="animate-spin"
 		/>
 	</div>
-	{{result }}
 </template>
 
 <script setup lang="ts">

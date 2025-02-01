@@ -17,3 +17,5 @@ export type { postSkillInterface } from "~/interfaces/server/post_skill.interfac
 export type { skillInterface } from "~/interfaces/server/skill.interface";
 export type { seekerSkillInterface } from "~/interfaces/server/seeker_skill.interface";
 export type { interactionInterface } from "~/interfaces/server/interaction.interface";
+export type { PhoneInterface } from "~/interfaces/server/phone.interface";
+export type { EmployerSocialInterface } from "~/interfaces/server/employer_social.interface";
