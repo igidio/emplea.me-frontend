@@ -41,6 +41,9 @@ import phoneUpdate from "./phoneUpdate.query";
 import phoneCreate from "./phoneCreate.query";
 import phoneDelete from "./phoneDelete.query";
 
+import employerSocialUpdate from "./employerSocialUpdate.query";
+import employerSocialDelete from "./employerSocialDelete.query";
+
 export {
 	getUserByToken,
 	loginQuery,
@@ -84,5 +87,8 @@ export {
 	// phone
 	phoneUpdate,
 	phoneCreate,
-	phoneDelete
+	phoneDelete,
+	// Emnployer Social
+	employerSocialUpdate,
+	employerSocialDelete,
 };

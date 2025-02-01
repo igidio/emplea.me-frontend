@@ -16,17 +16,34 @@
 					:reload="reload"
 				/>
 			</div>
-			<div>
+
+			<div class="flex flex-col gap-4">
 				<h6>Redes sociales</h6>
-<!--				<EmployerItemSocial/>-->
-<!--				<EmployerAddSocial/>-->
+				<EmployerItemSocial
+					v-for="e in result?.findOneEmployer.employer.employer_social"
+					:props="{
+								id: e.id!,
+								name: e.name,
+								identifier: e.identifier,
+								social: {
+									name: e.social!.name,
+									icon: e.social!.icon,
+									prefix: e.social!.prefix,
+									id: e.social!.id
+								}
+							}"
+					:social="social"
+					:reload="reload"
+					:key="'social'+e.id"
+				/>
+				<!--				<EmployerAddSocial/>-->
 			</div>
 		</div>
 	</UCard>
 </template>
 <script setup lang="ts">
-import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
-import {employerFindOne} from "~/queries";
+import type {EmployerInterface, EmployerUserInterface, socialInterface} from "~/interfaces";
+import {employerFindOne, socialFindAll} from "~/queries";
 
 const route = useRoute()
 
@@ -40,5 +57,9 @@ const reload = async () => {
 	await refetch()
 	console.log(result)
 }
+
+const social: Ref<socialInterface[] | undefined> = ref([])
+const social_data = await useAsyncQuery<{ socialFindAll: socialInterface[] }>(socialFindAll)
+social.value = social_data.data.value?.socialFindAll
 </script>
 
