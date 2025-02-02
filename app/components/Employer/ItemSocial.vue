@@ -72,9 +72,7 @@
 			</div>
 		</div>
 		<span class="error text-right" v-if="error">{{
-				error.name === 'ApolloError'
-					? 'Los valores introducidos no son válidos, es posible que ya exista un identificador en la misma red social ya registrada'
-					: error.message
+				error.message
 			}}</span>
 		<div class="flex flex-row gap-2 h-fit self-end">
 			<UButton color="red" label="Cancelar" size="sm" class="h-fit" :loading="loading" @click="cancel()"/>
@@ -87,7 +85,7 @@
 <script setup lang="ts">
 import type {socialInterface} from "~/interfaces";
 import * as yup from "yup";
-import {employerSocialDelete, employerSocialUpdate, seekerSocialDelete, seekerSocialUpdate} from "~/queries";
+import {employerSocialDelete, employerSocialUpdate} from "~/queries";
 import {seeker_social_schema} from "~/schemas";
 
 const loading = ref(false)

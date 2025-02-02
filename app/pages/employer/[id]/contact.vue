@@ -36,7 +36,11 @@
 					:reload="reload"
 					:key="'social'+e.id"
 				/>
-				<!--				<EmployerAddSocial/>-->
+				<EmployerAddSocial
+					:data_exists="!!(result?.findOneEmployer.employer.employer_social && result?.findOneEmployer.employer.employer_social.length > 0)"
+					:social="social!"
+					:reload="reload"
+				/>
 			</div>
 		</div>
 	</UCard>

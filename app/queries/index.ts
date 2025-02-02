@@ -43,6 +43,7 @@ import phoneDelete from "./phoneDelete.query";
 
 import employerSocialUpdate from "./employerSocialUpdate.query";
 import employerSocialDelete from "./employerSocialDelete.query";
+import employerSocialCreate from "./employerSocialCreate.query";
 
 export {
 	getUserByToken,
@@ -91,4 +92,5 @@ export {
 	// Emnployer Social
 	employerSocialUpdate,
 	employerSocialDelete,
+	employerSocialCreate,
 };
