@@ -23,8 +23,8 @@
 		</div>
 
 		<EmployerPage
-			v-if="data !== undefined && !loading"
-			:data="data"
+			v-if="result !== undefined && !loading"
+			:data="result"
 		/>
 	</div>
 
@@ -64,10 +64,10 @@ load()
 
 const get_employer = async (i: number) => {
 	loading.value = true
-	data.value = undefined
+	result.value = undefined
 	const employer_user = employerGetByUserData.value?.EmployerlistByUser[i];
 	await refetch({"findOneEmployerId": Number(employer_user?.employer.id)})
-	data.value = EmploymentData.value?.findOneEmployer
+	result.value = EmploymentData.value?.findOneEmployer
 	loading.value = false
 }
 </script>

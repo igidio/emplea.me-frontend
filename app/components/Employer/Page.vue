@@ -2,7 +2,7 @@
 	<div class="flex flex-col">
 		<div class="flex flex-row gap-4">
 			<div class="flex flex-col gap-4 w-[80%]">
-				<EmployerPresentation :data="{
+				<EmployerPresentation :result="{
 					profile_image: data.employer.profile_image,
 					name: data.employer.name,
 					establishment_date: data.employer.establishment_date,
@@ -11,6 +11,7 @@
 					can_modify: can_modify,
 					id: data.employer.id
 				}"/>
+
 				<EmployerPosts
 					:employer-info="{ image: data.employer.profile_image, name: data.employer.name, id: data.employer.id }"
 					:posts="data.employer.post!"
@@ -82,7 +83,7 @@
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 interface Props {
-	result: {
+	data: {
 		employer: EmployerInterface,
 		employerUser: EmployerUserInterface
 	}

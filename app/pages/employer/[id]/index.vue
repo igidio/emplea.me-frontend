@@ -1,4 +1,5 @@
 <template>
+
 	<EmployerPage :data="result.findOneEmployer" v-if="result"/>
 	<ClientOnly>
 		<div class="w-full full-content h-full flex flex-col justify-center" v-if="loading">
