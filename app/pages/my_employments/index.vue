@@ -42,7 +42,7 @@ definePageMeta({
 
 const loading = ref(false)
 
-const {fill_employments, user_id, employments, selected, index} = useMyEmployments();
+const {fill_employments, user_id, employments} = useMyEmployments();
 const result = ref<{
 	employer: EmployerInterface,
 	employerUser: EmployerUserInterface
@@ -53,12 +53,14 @@ const {data: employerGetByUserData, error} = await useAsyncQuery<{
 }>(employerGetByUser, {"id": Number(user_id)});
 await fill_employments({data: employerGetByUserData, error})
 
+const user = useUserStore()
+
 const {result: EmploymentData, load, refetch} = useLazyQuery<{
 	findOneEmployer: {
 		employer: EmployerInterface,
 		employerUser: EmployerUserInterface
 	}
-}>(employerFindOne, {"findOneEmployerId": 1})
+}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": 1})
 load()
 
 

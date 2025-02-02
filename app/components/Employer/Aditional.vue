@@ -5,7 +5,7 @@
 			<item
 				icon="ri:calendar-event-line"
 				small="Activo desde"
-				:regular="created_at.toString()"
+				:regular="new Date(created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })"
 			/>
 			<item
 				icon="ri:calculator-line"

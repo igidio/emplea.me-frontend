@@ -14,6 +14,7 @@
 		:schema="schema"
 		@submit="update"
 	>
+		<GoToPrevious/>
 		<UCard>
 			<template #header> Editar empleador</template>
 
