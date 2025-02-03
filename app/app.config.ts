@@ -62,7 +62,7 @@ export default defineAppConfig({
 		},
 		
 		input: {
-			base: "focus:ring-2 focus:ring-violet-400",
+			base: "focus:ring-2 focus:ring-violet-400 rounded-medium",
 			size: {
 				md: "text-base rounded-medium",
 				lg: "text-base rounded-large",

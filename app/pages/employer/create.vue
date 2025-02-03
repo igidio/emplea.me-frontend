@@ -137,6 +137,7 @@
 
 		</UCard>
 	</UForm>
+
 </template>
 
 <script setup lang="ts">
@@ -144,6 +145,8 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import {employer_schema} from "~/schemas/employer.schema";
 import {employerCreate} from "~/queries";
 import type {EmployerInterface, LocationInterface} from "~/interfaces";
+
+
 
 definePageMeta({
 	middleware: 'role',
