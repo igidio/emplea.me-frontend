@@ -1,10 +1,6 @@
 <template>
-
+	Esta es la página de inicio
 </template>
 
 <script setup lang="ts">
-
-definePageMeta({
-	layout: 'admin'
-})
 </script>

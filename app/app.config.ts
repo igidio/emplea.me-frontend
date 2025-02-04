@@ -181,6 +181,14 @@ export default defineAppConfig({
 					solid: 'bg-violet-100 text-violet-500',
 				}
 			}
+		},
+		table: {
+			default: {
+				emptyState: {
+					label: 'No hay registros',
+				}
+			}
 		}
 	},
+
 });

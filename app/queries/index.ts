@@ -47,6 +47,8 @@ import employerSocialCreate from "./employerSocialCreate.query";
 // Post
 import postCreate from "./postCreate.query";
 import postUpdate from "./postUpdate.query";
+//
+import employerFindAll from './employerFindAll.query'
 
 export {
 	getUserByToken,
@@ -99,4 +101,6 @@ export {
 	// Post
 	postCreate,
 	postUpdate,
+	// Employer
+	employerFindAll,
 };

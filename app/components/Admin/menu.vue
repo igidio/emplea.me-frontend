@@ -43,12 +43,12 @@ const collapse = defineModel('collapse')
 const options = [
 	{
 		label: 'Panel',
-		to: '/',
+		to: '/admin',
 		icon: 'ri:dashboard-horizontal-line'
 	},
 	{
 		label: 'Empleadores',
-		to: '/',
+		to: '/admin/employers',
 		icon: 'ri:group-2-line'
 	},
 	{
