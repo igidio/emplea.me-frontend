@@ -7,3 +7,4 @@ export { password_schema } from "./password.schema";
 export { phone_schema } from "./phone.schema";
 export { employer_schema } from "./employer.schema";
 export { post_schema } from "./post.schema";
+export { message_schema } from "./message.schema";

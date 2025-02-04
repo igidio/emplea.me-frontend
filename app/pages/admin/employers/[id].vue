@@ -1,27 +1,45 @@
 <template>
+	<AdminModalMessage
+		v-model:is_open="is_modal_open"
+		:labels="{
+				header: 'Actualizar empleador',
+				confirm: 'Confirmar',
+				description: 'Debes indicar una razón para realizar esta acción.',
+				loading,
+				error,
+		}"
+		:on_submit="submit"
+		:on_close="close_modal"
+		:schema="message_schema"
+	/>
+	
 	<EmployerUpdate
 		v-model:state="state"
 		:props="{
 			id: Number(employer.id),
 			loading,
 			error,
-			update: submit,
-			cancel: `/employer/${employer.id}`
+			update: confirm,
+			cancel: `/admin/employers`
 		}"
 	/>
+	
 </template>
 
 <script setup lang="ts">
+import {message_schema} from "~/schemas";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['ADMIN', 'SUPERUSER']
+})
+
 import {employerFindOne, employerUpdate} from "~/queries";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 const route = useRoute()
 const postStore = usePostStore();
-
-definePageMeta({
-	middleware: 'role',
-	roles: ['EMPLOYER']
-})
+const is_modal_open = ref(false)
 
 const {data} = await useAsyncQuery<{
 	findOneEmployer: {
@@ -29,11 +47,20 @@ const {data} = await useAsyncQuery<{
 		employerUser: EmployerUserInterface
 	}
 }>(employerFindOne(), {"findOneEmployerId": Number(route.params.id)})
-const {employer, employerUser} = data.value?.findOneEmployer!
+const {employer} = data.value?.findOneEmployer!
 
-const {mutate, loading, error} = useMutation<{ employerUpdate: string }>(employerUpdate);
 
-const submit = async () => {
+const confirm = async () => {
+	is_modal_open.value = true
+}
+
+const close_modal = () => {
+	is_modal_open.value = false
+}
+
+const {mutate, loading, error} = useMutation<{ employerUpdate: string }>(employerUpdate(true));
+const submit = async (message:string) => {
+	is_modal_open.value = true
 	await mutate({
 		"employerUpdate": {
 			"description": state.description,
@@ -42,10 +69,13 @@ const submit = async () => {
 			"id": Number(employer.id),
 			"id_location": Number(state.location?.id),
 			"name": state.name,
+		},
+		"messageInput": {
+			"message": message
 		}
 	}).then((d) => {
 		useToast().add({title: d?.data?.employerUpdate})
-		useRouter().push(`/employer/${employer.id}`)
+		useRouter().push(`/admin/employers`)
 	})
 }
 
@@ -54,17 +84,11 @@ const state = reactive({
 	establishment_date: employer.establishment_date,
 	email: employer.email,
 	description: employer.description,
-	profile_image: employer.profile_image as string|null,
+	profile_image: employer.profile_image as string | null,
 	location: employer.location ? postStore.location_options.find((e) => {
 		if (e.id === employer.location?.id) return e
 	}) : undefined,
 	phone: employer,
 })
 
-
-
-if (employerUser.level !== 'ADMIN') {
-	useRouter().push('/')
-	useToast().add({title: 'No puedes hacer esto'})
-}
 </script>

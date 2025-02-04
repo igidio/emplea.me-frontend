@@ -79,6 +79,8 @@ import type {TableColumn, TableRow} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {last_time} from "~/helpers/last_time";
 
+const route = useRoute()
+
 const is_open_modal_verify: Ref<{ modal: boolean, id?: number, name?: string }> = ref({
 	modal: false,
 	id: undefined,
@@ -165,6 +167,11 @@ const options = (row: any) => [
 			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
 			click: () => set_open_modal_active(row.id, row.name, row.is_active)
 		}]),
+		{
+			label: 'Editar',
+			icon: 'ri:edit-line',
+			click: () => useRouter().push(`/admin/employers/${row.id}`)
+		}
 	],
 	[
 		{
@@ -186,16 +193,22 @@ const rows: ComputedRef<TableRow[]> = computed(() => {
 		results = employers.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 	}
 	
-	if (q.value) results = employers.value.filter((e) => {
+	if (q.value) results = employers.value.filter((e: any) => {
 		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
 			return String(value).toLowerCase().includes(q.value.toLowerCase())
 		})
 	})
 	
 	if (search_by_status.value) {
-		results = results.filter((e) => e.status.label.includes(search_by_status.value))
+		results = results.filter((e: any) => e.status.label.includes(search_by_status.value))
 	}
 	
 	return results
+})
+
+onMounted(() => {
+	if (route.query.q) {
+		q.value = route.query.q as string
+	}
 })
 </script>
