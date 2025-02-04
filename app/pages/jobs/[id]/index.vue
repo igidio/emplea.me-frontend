@@ -23,7 +23,9 @@
 						<h4 class="mb-2">{{ job.title }}</h4>
 					</div>
 					<div class="w-24 flex flex-col gap-1" v-if="info?.can_modify">
-						<UButton label="✏️ Editar" size="sm"/>
+						<NuxtLink :to="`/jobs/${job.id}/edit`">
+							<UButton label="Editar" size="sm" class="w-full"/>
+						</NuxtLink>
 						<UButton color="gold" label="⭐ Destacar" size="sm" v-if="is_premium"/>
 						<UButton color="black" label="Eliminar" size="sm"/>
 					</div>
@@ -136,6 +138,15 @@ import {postFindOne} from "~/queries";
 import type {PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
+import router from "#app/plugins/router";
+import {definePageMeta} from "#imports";
+
+definePageMeta({
+	keepalive: {
+		max: 0
+	},
+	title: "Empleo",
+})
 
 const route = useRoute();
 const is_hidden = ref(true);
@@ -143,7 +154,7 @@ const is_hidden = ref(true);
 const userStore = useUserStore()
 const {is_premium} = storeToRefs(userStore);
 
-const {data} = await useAsyncQuery<
+const {data, refresh, execute} = await useAsyncQuery<
 	{
 		post: {
 			post: PostInterface,
@@ -154,9 +165,10 @@ const {data} = await useAsyncQuery<
 			}
 		}
 	}
->(postFindOne(true), {"id": Number(route.params.id)});
-
-console.log(data.value)
+>(postFindOne(true), {
+	"id": Number(route.params.id),
+	watch: [route.query]
+})
 
 const post = data.value?.post.post
 const info = data.value?.post.info
@@ -164,6 +176,7 @@ const info = data.value?.post.info
 if (info?.show_employer) is_hidden.value = false;
 
 const job = reactive({
+	id: post?.id,
 	title: post?.name,
 	category: post?.category,
 	location: `${post?.location.department}, ${post?.location.municipality}, ${post?.location.province}`,

@@ -125,6 +125,9 @@ import type {
 import postFromRangeQuery from "~/queries/postFromRange.query";
 import type {PostInterface} from "~/interfaces";
 import modalitiesData from "~/data/search/modalities.data";
+import {definePageMeta} from "#imports";
+
+
 
 const {searchOptions, state, sendSearchQuery} = useSearch();
 
