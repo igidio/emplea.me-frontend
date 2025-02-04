@@ -10,38 +10,65 @@
 	
 	<UCard>
 		<template #header>Empleadores</template>
-		<UTable
-			:columns="columns"
-			:rows="rows"
-			:loading="loading"
-			:sort="{ column: 'created_at', direction: 'desc' }"
-			v-model:expand="expand"
-		>
-			<template #profile_image-data="{row}">
-				<img :src="row.profile_image" class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
-			</template>
-			<template #status-data="{row}">
-				<UBadge
-					variant="soft"
-					:color="row.status.color"
-				>{{ row.status.label }}
-				</UBadge>
+		<div class="flex flex-col gap-4">
 			
-			</template>
-			<template #options-data="{row}">
-				<UDropdown :items="options(row)">
-					<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
-				</UDropdown>
-			</template>
-			<template #expand="{ row }">
-				<div class="flex flex-col p-4 text-sm gap-1">
-					<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
-					<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
-					<span class="inline-block font-semibold">Descripción</span>
-					<p class="text-justify">{{ row.description }}</p>
-				</div>
-			</template>
-		</UTable>
+			<div class="flex flex-row gap-2 justify-end">
+				<UInput
+					icon="ri:search-2-line"
+					v-model="q"
+					placeholder="Filtrar resultados"
+					color="gray"
+					class="w-64"
+				/>
+				
+				<USelect
+					color="gray"
+					size="md"
+					placeholder="Filtrar por estado"
+					icon="ri:filter-line"
+					v-model="search_by_status"
+					:options="[
+					{label: 'Todos', value: undefined},
+					{label: 'Activo', value: 'Activo'},
+					{label: 'No activo', value: 'No activo'},
+					{label: 'No verificado', value: 'No verificado'}
+				]"
+				/>
+			</div>
+			
+			<UTable
+				:columns="columns"
+				:rows="rows"
+				:loading="loading"
+				:sort="{ column: 'created_at', direction: 'desc' }"
+				v-model:expand="expand"
+			>
+				<template #profile_image-data="{row}">
+					<img :src="row.profile_image" class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
+				</template>
+				<template #status-data="{row}">
+					<UBadge
+						variant="soft"
+						:color="row.status.color"
+					>{{ row.status.label }}
+					</UBadge>
+				
+				</template>
+				<template #options-data="{row}">
+					<UDropdown :items="options(row)">
+						<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
+					</UDropdown>
+				</template>
+				<template #expand="{ row }">
+					<div class="flex flex-col p-4 text-sm gap-1">
+						<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
+						<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
+						<span class="inline-block font-semibold">Descripción</span>
+						<p class="text-justify">{{ row.description }}</p>
+					</div>
+				</template>
+			</UTable>
+		</div>
 	</UCard>
 </template>
 
@@ -106,6 +133,7 @@ const {result, refetch, loading} = useQuery<{
 	"employerFindAll": EmployerInterface[]
 }>(employerFindAll, {}, {prefetch: true})
 const q = ref('')
+const search_by_status = ref(undefined)
 
 onMounted(async () => await fetch())
 
@@ -126,7 +154,7 @@ const columns: TableColumn[] = [
 const page = ref(1)
 const pageCount = 6
 
-const options = (row:any) => [
+const options = (row: any) => [
 	[
 		...((!row.is_verified) ? [{
 			label: 'Verificar',
@@ -152,14 +180,22 @@ const options = (row:any) => [
 ]
 
 const rows: ComputedRef<TableRow[]> = computed(() => {
+	let results = [];
+	
 	if (!q.value) {
-		return employers.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+		results = employers.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 	}
 	
-	return employers.value.filter((e) => {
+	if (q.value) results = employers.value.filter((e) => {
 		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
 			return String(value).toLowerCase().includes(q.value.toLowerCase())
 		})
 	})
+	
+	if (search_by_status.value) {
+		results = results.filter((e) => e.status.label.includes(search_by_status.value))
+	}
+	
+	return results
 })
 </script>

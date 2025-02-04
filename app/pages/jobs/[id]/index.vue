@@ -1,8 +1,7 @@
 <template>
 	<GoToPrevious></GoToPrevious>
-
+	
 	<div class="flex flex-col desktop:flex-row gap-4">
-
 		<div class="w-full desktop:w-[75%] gap-4 flex flex-col">
 			<UCard>
 				<div class="flex flex-row justify-between">
@@ -30,7 +29,7 @@
 						<UButton color="black" label="Eliminar" size="sm"/>
 					</div>
 				</div>
-
+				
 				<div class="flex flex-col gap-2 desktop:flex-row">
 					<div class="flex flex-col desktop:w-[30%] gap-2">
 						<div class="flex flex-row gap-2" v-for="e in additional_info">
@@ -44,7 +43,7 @@
 								<span class="text-sm">{{ e.value }}</span>
 							</div>
 						</div>
-
+					
 					</div>
 					<hr class="desktop:hidden"/>
 					<div class="flex flex-col desktop:w-[70%] gap-2">
@@ -57,7 +56,7 @@
 								<UButton label="Editar" size="sm" v-if="info?.can_modify"/>
 							</div>
 							<div class="grid tablet:grid-cols-2 gap-3" v-if="job.skills && job.skills.length > 0">
-
+								
 								<div
 									class="flex flex-row gap-2"
 									v-for="skill in job.skills"
@@ -75,7 +74,7 @@
 										<span class="text-sm">
 											{{ SkillLevelEnum[skill.level as unknown as keyof typeof SkillLevelEnum] }}
 										</span>
-
+									
 									</div>
 								</div>
 							</div>
@@ -84,7 +83,7 @@
 					</div>
 				</div>
 			</UCard>
-
+			
 			<!-- TODO: Crear tabla interacciones e introducir cada una de ellas-->
 			<UCard v-if="is_premium">
 				<template #header>⭐ Interacciones</template>
@@ -100,7 +99,7 @@
 			</UCard>
 			<Add class="w-full h-24" v-else></Add>
 		</div>
-
+		
 		<div class="flex flex-col w-full desktop:w-[25%] gap-4">
 			<div class="flex flex-col gap-2" v-if="info?.can_modify">
 				<UButton color="black" label="Llenar vacante" v-if="job.is_available"/>
@@ -113,20 +112,20 @@
 					<p>Ten en cuenta que puedes destacar # publicaciones.</p>
 				</div>
 			</div>
-
+			
 			<EmployerInfo
 				:profile_image="post?.employer.profile_image!"
 				:name="post?.employer.name!"
 				:id="post?.id!.toString()!"
 			/>
-
+			
 			<EmployerContactInfo
 				:phone="data?.post.post.employer.phone"
 				:social_media="data?.post.post.employer.employer_social"
 				:info="data?.post.info"
 				:is_hidden="is_hidden"
 			/>
-
+		
 		</div>
 	</div>
 
@@ -216,7 +215,7 @@ const additional_info = computed(() => {
 			label: "Modalidad",
 			value: `${job.modality}`
 		},
-
+	
 	];
 })
 
