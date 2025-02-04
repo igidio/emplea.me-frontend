@@ -58,6 +58,14 @@ export default (show_employer_info:boolean = false) => {
                             phone
                         }
                     }
+                    post_skill {
+                        id
+                        level
+                        skill {
+                            name
+                            id
+                        }
+                    }
                 }
                 info {
                     type
@@ -104,6 +112,14 @@ export default (show_employer_info:boolean = false) => {
                         is_active
                         created_at
                         modified_at
+                    }
+                    post_skill {
+                        id
+                        level
+                        skill {
+                            name
+                            id
+                        }
                     }
                 }
                 info {

@@ -14,12 +14,14 @@
 					icon="i-heroicons-rocket-launch"
 					variant="soft"
 				><UIcon :name="job.category.icon" class="mr-1"/>{{ job.category?.name }}</UBadge>
+				<UBadge
+					:color="job.is_available ? 'green' : 'red'"
+					variant="soft"
+				>{{ job.is_available ? 'Disponible' : 'No disponible' }}</UBadge>
 
 			</span>
 						<h4 class="mb-2">{{ job.title }}</h4>
 					</div>
-
-
 					<div class="w-24 flex flex-col gap-1" v-if="info?.can_modify">
 						<UButton label="✏️ Editar" size="sm"/>
 						<UButton color="gold" label="⭐ Destacar" size="sm" v-if="is_premium"/>
@@ -27,11 +29,9 @@
 					</div>
 				</div>
 
-
 				<div class="flex flex-col gap-2 desktop:flex-row">
 					<div class="flex flex-col desktop:w-[30%] gap-2">
-
-						<div class="flex flex-row gap-2" v-for="e in job.info">
+						<div class="flex flex-row gap-2" v-for="e in additional_info">
 							<div
 								class="bg-violet-600 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
 							>
@@ -46,17 +46,38 @@
 					</div>
 					<hr class="desktop:hidden"/>
 					<div class="flex flex-col desktop:w-[70%] gap-2">
-						<item :label="job.modified_at?.toString()" icon="ri:calendar-line"/>
+						<item :label="'Última modificación: ' + es_date(job.modified_at!)" icon="ri:calendar-line"/>
 						<p class="text-justify">{{ job.description }}</p>
 						<hr class="desktop:hidden"/>
-						<h6>Habilidades necesarias</h6>
-						<div class="grid tablet:grid-cols-2 gap-3">
-							<item
-								:icon="skillLevelIcon[skill.level]"
-								v-for="skill in job.skills"
-								:label="skill.level"
-								:label-bold="skill.name"
-							/>
+						<div class="flex flex-col gap-2">
+							<div class="flex flex-row justify-between">
+								<h6>Habilidades necesarias</h6>
+								<UButton label="Editar" size="sm" v-if="info?.can_modify"/>
+							</div>
+							<div class="grid tablet:grid-cols-2 gap-3" v-if="job.skills && job.skills.length > 0">
+
+								<div
+									class="flex flex-row gap-2"
+									v-for="skill in job.skills"
+								>
+									<div
+										class="bg-violet-600 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
+									>
+										<UIcon
+											:name="skillLevelIcon[skill.level as unknown as keyof typeof SkillLevelEnum]"
+											class="bg-white z-0" size="14"
+										/>
+									</div>
+									<div class="flex flex-col">
+										<span class="text-md">{{ skill.skill?.name }}</span>
+										<span class="text-sm">
+											{{ SkillLevelEnum[skill.level as unknown as keyof typeof SkillLevelEnum] }}
+										</span>
+
+									</div>
+								</div>
+							</div>
+							<div class="w-full text-center py-2" v-else>No hay habilidades específicadas.</div>
 						</div>
 					</div>
 				</div>
@@ -114,12 +135,13 @@ import {SkillLevelEnum} from "~/enums/skill_level.enum";
 import {postFindOne} from "~/queries";
 import type {PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
+import {es_date} from "~/helpers/es_date";
 
 const route = useRoute();
 const is_hidden = ref(true);
 
 const userStore = useUserStore()
-const {is_open_modal_login, is_premium} = storeToRefs(userStore);
+const {is_premium} = storeToRefs(userStore);
 
 const {data} = await useAsyncQuery<
 	{
@@ -133,6 +155,8 @@ const {data} = await useAsyncQuery<
 		}
 	}
 >(postFindOne(true), {"id": Number(route.params.id)});
+
+console.log(data.value)
 
 const post = data.value?.post.post
 const info = data.value?.post.info
@@ -149,19 +173,38 @@ const job = reactive({
 	salary_type: SalaryEnum[post?.salary_type as keyof typeof SalaryEnum],
 	description: post?.description,
 	is_available: post?.available,
+	skills: post?.post_skill
 });
 
 const skillLevelIcon = {
-	[SkillLevelEnum.BASIC]: "ri:progress-3-line",
-	[SkillLevelEnum.INTERMEDIATE]: "ri:progress-4-line",
-	[SkillLevelEnum.ADVANCED]: "ri:progress-8-line",
+	'BASIC': "ri:progress-3-line",
+	'INTERMEDIATE': "ri:progress-4-line",
+	'ADVANCED': "ri:progress-8-line",
 };
-//
-// console.log(useRoute().params.id)
-// console.log(typeof  useRoute().params.id)
-// // GET DATA
 
 const computed_image = computed(() =>
 	"/images/empleame_user_silhouette.png"
 );
+
+const additional_info = computed(() => {
+	return [
+		{
+			icon: "ri:map-pin-line",
+			label: "Locación",
+			value: job.location
+		},
+		{
+			icon: "ri:money-dollar-circle-line",
+			label: "Salario",
+			value: `${job.salary} ${job.salary_type}`
+		},
+		{
+			icon: "ri:timeline-view",
+			label: "Modalidad",
+			value: `${job.modality}`
+		},
+
+	];
+})
+
 </script>

@@ -6,7 +6,7 @@
 				<p>
 					A continuación introduzca el correo electrónico asociado a su cuenta,
 					se le enviará un enlace para reestablecer su contraseña, dicho enlace
-					tendrá una duración de 24 horas:
+					tendrá una duración de 24 hours:
 				</p>
 				<UFormGroup name="email">
 					<UInput placeholder="correo@mail.com" v-model="state.email" />
