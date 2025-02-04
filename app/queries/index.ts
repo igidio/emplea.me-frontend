@@ -49,6 +49,8 @@ import postCreate from "./postCreate.query";
 import postUpdate from "./postUpdate.query";
 //
 import employerFindAll from './employerFindAll.query'
+import employerVerify from './employerVerify.query'
+import employerActivateOrDeactivate from './employerActivateOrDeactivate.query'
 
 export {
 	getUserByToken,
@@ -103,4 +105,6 @@ export {
 	postUpdate,
 	// Employer
 	employerFindAll,
+	employerVerify,
+	employerActivateOrDeactivate,
 };

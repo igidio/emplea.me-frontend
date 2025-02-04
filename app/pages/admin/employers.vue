@@ -1,4 +1,13 @@
 <template>
+	<AdminModalVerifyEmployer
+		v-model="is_open_modal_verify"
+		:reload="fetch"
+	/>
+	<AdminModalActiveEmployer
+		v-model="is_open_modal_active"
+		:reload="fetch"
+	/>
+	
 	<UCard>
 		<template #header>Empleadores</template>
 		<UTable
@@ -29,7 +38,7 @@
 					<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
 					<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
 					<span class="inline-block font-semibold">Descripción</span>
-					<p>{{ row.description }}</p>
+					<p class="text-justify">{{ row.description }}</p>
 				</div>
 			</template>
 		</UTable>
@@ -42,6 +51,32 @@ import type {EmployerInterface} from "~/interfaces";
 import type {TableColumn, TableRow} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {last_time} from "~/helpers/last_time";
+
+const is_open_modal_verify: Ref<{ modal: boolean, id?: number, name?: string }> = ref({
+	modal: false,
+	id: undefined,
+	name: undefined
+})
+const set_open_modal_verify = (id: number, name: string) => {
+	is_open_modal_verify.value.modal = true
+	is_open_modal_verify.value.id = Number(id)
+	is_open_modal_verify.value.name = name
+}
+
+const is_open_modal_active: Ref<{ modal: boolean, id?: number, name?: string, is_active: boolean }> = ref({
+	modal: false,
+	id: undefined,
+	name: undefined,
+	is_active: false
+})
+
+const set_open_modal_active = (id: number, name: string, is_active: boolean) => {
+	is_open_modal_active.value.modal = true
+	is_open_modal_active.value.id = Number(id)
+	is_open_modal_active.value.name = name
+	is_open_modal_active.value.is_active = is_active
+	
+}
 
 const employers: ComputedRef = computed(() => (result.value?.employerFindAll && result.value?.employerFindAll.length > 0) ?
 	result.value?.employerFindAll.map((e) => ({
@@ -57,6 +92,8 @@ const employers: ComputedRef = computed(() => (result.value?.employerFindAll && 
 		description: e.description,
 		created_at: es_date(e.created_at),
 		modified_at: last_time(new Date(e.modified_at)),
+		is_verified: e.is_verified,
+		is_active: e.is_active,
 	})) : []
 )
 
@@ -89,21 +126,29 @@ const columns: TableColumn[] = [
 const page = ref(1)
 const pageCount = 6
 
-const options = (row: any) => [
-	[{
-		label: 'Verificar',
-		icon: 'ri:checkbox-circle-line',
-		click: () => console.log(row.id)
-	}, {
-		label: 'Deshabilitar',
-		icon: 'ri:close-circle-line'
-	}], [{
-		label: 'Ver detalles',
-		icon: 'ri:align-left'
-	}, {
-		label: 'Ver personal',
-		icon: 'ri:parent-line'
-	}]
+const options = (row:any) => [
+	[
+		...((!row.is_verified) ? [{
+			label: 'Verificar',
+			icon: 'ri:checkbox-circle-line',
+			click: () => set_open_modal_verify(row.id, row.name)
+		},] : [{
+			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
+			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
+			click: () => set_open_modal_active(row.id, row.name, row.is_active)
+		}]),
+	],
+	[
+		{
+			label: 'Ver detalles',
+			icon: 'ri:align-left',
+			click: () => useRouter().push(`/employer/${row.id}`)
+		},
+		{
+			label: 'Ver personal',
+			icon: 'ri:parent-line'
+		}
+	]
 ]
 
 const rows: ComputedRef<TableRow[]> = computed(() => {
