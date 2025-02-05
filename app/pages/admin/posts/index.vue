@@ -14,12 +14,14 @@ const {result, refetch, loading} = useQuery<{
 	"postFindAll": PostInterface[]
 }>(postFindAll(true), {}, {prefetch: true})
 
-onMounted(async () => await fetch())
-
 const posts = ref<PostInterface[]>([])
-posts.value = result.value?.postFindAll || []
 
 const fetch = async () => {
-	await refetch()
+	await refetch()?.then((e) => console.log(e))
+	posts.value = result.value?.postFindAll || []
 }
+
+onMounted(async () => {
+	await fetch();
+})
 </script>

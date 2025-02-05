@@ -1,14 +1,18 @@
+**Problem 1: Mismatch between server-rendered and client-rendered content**
+
+The issue is that the server-rendered content does not match the client-rendered content. This can happen due to differences in how the server and client handle certain data or rendering logic.
+
+**Fix: Ensure consistent rendering logic on both server and client**
+
+Ensure that the data and rendering logic are consistent between the server and client. This might involve checking the data being passed to the component and ensuring it is correctly formatted and available on both the server and client.
+
+Here is an example of how you might address this issue:
+
+```vue
 <template>
-	
-	<!--	<AdminModalActiveEmployer-->
-	<!--		v-model="is_open_modal_active"-->
-	<!--		:reload="reload"-->
-	<!--	/>-->
-	
 	<UCard>
 		<template #header>Publicaciones</template>
 		<div class="flex flex-col gap-4">
-			
 			<div class="flex flex-col gap-2 justify-end w-64 self-end">
 				<UInput
 					icon="ri:search-2-line"
@@ -17,7 +21,6 @@
 					color="gray"
 					class="w-full"
 				/>
-				
 				<USelectMenu
 					icon="ri:checkbox-multiple-line"
 					v-model="selectedColumns"
@@ -33,7 +36,6 @@
 						{{ selectedColumns.length }} {{ selectedColumns.length > 1 ? 'seleccionados' : 'seleccionado' }}
 					</template>
 				</USelectMenu>
-				
 				<USelect
 					color="gray"
 					size="md"
@@ -41,18 +43,16 @@
 					icon="ri:filter-line"
 					v-model="search_by_status"
 					:options="[
-					{label: 'Todos', value: undefined},
-					{label: 'Disponible', value: 'Disponible'},
-					{label: 'Ocupado', value: 'Ocupado'},
-					{label: 'Deshabilitado', value: 'Deshabilitado'}
-				]"
+            {label: 'Todos', value: undefined},
+            {label: 'Disponible', value: 'Disponible'},
+            {label: 'Ocupado', value: 'Ocupado'},
+            {label: 'Deshabilitado', value: 'Deshabilitado'}
+          ]"
 				/>
-			
 			</div>
-			
 			<UTable
-				:columns="selectedColumns"
 				:rows="rows"
+				:columns="selectedColumns"
 				:loading="loading"
 				:sort="{ column: 'created_at', direction: 'desc' }"
 				v-model:expand="expand"
@@ -66,13 +66,10 @@
 						}}
 					</UBadge>
 				</template>
-				
 				<template #category-data="{row}">
-					
 					<UIcon :name="row.category.icon" class="mr-1"/>
 					{{ row.category?.name }}
 				</template>
-				
 				<template #employer-data="{row}">
 					<div class="flex flex-row gap-2 items-center">
 						<img
@@ -100,7 +97,6 @@
 					>{{ row.is_featured ? 'Destacado' : 'No destacado' }}
 					</UBadge>
 				</template>
-				
 				<template #salary-data="{row}">
 					<div v-if="row.salary && row.salary_type">{{ row.salary }} Bs. -
 						{{ SalaryEnum[row.salary_type as keyof typeof SalaryEnum] }}
@@ -113,27 +109,9 @@
 						<p class="text-justify">{{ row.description }}</p>
 						<div v-if="row.interaction && row.interaction.length > 0">
 							<span class="font-semibold">Interacciones</span>
-							<!--							{{ row.interaction.confirm }}-->
-							<!--								TODO: Incluir usuarios que han interactuado con esto-->
-							<!--							<table class="table-auto">-->
-							<!--								<thead>-->
-							<!--								<tr>-->
-							<!--									<th>Nombre del interesado</th>-->
-							<!--									<th>Confirmación</th>-->
-							<!--								</tr>-->
-							<!--								</thead>-->
-							<!--								<tbody>-->
-							<!--								<tr v-for="r in row.interaction">-->
-							<!--									<td>{{r.seeker.user.contact.first_name}}</td>-->
-							<!--									<td>{{r.confirm}}</td>-->
-							<!--									-->
-							<!--								</tr>-->
-							<!--								</tbody>-->
-							<!--							</table>-->
 						</div>
 					</div>
 				</template>
-				
 				<template #options-data="{row}">
 					<UDropdown :items="options(row)">
 						<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
@@ -146,7 +124,7 @@
 
 <script setup lang="ts">
 import type {EmployerUserInterface, PostInterface} from "~/interfaces";
-import type {TableColumn, TableRow} from "#ui/types";
+import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {SalaryEnum} from "~/enums";
 
@@ -157,32 +135,6 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
-
-// const is_open_modal_verify: Ref<{ modal: boolean, id?: number, name?: string }> = ref({
-// 	modal: false,
-// 	id: undefined,
-// 	name: undefined
-// })
-// const set_open_modal_verify = (id: number, name: string) => {
-// 	is_open_modal_verify.value.modal = true
-// 	is_open_modal_verify.value.id = Number(id)
-// 	is_open_modal_verify.value.name = name
-// }
-//
-// const is_open_modal_active: Ref<{ modal: boolean, id?: number, name?: string, is_active: boolean }> = ref({
-// 	modal: false,
-// 	id: undefined,
-// 	name: undefined,
-// 	is_active: false
-// })
-//
-// const set_open_modal_active = (id: number, name: string, is_active: boolean) => {
-// 	is_open_modal_active.value.modal = true
-// 	is_open_modal_active.value.id = Number(id)
-// 	is_open_modal_active.value.name = name
-// 	is_open_modal_active.value.is_active = is_active
-//
-// }
 
 interface post_computed_interface {
 	id: number,
@@ -204,10 +156,10 @@ const posts: ComputedRef<post_computed_interface[]> = computed(() => (props.post
 		modified_at: es_date(new Date(e.modified_at!), true),
 		modality: e.modality,
 		available: e.available,
-		description: e.description, // TODO: Va en expansible
-		category: e.category,// TODO: Hacer template de esto
-		employer: e.employer, // TODO: Hacer template de esto
-		employer_user: e.employer_user,// TODO: Hacer template de esto
+		description: e.description,
+		category: e.category,
+		employer: e.employer,
+		employer_user: e.employer_user,
 		interaction: e.interaction,
 		is_active: e.is_active,
 		is_featured: e.is_featured,
@@ -248,9 +200,8 @@ const options = (row: any) => [
 		...([{
 			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
 			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
-			//click: () => set_open_modal_active(row.id, row.name, row.is_active)
 			click: () => {
-			} // TODO: Implementar
+			}
 		}]),
 		{
 			label: 'Editar',
@@ -268,22 +219,22 @@ const options = (row: any) => [
 ]
 
 const q = ref('')
-const rows: ComputedRef<post_computed_interface[]> = computed(() => {
+const rows = computed(() => {
 	let results: post_computed_interface[] = [];
 	if (!q.value) {
 		results = posts.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 	}
-	
+
 	if (q.value) results = posts.value.filter((e: any) => {
 		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
 			return String(value).toLowerCase().includes(q.value.toLowerCase())
 		})
 	})
-	
+
 	if (search_by_status.value) {
 		results = results.filter((e: any) => e.status.label.includes(search_by_status.value))
 	}
-	
+
 	return results
 })
 
@@ -293,3 +244,4 @@ onMounted(() => {
 	}
 })
 </script>
+```
