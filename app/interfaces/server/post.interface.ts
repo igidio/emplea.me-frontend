@@ -2,7 +2,7 @@ import {ModalityEnum, SalaryEnum} from "~/enums";
 import type {
 	CategoryInterface,
 	EmployerInterface,
-	EmployerUserInterface,
+	EmployerUserInterface, interactionInterface,
 	LocationInterface,
 	postSkillInterface
 } from "~/interfaces";
@@ -21,6 +21,7 @@ export interface PostInterface {
 	category: CategoryInterface;
 	employer: EmployerInterface;
 	employer_user: EmployerUserInterface;
+	interaction: interactionInterface;
 	post_skill: postSkillInterface[],
 	created_at?: Date;
 	modified_at?: Date;

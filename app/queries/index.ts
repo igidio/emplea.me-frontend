@@ -47,6 +47,7 @@ import employerSocialCreate from "./employerSocialCreate.query";
 // Post
 import postCreate from "./postCreate.query";
 import postUpdate from "./postUpdate.query";
+import postFindAll from "./postFindAll.query";
 //
 import employerFindAll from './employerFindAll.query'
 import employerVerify from './employerVerify.query'
@@ -103,6 +104,7 @@ export {
 	// Post
 	postCreate,
 	postUpdate,
+	postFindAll,
 	// Employer
 	employerFindAll,
 	employerVerify,

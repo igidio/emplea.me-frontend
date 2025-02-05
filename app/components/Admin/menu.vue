@@ -63,7 +63,7 @@ const options = [
 	},
 	{
 		label: 'Publicaciones',
-		to: '/',
+		to: '/admin/posts',
 		icon: 'ri:sticky-note-line'
 	},
 	{

@@ -10,9 +10,9 @@
 		</div>
 
 		<div
-			class="flex flex-col tablet:mb-0 tablet:place-content-between content-between w-full"
+			class="flex flex-col tablet:mb-0 tablet:place-content-between content-between w-1 flex-1"
 		>
-			<div class="w-full flex flex-col  content-between">
+			<div class="w-full flex flex-col content-between">
 
 				<Header/>
 				<div class="mt-6 flex justify-center mb-4">

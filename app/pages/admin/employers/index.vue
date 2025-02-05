@@ -80,6 +80,7 @@ import {es_date} from "~/helpers/es_date";
 import {last_time} from "~/helpers/last_time";
 
 const route = useRoute()
+const q = ref('')
 
 const is_open_modal_verify: Ref<{ modal: boolean, id?: number, name?: string }> = ref({
 	modal: false,
@@ -134,7 +135,7 @@ const expand = ref({
 const {result, refetch, loading} = useQuery<{
 	"employerFindAll": EmployerInterface[]
 }>(employerFindAll, {}, {prefetch: true})
-const q = ref('')
+
 const search_by_status = ref(undefined)
 
 onMounted(async () => await fetch())
