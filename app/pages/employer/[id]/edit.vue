@@ -61,8 +61,6 @@ const state = reactive({
 	phone: employer,
 })
 
-
-
 if (employerUser.level !== 'ADMIN') {
 	useRouter().push('/')
 	useToast().add({title: 'No puedes hacer esto'})

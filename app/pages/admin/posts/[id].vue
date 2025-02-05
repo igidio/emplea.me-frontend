@@ -1,12 +1,26 @@
 <template>
+	<AdminModalMessage
+		v-model:is_open="is_modal_open"
+		:labels="{
+				header: 'Actualizar publicación',
+				confirm: 'Confirmar',
+				description: 'Debes indicar una razón para realizar esta acción.',
+				loading,
+				error,
+		}"
+		:on_submit="submit"
+		:on_close="close_modal"
+		:schema="message_schema"
+	/>
+	
 	<JobUpdate
 		v-model:state="state"
 		:props="{
 			id: Number(route.params.id),
 			loading,
 			error,
-			update: submit,
-			cancel: `/jobs/${route.params.id}`
+			update: confirm,
+			cancel: `/admin/posts`
 		}"
 	/>
 </template>
@@ -15,19 +29,16 @@
 import {usePostStore} from "~/stores/post.pinia";
 import type {PostInterface} from "~/interfaces";
 import {postFindOne, postUpdate} from "~/queries";
+import {message_schema} from "~/schemas";
 
 definePageMeta({
 	middleware: 'role',
-	roles: ['EMPLOYER']
+	roles: ['SUPERUSER', 'ADMIN']
 })
 
 const route = useRoute()
 const {location_options} = usePostStore()
-
-// if (employerUser.level !== 'ADMIN') {
-// 	useRouter().push('/')
-// 	useToast().add({title: 'No puedes hacer esto'})
-// }
+const is_modal_open = ref(false)
 
 const {data} = await useAsyncQuery<
 	{
@@ -42,13 +53,16 @@ const {data} = await useAsyncQuery<
 	}
 >(postFindOne(), {"id": Number(route.params.id)});
 
-if (data.value?.post.info.can_modify === false) {
-	useRouter().push('/')
-	useToast().add({title: 'No puedes hacer esto'})
+const confirm = async () => {
+	is_modal_open.value = true
+}
+
+const close_modal = () => {
+	is_modal_open.value = false
 }
 
 const {mutate, loading, error} = useMutation<{ "postUpdate": string }>(postUpdate)
-const submit = async () => {
+const submit = async (message:string) => {
 	await mutate({
 		"updatePostInput": {
 			"id": Number(route.params.id),
@@ -60,10 +74,13 @@ const submit = async () => {
 			"salary_type": state.salary_type,
 			"modality": state.modality,
 			"id_employer": Number(data.value?.post.post.employer.id)
+		},
+		"messageInput": {
+			"message": message
 		}
 	}).then((e) => {
 		useToast().add({title: e?.data?.postUpdate})
-		useRouter().push(`/jobs/${route.params.id}?U`)
+		useRouter().push(`/admin/posts`)
 	}).catch((e) => {
 		console.log(e)
 	});

@@ -255,7 +255,7 @@ const options = (row: any) => [
 		{
 			label: 'Editar',
 			icon: 'ri:edit-line',
-			click: () => useRouter().push(`/admin/employers/${row.id}`)
+			click: () => useRouter().push(`/admin/posts/${row.id}`)
 		}
 	],
 	[
