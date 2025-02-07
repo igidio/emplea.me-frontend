@@ -13,7 +13,10 @@ export interface PostInterface {
 	description: string;
 	available: boolean;
 	modality: ModalityEnum | string;
-	is_featured: boolean;
+	featured: {
+		id: number;
+		
+	};
 	salary?: number;
 	salary_type?: SalaryEnum | string;
 	is_active: boolean;

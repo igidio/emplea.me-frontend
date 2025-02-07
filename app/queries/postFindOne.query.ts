@@ -8,7 +8,9 @@ export default (show_employer_info:boolean = false) => {
                     description
                     available
                     modality
-                    is_featured
+                    featured {
+                        id
+                    }
                     salary
                     salary_type
                     is_active
@@ -83,7 +85,9 @@ export default (show_employer_info:boolean = false) => {
                     description
                     available
                     modality
-                    is_featured
+                    featured {
+                        id
+                    }
                     salary
                     salary_type
                     is_active

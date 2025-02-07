@@ -43,7 +43,9 @@ export default (detailed_view: boolean = false ) => detailed_view ? gql`
                 }
             }
             is_active
-            is_featured
+            featured {
+                id
+            }
             location {
                 municipality
                 province
@@ -93,7 +95,9 @@ export default (detailed_view: boolean = false ) => detailed_view ? gql`
             }
             id
             is_active
-            is_featured
+            featured {
+                id
+            }
             location {
                 municipality
                 province

@@ -27,8 +27,10 @@ const cases = {
                             province
                             department
                         }
+                        featured {
+                            id
+                        }
                         is_active
-                        is_featured
                         id
                         description
                     }
@@ -96,7 +98,9 @@ const cases = {
                             department
                         }
                         is_active
-                        is_featured
+                        featured {
+                            id
+                        }
                         id
                         description
                     }

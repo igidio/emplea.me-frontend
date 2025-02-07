@@ -48,10 +48,12 @@ import employerSocialCreate from "./employerSocialCreate.query";
 import postCreate from "./postCreate.query";
 import postUpdate from "./postUpdate.query";
 import postFindAll from "./postFindAll.query";
+import postActivateOrDeactivate from './postActivateOrDeactivate.query'
 //
 import employerFindAll from './employerFindAll.query'
 import employerVerify from './employerVerify.query'
 import employerActivateOrDeactivate from './employerActivateOrDeactivate.query'
+
 
 export {
 	getUserByToken,
@@ -105,6 +107,7 @@ export {
 	postCreate,
 	postUpdate,
 	postFindAll,
+	postActivateOrDeactivate,
 	// Employer
 	employerFindAll,
 	employerVerify,

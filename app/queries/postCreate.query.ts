@@ -6,7 +6,9 @@ export default gql`
             description
             available
             modality
-            is_featured
+            featured {
+                id
+            }
             salary
             salary_type
             is_active

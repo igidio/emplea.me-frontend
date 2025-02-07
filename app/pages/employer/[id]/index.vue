@@ -23,5 +23,10 @@ const {result, refetch, loading} = useQuery<{
 	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
 }>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)}, {prefetch: false})
 
-onMounted(async () => await refetch())
+onMounted(async () => {
+		await refetch()
+	console.log(result)
+	}
+)
 </script>
+

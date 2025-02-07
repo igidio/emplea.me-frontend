@@ -26,13 +26,13 @@
 						<UButton
 							color="black"
 							@click="close_modal"
-							:loading="labels.loading"
+							:disabled="labels.loading"
 						>
 							Cancelar
 						</UButton>
 						<UButton
 							type="submit"
-							:loading="labels.loading"
+							:disabled="labels.loading"
 						>
 							{{ labels.confirm }}
 						</UButton>
@@ -53,7 +53,7 @@ const props = defineProps<{
 	on_close: () => void,
 	schema: ObjectSchema<any>,
 	labels: {
-		header: string,
+		header: string|undefined,
 		confirm: string,
 		description?: string,
 		loading: boolean,
@@ -68,11 +68,12 @@ const state = reactive({
 const is_open: ModelRef<boolean> = defineModel('is_open', {required: true, type: Boolean});
 
 const confirm = async () => {
-	await props.on_submit(state.message)
+	await props.on_submit(state.message).then(() => state.message = "")
 }
 
 const close_modal = () => {
 	is_open.value = false
+	state.message = ""
 	props.on_close()
 }
 </script>

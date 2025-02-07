@@ -18,3 +18,4 @@ export type { seekerSkillInterface } from "~/interfaces/server/seeker_skill.inte
 export type { interactionInterface } from "~/interfaces/server/interaction.interface";
 export type { PhoneInterface } from "~/interfaces/server/phone.interface";
 export type { EmployerSocialInterface } from "~/interfaces/server/employer_social.interface";
+export type { FeaturedInterface } from "~/interfaces/server/featured.interface";

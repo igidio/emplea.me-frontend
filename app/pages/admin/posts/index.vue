@@ -17,7 +17,7 @@ const {result, refetch, loading} = useQuery<{
 const posts = ref<PostInterface[]>([])
 
 const fetch = async () => {
-	await refetch()?.then((e) => console.log(e))
+	await refetch()
 	posts.value = result.value?.postFindAll || []
 }
 

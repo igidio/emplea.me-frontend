@@ -1,15 +1,18 @@
-**Problem 1: Mismatch between server-rendered and client-rendered content**
-
-The issue is that the server-rendered content does not match the client-rendered content. This can happen due to differences in how the server and client handle certain data or rendering logic.
-
-**Fix: Ensure consistent rendering logic on both server and client**
-
-Ensure that the data and rendering logic are consistent between the server and client. This might involve checking the data being passed to the component and ensuring it is correctly formatted and available on both the server and client.
-
-Here is an example of how you might address this issue:
-
-```vue
 <template>
+	<AdminModalMessage
+		v-model:is_open="modal_data.is_open"
+		:labels="{
+				header: modal_data.header,
+				confirm: 'Confirmar',
+				description: 'Debes indicar una razón para realizar esta acción.',
+				loading,
+				error,
+		}"
+		:on_submit="submit"
+		:on_close="close_modal"
+		:schema="message_schema"
+	/>
+
 	<UCard>
 		<template #header>Publicaciones</template>
 		<div class="flex flex-col gap-4">
@@ -90,11 +93,11 @@ Here is an example of how you might address this issue:
 						{{ row.employer_user.user.contact.first_name }} {{ row.employer_user.user.contact.last_name }}
 					</div>
 				</template>
-				<template #is_featured-data="{row}">
+				<template #featured-data="{row}">
 					<UBadge
-						:color="row.is_featured ? 'amber' : 'gray'"
+						:color="row.featured ? 'amber' : 'gray'"
 						variant="soft"
-					>{{ row.is_featured ? 'Destacado' : 'No destacado' }}
+					>{{ row.featured ? 'Destacado' : 'No destacado' }}
 					</UBadge>
 				</template>
 				<template #salary-data="{row}">
@@ -123,10 +126,12 @@ Here is an example of how you might address this issue:
 </template>
 
 <script setup lang="ts">
-import type {EmployerUserInterface, PostInterface} from "~/interfaces";
+import type {EmployerUserInterface, FeaturedInterface, PostInterface} from "~/interfaces";
 import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {SalaryEnum} from "~/enums";
+import {message_schema} from "~/schemas";
+import {postActivateOrDeactivate} from "~/queries";
 
 const props = defineProps<{
 	posts: PostInterface[],
@@ -135,6 +140,12 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+
+const modal_data = ref({
+	is_open: false,
+	header: undefined as string|undefined,
+	id: undefined as number|undefined
+})
 
 interface post_computed_interface {
 	id: number,
@@ -145,10 +156,10 @@ interface post_computed_interface {
 	employer_user: EmployerUserInterface,
 	interaction: any,
 	is_active: boolean,
-	is_featured: boolean,
+	featured: FeaturedInterface,
 }
 
-const posts: ComputedRef<post_computed_interface[]> = computed(() => (props.posts && props.posts.length > 0) ?
+const posts: ComputedRef = computed(() => (props.posts && props.posts.length > 0) ?
 	props.posts.map((e: PostInterface) => ({
 		id: e.id,
 		name: e.name,
@@ -162,7 +173,7 @@ const posts: ComputedRef<post_computed_interface[]> = computed(() => (props.post
 		employer_user: e.employer_user,
 		interaction: e.interaction,
 		is_active: e.is_active,
-		is_featured: e.is_featured,
+		featured: e.featured,
 		salary: e.salary,
 		salary_type: e.salary_type,
 		status: (e.available && e.is_active) ? {color: 'green', label: 'Disponible'} :
@@ -185,7 +196,7 @@ const columns: TableColumn[] = [
 	{label: 'Categoría', key: 'category', sortable: true},
 	{label: 'Empleador', key: 'employer', sortable: true},
 	{label: 'Publicado por:', key: 'employer_user', sortable: true},
-	{label: 'Destacado', key: 'is_featured', sortable: true},
+	{label: 'Destacado', key: 'featured', sortable: true},
 	{label: 'Salario', key: 'salary', sortable: true},
 	{label: 'Opciones', key: 'options', sortable: true},
 ]
@@ -201,6 +212,9 @@ const options = (row: any) => [
 			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
 			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
 			click: () => {
+				modal_data.value.is_open = true
+				modal_data.value.header = (row.is_active) ? 'Deshabilitar publicación' : 'Volver a habilitar publicación'
+				modal_data.value.id = row.id
 			}
 		}]),
 		{
@@ -243,5 +257,27 @@ onMounted(() => {
 		q.value = route.query.q as string
 	}
 })
+
+const {mutate, error, loading} = useMutation(postActivateOrDeactivate)
+
+const submit = async (message:string) => {
+	await mutate({
+		"postActivateOrDeactivateId": Number(modal_data.value.id),
+		"messageOptInput": {
+			"message": message
+		}
+	}).then((e) => {
+		close_modal()
+		useToast().add({title: e?.data?.postActivateOrDeactivate})
+		props.reload()
+	}).catch((e) => {
+		console.log(e)
+	});
+}
+
+const close_modal = () => {
+	modal_data.value.is_open = false
+	modal_data.value.header = undefined
+	modal_data.value.id = undefined
+}
 </script>
-```
