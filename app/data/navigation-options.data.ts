@@ -11,7 +11,7 @@ export const favorites_option: navigationOptionsInterface = {
 };
 export const my_employments_option: navigationOptionsInterface = {
 	label: "Mis Negocios",
-	name: 'my_employments'
+	name: 'employer'
 };
 export const my_posts_option: navigationOptionsInterface = {
 	label: "Mis Publicaciones",

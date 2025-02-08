@@ -119,7 +119,7 @@
 			<template #footer>
 				<div class="flex flex-row gap-2 justify-end w-full">
 					<NuxtLink
-						to="/my_employments">
+						to="/employer">
 						<UButton
 							color="black"
 							label="Cancelar"

@@ -1,5 +1,4 @@
 <template>
-	{{ subscriptions}}
 	<HistoryTable
 		:subscriptions="subscriptions"
 	/>
@@ -16,4 +15,4 @@ const { result } = useQuery<{ subscriptionFindAll: SubscriptionInterface[]}>(sub
 onMounted(() => {
 	subscriptions.value = result.value?.subscriptionFindAll || []
 })
-</script>
+</script>1

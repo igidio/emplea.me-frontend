@@ -40,20 +40,24 @@ definePageMeta({
 	roles: ['EMPLOYER']
 })
 
+const user = useUserStore()
 const loading = ref(false)
 
-const {fill_employments, user_id, employments} = useMyEmployments();
+const {fill_employments, employments} = useMyEmployments();
+
 const result = ref<{
 	employer: EmployerInterface,
 	employerUser: EmployerUserInterface
 } | undefined>(undefined)
 
 const {data: employerGetByUserData, error} = await useAsyncQuery<{
-	EmployerlistByUser: EmployerUserInterface[]
-}>(employerGetByUser, {"id": Number(user_id)});
-await fill_employments({data: employerGetByUserData, error})
+	"employerListByUser": EmployerUserInterface[]
+}>(employerGetByUser);
 
-const user = useUserStore()
+await fill_employments({
+	data: employerGetByUserData.value?.employerListByUser,
+	error
+})
 
 const {result: EmploymentData, load, refetch} = useLazyQuery<{
 	findOneEmployer: {
@@ -63,11 +67,17 @@ const {result: EmploymentData, load, refetch} = useLazyQuery<{
 }>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": 1})
 load()
 
+onMounted(() => {
+	if (useRoute().query.e && employerGetByUserData.value?.employerListByUser[Number(useRoute().query.e)]) {
+		get_employer(Number(useRoute().query.e))
+	}
+})
 
 const get_employer = async (i: number) => {
+	await useRouter().push({ query: {e: i}})
 	loading.value = true
 	result.value = undefined
-	const employer_user = employerGetByUserData.value?.EmployerlistByUser[i];
+	const employer_user = employerGetByUserData.value?.employerListByUser[i];
 	await refetch({"findOneEmployerId": Number(employer_user?.employer.id)})
 	result.value = EmploymentData.value?.findOneEmployer
 	loading.value = false

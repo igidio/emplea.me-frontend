@@ -23,7 +23,7 @@ export function useMyEmployments() {
 	})
 
 	const fill_employments = async ({data, error}: {data:any, error: any}) => {
-		if (data.value && !error.value) employments.value = (data.value as any).EmployerlistByUser.map((e: EmployerUserInterface): employmentsInterface => ({
+		if (data && !error.value) employments.value = (data as any).map((e: EmployerUserInterface): employmentsInterface => ({
 			image: e.employer.profile_image,
 			name: e.employer.name,
 			role: e.level,
