@@ -60,6 +60,7 @@ import employerActivateOrDeactivate from './employerActivateOrDeactivate.query'
 import subscriptionCreate from "./subscriptionCreate.query";
 import subscriptionMyHistory from "./subscriptionMyHistory.query";
 import subscriptionUserDetails from "./subscriptionUserDetails.query";
+import subscriptionFindAll from "./subscriptionFindAll.query";
 
 export {
 	plansGet,
@@ -125,4 +126,5 @@ export {
 	subscriptionCreate,
 	subscriptionMyHistory,
 	subscriptionUserDetails,
+	subscriptionFindAll,
 };

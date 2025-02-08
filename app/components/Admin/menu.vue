@@ -52,8 +52,8 @@ const options = [
 		icon: 'ri:group-2-line'
 	},
 	{
-		label: 'Transacciones',
-		to: '/',
+		label: 'Subscripciones',
+		to: '/admin/subscriptions',
 		icon: 'ri:coins-line'
 	},
 	{
