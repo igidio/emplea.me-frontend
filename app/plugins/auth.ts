@@ -1,6 +1,7 @@
-import {categoryGet, getUserByToken, locationGet} from "~/queries";
+import {categoryGet, getUserByToken, locationGet, plansGet} from "~/queries";
 import {useUserStore} from "~/stores/user.pinia";
 import {usePostStore} from "~/stores/post.pinia";
+import type {PlanInterface} from "~/interfaces";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
 	const userStore = useUserStore();
@@ -20,8 +21,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 		postStore.set_categories((data.value as any).allCategories);
 	}
 	const get_locations = async () => {
-		const {data} = await useAsyncQuery(locationGet, {server: true});
-		postStore.set_locations((data.value as any).allLocations);
+		const {data} = await useAsyncQuery<{ allPlans: PlanInterface[] }>(plansGet, {server: true});
+		postStore.set_plans((data.value as any).allPlans);
 	}
 	
 	await get_categories()

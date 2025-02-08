@@ -13,7 +13,6 @@
 		</div>
 
 		<!-- <Footer /> -->
-
 		<NuxtLayout :name="footer">
 			<NuxtPage/>
 		</NuxtLayout>

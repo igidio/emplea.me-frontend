@@ -2,8 +2,8 @@
 	<div class="bg-violet-200 rounded-large p-4 justify-between row mb-4 desktop:hidden flex">
 		<div class="flex flex-col text-end w-full">
 			<span class="font-bold">Plan {{ plan.name }}</span>
-			<span class="font-black text-5xl">{{ plan.price }} {{ plan.currency }}</span>
-			<span class="font-bold">{{ (plan.price / exchangeRate).toFixed(2) }} USD (Dólar americano)</span>
+			<span class="font-black text-5xl">{{ plan.price }} Bs.</span>
+			<span class="font-bold">{{ (plan.price / exchange_rate).toFixed(2) }} USD (Dólar americano)</span>
 		</div>
 	</div>
 	<div class="flex flex-col desktop:flex-row gap-4 w-full">
@@ -20,12 +20,12 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col desktop:max-w-[50%] gap-4">
+		<div class="flex flex-col desktop:max-w-96 gap-4">
 			<div class="bg-violet-200 rounded-large p-4 justify-between row hidden desktop:flex">
 				<div class="flex flex-col text-end w-full">
 					<span class="font-bold">Plan {{ plan.name }}</span>
-					<span class="font-black text-5xl">{{ plan.price }} {{ plan.currency }}</span>
-					<span class="font-bold">{{ (plan.price / exchangeRate).toFixed(2) }} USD (Dólar americano)</span>
+					<span class="font-black text-5xl">{{ plan.price }} Bs.</span>
+					<span class="font-bold">{{ (plan.price / exchange_rate).toFixed(2) }} USD (Dólar americano)</span>
 				</div>
 			</div>
 
@@ -34,6 +34,7 @@
 				<UForm
 					@submit.prevent="submit_form()"
 					:state="state"
+					:schema="schema"
 					class="flex flex-col gap-4"
 
 				>
@@ -127,7 +128,8 @@
 						v-model="state.auto_renew"
 					/>
 
-					<UButton type="submit" label="Pagar 100 Bs." block/>
+					<span class="error" v-if="error">{{error.message}}</span>
+					<UButton type="submit" label="Pagar 100 Bs." block :disabled="loading"/>
 				</UForm>
 			</UCard>
 
@@ -149,17 +151,20 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue'
-import type {PlanInterface} from "~/interfaces";
-import {plans} from "~/data/plans.data";
-import {order_schema} from "~/schemas/order.schema";
-import allowed_cards from "~/data/allowed-cards.data";
-import {paymentCreateTransaction} from "~/queries";
+definePageMeta({
+	middleware: ["order"]
+})
 
-const exchangeRate = 6.91
+import type {PlanInterface, SubscriptionInterface} from "~/interfaces";
+import allowed_cards from "~/data/allowed-cards.data";
+import {subscriptionCreate} from "~/queries";
+import {order_schema} from "~/schemas/order.schema";
+
+const exchange_rate = 6.91
 const is_invalid_expiration_date: Ref<undefined | string> = ref(undefined)
 
-const {mutate, loading} = useMutation(paymentCreateTransaction)
+const {plans} = usePostStore()
+const schema = order_schema
 
 const state = reactive({
 	card_number: '',
@@ -170,16 +175,10 @@ const state = reactive({
 })
 
 const is_card_flipped = ref(false)
-const errors = ref({})
 
 // PLAN
 const id = Number(useRoute().params.id)
-if (!id) {
-	useRouter().push('/')
-}
-
 const plan: PlanInterface = plans[id]!
-
 
 const format_card_number = () => {
 	let value = state.card_number.replace(/[^\d]/g, '')
@@ -196,7 +195,6 @@ const format_card_number = () => {
 
 const format_card_holder = () => {
 	state.card_holder = state.card_holder.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '').replace(/\B\w/g, char => char.toLowerCase());
-
 }
 
 const format_expiry = () => {
@@ -209,18 +207,21 @@ const format_expiry = () => {
 	state.expiry = value
 }
 
+const {mutate, loading, error} = useMutation<{ "subscriptionCreateByCard": SubscriptionInterface }>(subscriptionCreate)
 const submit_form = async () => {
 	let card_token = allowed_cards[state.card_number.replace(/[^\d]/g, '') as keyof typeof allowed_cards]
 
 	const variables = {
-		"input": {
-			"amount": Number((plan.price / exchangeRate).toFixed(2)) * 100,
-			"currency": "usd",
+		"createSubscriptionInput": {
+			"autorenew": state.auto_renew,
+			"id_plan": id
+		},
+		"createPaymentIntentInput": {
 			"token": card_token ? card_token : "tok_visa_chargeDeclined"
 		}
 	}
-
-	await mutate(variables);
-
+	await mutate(variables).catch((error) => {
+		console.log(error)
+	});
 }
 </script>

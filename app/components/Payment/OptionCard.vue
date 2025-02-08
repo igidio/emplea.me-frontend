@@ -2,19 +2,19 @@
 	<div
 		class="flex tablet:flex-row desktop:flex-col rounded-large p-4 text-center place-content-between h-full shadow shadow-black/20"
 
-		:class="color"
+		:class="'bg-'+color"
 	>
 		<div class="flex flex-col">
 			<span class="font-semibold">{{ name }}</span>
-			<span class="font-black text-5xl">{{ price }} {{ currency }}</span>
+			<span class="font-black text-5xl">{{ price }} Bs.</span>
 			<span class="font-semibold mb-4">Beneficios</span>
-			<ul>
-				<li v-for="benefit in benefits" class="text-sm">{{ benefit }}</li>
+			<ul class="list-disc list-inside text-left">
+				<li v-for="benefit in benefits.split(';')" class="text-sm">{{ benefit }}</li>
 			</ul>
 		</div>
-		
+
 		<NuxtLink
-			:to="{ path: `payment/${props.index.toString()}` }"
+			:to="{ path: `payment/${id-1}` }"
 			v-if="show_select_button"
 		>
 			<UButton
@@ -44,5 +44,5 @@ const props = withDefaults(
 	defineProps<Props>(),
 	{ show_select_button: true }
 )
-const {name, price, currency, benefits, color} = props.props
+const {name, price, benefits, color, id} = props.props
 </script>

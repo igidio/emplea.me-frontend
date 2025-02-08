@@ -24,6 +24,8 @@ definePageMeta({
 	roles: ['EMPLOYER']
 })
 
-import {plans} from "~/data/plans.data";
+const { plans } = usePostStore()
+
+
 const current = ref(0)
 </script>

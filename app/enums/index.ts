@@ -5,6 +5,8 @@ import { ModalityEnum } from "./modality.enum";
 import { SalaryEnum } from "./salary.enum";
 import { SkillLevelEnum } from "./server/seeker_skill.enum";
 import { DegreeEnum } from "./server/degree.enum";
+import { TransactionStatusEnum } from "./server/transaction_status.enum";
+import { TransactionTypeEnum } from "./server/transaction_type.enum";
 
 export {
 	EmployerLevelEnum,
@@ -12,5 +14,7 @@ export {
 	ModalityEnum,
 	SalaryEnum,
 	SkillLevelEnum,
-	DegreeEnum
+	DegreeEnum,
+	TransactionStatusEnum,
+	TransactionTypeEnum
 }

@@ -12,6 +12,7 @@
 				:show_select_button="false"
 			/>
 		</div>
+		{{}}
 		<div class="flex flex-col gap-4 w-full tablet:w-96 justify-center">
 			<span class="font-semibold">Selecciona un método de pago</span>
 			<UButton color="primary" size="lg" label="Pagar con tarjeta" :to="`${useRoute().params.id}/order`"/>
@@ -35,20 +36,14 @@
 </template>
 
 <script setup lang="ts">
-import {plans} from "~/data/plans.data";
+definePageMeta({
+	middleware: ["order"]
+})
+
+const {plans} = usePostStore()
 
 const modal_qr_is_open = ref(false)
 const modal_ftf_is_open = ref(false)
-
-if (import.meta.client) {
-	if (
-		!useRoute().params.id ||
-		!plans[Number(useRoute().params.id!)] ||
-		Number(useRoute().params.id) <= 0
-	) {
-		useRouter().push('/payment')
-	}
-}
 
 const current_plan = ref(Number(useRoute().params.id) > 0 && plans[Number(useRoute().params.id!)])
 </script>

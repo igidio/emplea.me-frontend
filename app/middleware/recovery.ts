@@ -1,6 +1,6 @@
 import { confirmationVerifyToken } from "~/queries";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
 	const token = to.query.t;
 
 	if (!token) {
@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
 	const { mutate, onDone, onError } = useMutation(confirmationVerifyToken);
 
-	mutate({
+	await mutate({
 		verify: { token, type: "recovery" },
 	});
 

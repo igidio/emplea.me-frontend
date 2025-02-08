@@ -5,7 +5,6 @@ export type { LocationInterface } from "~/interfaces/location.interface";
 export type { CategoryInterface } from "~/interfaces/category.interface";
 export type { EmployerInterface } from "~/interfaces/employer.interface";
 export type { EmployerUserInterface } from "~/interfaces/employer-user.interface";
-export type { PlanInterface } from "~/interfaces/plan.interface";
 export type { seekerInterface } from "~/interfaces/server/seeker.interface";
 export type { educationInterface } from "~/interfaces/server/education.interface";
 export type { instituteInterface } from "~/interfaces/server/institute.interface";
@@ -19,3 +18,7 @@ export type { interactionInterface } from "~/interfaces/server/interaction.inter
 export type { PhoneInterface } from "~/interfaces/server/phone.interface";
 export type { EmployerSocialInterface } from "~/interfaces/server/employer_social.interface";
 export type { FeaturedInterface } from "~/interfaces/server/featured.interface";
+export type { PlanInterface } from "~/interfaces/server/plan.interface";
+export type { SubscriptionInterface } from "~/interfaces/server/subscription.interface";
+export type { TransactionInterface } from "~/interfaces/server/transaction.interface";
+export type { MethodInterface } from "~/interfaces/server/method.interface";
