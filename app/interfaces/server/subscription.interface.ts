@@ -1,11 +1,13 @@
+import type {PlanInterface, TransactionInterface, UserInterface} from "~/interfaces";
+
 export interface SubscriptionInterface {
 	id?: number;
 	starts_at: Date;
 	ends_at: Date;
 	autorenew: boolean;
-	user_id: number;
-	plan_id: number;
-	transaction_id: number;
+	user: UserInterface;
+	plan: PlanInterface;
+	transaction: TransactionInterface;
 	created_at?: Date;
 	modified_at?: Date;
 }

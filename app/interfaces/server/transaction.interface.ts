@@ -1,14 +1,14 @@
-import type {SubscriptionEntity} from "~/interfaces";
+import type {MethodInterface, SubscriptionInterface } from "~/interfaces";
 import {TransactionStatusEnum} from "~/enums";
 
 export interface TransactionInterface {
 	id?: number;
-	id_method: number; // Referencia al ID del método de pago
+	method: MethodInterface;
 	amount: number;
 	status: TransactionStatusEnum;
 	last_four?: string;
 	brand?: string;
-	subscription?: SubscriptionEntity;
+	subscription?: SubscriptionInterface;
 	created_at?: Date;
 	modified_at?: Date;
 }

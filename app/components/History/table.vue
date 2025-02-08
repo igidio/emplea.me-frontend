@@ -1,9 +1,113 @@
 <template>
-	{{subscriptions}}
+	<UCard>
+		<template #header>Historial de pago</template>
+		<UTable
+			:rows="rows"
+			:columns="columns"
+		>
+			<template #amount-data="{row}">
+				<div class="flex flex-col gap-1">
+					<span>{{ row.amount.bob }} BOB</span>
+					<span>{{ row.amount.usd }} USD</span>
+				</div>
+			</template>
+			<template #method-data="{row}">
+				<div class="flex flex-col gap-1">
+					{{ TransactionTypeEnum[ row.method.type  as unknown as keyof typeof TransactionTypeEnum] }}
+					<div
+						class="flex flex-row place-items-center place-content-between"
+						v-if="row.method.type === 'CARD' ">
+						<UIcon
+							size="16px"
+							:name="brands[row.brand as keyof typeof brands]['icon']"
+							:class="brands[row.brand as keyof typeof brands]['color']"
+							v-if="row.brand"
+						/>
+						<span v-else/>
+						<span>**{{ row.last_four }}</span>
+
+					</div>
+				</div>
+			</template>
+		</UTable>
+	</UCard>
+
+
 </template>
 
 <script setup lang="ts">
-import type {SubscriptionInterface} from "~/interfaces";
+import type {MethodInterface, SubscriptionInterface} from "~/interfaces";
+import type {TableColumn} from "#ui/types";
+import {es_date} from "~/helpers/es_date";
+import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
 
-defineProps<{subscriptions: SubscriptionInterface[]}>()
+const {subscriptions} = defineProps<{ subscriptions: SubscriptionInterface[] }>()
+
+
+const elements = computed(() => {
+	return subscriptions.map((e: SubscriptionInterface) => ({
+		id: e.id,
+		plan: e.plan.name,
+		date: es_date(e.created_at!),
+		start_date: es_date(e.starts_at),
+		end_date: es_date(e.ends_at),
+		amount: {
+			usd: e.transaction.amount.toFixed(2),
+			bob: (e.transaction.amount * 6.91).toFixed(2),
+		},
+		brand: e.transaction.brand,
+		last_four: e.transaction.last_four,
+		method: e.transaction.method,
+		status: TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],	}))
+})
+
+const columns: TableColumn[] = [
+	// {label: 'ID', key: 'id'},
+	{label: 'Plan', key: 'plan'},
+	{label: 'Fecha de transacción', key: 'date'},
+	{label: 'Fecha de inicio', key: 'start_date'},
+	{label: 'Fecha de fin', key: 'end_date'},
+	{label: 'Monto', key: 'amount'},
+	{label: 'Método de pago', key: 'method'},
+	{label: 'Estado', key: 'status'},
+]
+
+
+const rows = computed(() => {
+	return elements.value
+})
+
+const brands = {
+	'visa': {
+		icon: 'fa6-brands:cc-visa',
+		color: 'bg-blue-600',
+		size: '18px'
+	},
+	'mastercard': {
+		icon: 'fa6-brands:cc-mastercard',
+		color: 'bg-red-500'
+	},
+	'amex': {
+		icon: 'fa6-brands:cc-amex',
+		color: 'bg-blue-600'
+	},
+	'unionpay': {
+		icon: 'material-symbols:upi-pay',
+		color: 'bg-green-700'
+	},
+	'discover': {
+		icon: 'fa6-brands:cc-discover',
+		color: 'bg-orange-500'
+	},
+	'jcb': {
+		icon: 'fa6-brands:cc-jcb',
+		color: 'bg-red-500'
+	},
+	'diners': {
+		icon: 'fa6-brands:cc-diners-club',
+		color: 'bg-blue-600'
+	},
+
+}
+
 </script>

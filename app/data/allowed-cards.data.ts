@@ -5,6 +5,12 @@ export default {
 	"5200828282828210": "tok_mastercard_debit",
 	"378282246310005": "tok_amex",
 	"6200000000000005": "tok_unionpay",
+	"6200000000000047": "tok_unionpay",
+	"6011111111111117": "tok_discover",
+	"6011981111111113": "tok_discover",
+	"3056930009020004": "tok_diners",
+	"36227206271667": "tok_diners",
+	"3566002020360505": "tok_jcb",
 	
 	"4000000000000002": "tok_visa_chargeDeclined",
 	"4000000000000259": "tok_visa_chargeDeclinedInsufficientFunds",
