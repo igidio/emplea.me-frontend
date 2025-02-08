@@ -21,6 +21,7 @@ export const useUserStore = defineStore("user", () => {
 	const token: Ref<string> = ref("");
 	const initial_loading = ref(true);
 	const is_open_modal_login = ref(false);
+	const router = useRouter();
 	
 	const get_token = () => {
 		let token_from_storage = useCookie("token");
@@ -61,7 +62,7 @@ export const useUserStore = defineStore("user", () => {
 	const is_premium = computed(() => false);
 	
 	const logout_user = async () => {
-		await useRouter().push({
+		await router.push({
 			path: "/",
 		})
 		await new Promise((resolve) => {
@@ -78,15 +79,14 @@ export const useUserStore = defineStore("user", () => {
 			label: "Ver perfil",
 			shortcuts: ["V"],
 			click: () => {
-				useRouter().push("/profile");
+				router.push("/profile");
 			},
 		};
 		
 		let payment = {
-			label: "Pagos",
+			label: "Tus compras",
 			shortcuts: ["P"],
-			click: () => {
-			},
+			click: () => router.push("/history"),
 		};
 		
 		let logout = {

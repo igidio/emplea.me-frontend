@@ -56,6 +56,7 @@ import employerVerify from './employerVerify.query'
 import employerActivateOrDeactivate from './employerActivateOrDeactivate.query'
 // Subscription
 import subscriptionCreate from "./subscriptionCreate.query";
+import subscriptionMyHistory from "./subscriptionMyHistory.query";
 
 export {
 	plansGet,
@@ -117,5 +118,6 @@ export {
 	employerActivateOrDeactivate,
 	// Subscription
 	subscriptionCreate,
+	subscriptionMyHistory,
 	
 };

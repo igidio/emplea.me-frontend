@@ -104,6 +104,11 @@ export default defineNuxtConfig({
 			path: "~/components/Payment",
 			pathPrefix: true,
 		},
+		{
+			prefix: "History",
+			path: "~/components/History",
+			pathPrefix: true,
+		},
 	],
 
 	future: {
