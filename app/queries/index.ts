@@ -50,6 +50,8 @@ import postCreate from "./postCreate.query";
 import postUpdate from "./postUpdate.query";
 import postFindAll from "./postFindAll.query";
 import postActivateOrDeactivate from './postActivateOrDeactivate.query'
+import postMyPosts from './postMyPosts.query'
+import postToggleAvailability from './postToggleAvailability.query'
 //
 import employerFindAll from './employerFindAll.query'
 import employerVerify from './employerVerify.query'
@@ -113,6 +115,8 @@ export {
 	postUpdate,
 	postFindAll,
 	postActivateOrDeactivate,
+	postMyPosts,
+	postToggleAvailability,
 	// Employer
 	employerFindAll,
 	employerVerify,

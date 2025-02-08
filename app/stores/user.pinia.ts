@@ -75,8 +75,8 @@ export const useUserStore = defineStore("user", () => {
 		});
 		delete_token();
 		user.value = {} as UserInterface;
+		employer_info.value = {} as employer_info_interface
 		useToast().add({title: "Sesión finalizada"});
-		
 	};
 	
 	const dropdown_options: ComputedRef<any[][]> = computed(() => {

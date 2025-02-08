@@ -147,6 +147,7 @@ export default defineAppConfig({
 			rounded: "rounded-small",
 		},
 		dropdown: {
+			base: ' border',
 			item: {
 				rounded: "rounded-small",
 				padding: "px-2",

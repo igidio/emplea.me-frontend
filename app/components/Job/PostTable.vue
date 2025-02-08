@@ -1,18 +1,4 @@
 <template>
-	<AdminModalMessage
-		v-model:is_open="modal_data.is_open"
-		:labels="{
-				header: modal_data.header,
-				confirm: 'Confirmar',
-				description: 'Debes indicar una razón para realizar esta acción.',
-				loading,
-				error,
-		}"
-		:on_submit="submit"
-		:on_close="close_modal"
-		:schema="message_schema"
-	/>
-
 	<UCard>
 		<template #header>Publicaciones</template>
 		<div class="flex flex-col gap-4">
@@ -74,14 +60,17 @@
 					{{ row.category?.name }}
 				</template>
 				<template #employer-data="{row}">
-					<div class="flex flex-row gap-2 items-center">
+					<NuxtLink
+						class="flex flex-row gap-2 items-center"
+						:to="`/employer/${row.employer.id}`"
+					>
 						<img
 							:src="row.employer.profile_image"
 							class="border rounded-medium w-8 aspect-square"
 							alt="Foto de perfil"
 						/>
 						{{ row.employer.name }}
-					</div>
+					</NuxtLink>
 				</template>
 				<template #employer_user-data="{row}">
 					<div class="flex flex-row gap-2 items-center">
@@ -116,11 +105,15 @@
 					</div>
 				</template>
 				<template #options-data="{row}">
-					<UDropdown :items="options(row)">
+					<UDropdown :items="options(row)" :ui="{
+						width: 'w-48'
+					}" >
 						<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
 					</UDropdown>
 				</template>
 			</UTable>
+			<UPagination v-model="page" :page-count="pageCount" :total="posts.length"/>
+
 		</div>
 	</UCard>
 </template>
@@ -136,16 +129,13 @@ import {postActivateOrDeactivate} from "~/queries";
 const props = defineProps<{
 	posts: PostInterface[],
 	reload: () => Promise<void>,
-	loading: boolean
+	loading: boolean,
+	options: (row: any) => any[]
 }>()
 
 const route = useRoute()
-
-const modal_data = ref({
-	is_open: false,
-	header: undefined as string|undefined,
-	id: undefined as number|undefined
-})
+const page = ref(1)
+const pageCount = 5
 
 interface post_computed_interface {
 	id: number,
@@ -203,34 +193,6 @@ const columns: TableColumn[] = [
 
 const selectedColumns = ref([...columns])
 const search_by_status = ref(undefined)
-const page = ref(1)
-const pageCount = 6
-
-const options = (row: any) => [
-	[
-		...([{
-			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
-			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
-			click: () => {
-				modal_data.value.is_open = true
-				modal_data.value.header = (row.is_active) ? 'Deshabilitar publicación' : 'Volver a habilitar publicación'
-				modal_data.value.id = row.id
-			}
-		}]),
-		{
-			label: 'Editar',
-			icon: 'ri:edit-line',
-			click: () => useRouter().push(`/admin/posts/${row.id}`)
-		}
-	],
-	[
-		{
-			label: 'Ver detalles',
-			icon: 'ri:align-left',
-			click: () => useRouter().push(`/jobs/${row.id}`)
-		},
-	]
-]
 
 const q = ref('')
 const rows = computed(() => {
@@ -257,27 +219,4 @@ onMounted(() => {
 		q.value = route.query.q as string
 	}
 })
-
-const {mutate, error, loading} = useMutation(postActivateOrDeactivate)
-
-const submit = async (message:string) => {
-	await mutate({
-		"postActivateOrDeactivateId": Number(modal_data.value.id),
-		"messageOptInput": {
-			"message": message
-		}
-	}).then((e) => {
-		close_modal()
-		useToast().add({title: e?.data?.postActivateOrDeactivate})
-		props.reload()
-	}).catch((e) => {
-		console.log(e)
-	});
-}
-
-const close_modal = () => {
-	modal_data.value.is_open = false
-	modal_data.value.header = undefined
-	modal_data.value.id = undefined
-}
 </script>

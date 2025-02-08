@@ -20,7 +20,7 @@
 
 			<template #method-data="{row}">
 				<div class="flex flex-col gap-1 bg-gray-100 p-2 rounded-medium">
-					{{ TransactionTypeEnum[ row.method.type  as unknown as keyof typeof TransactionTypeEnum] }}
+					{{ TransactionTypeEnum[row.method.type as unknown as keyof typeof TransactionTypeEnum] }}
 					<div
 						class="flex flex-row place-items-center place-content-between"
 						v-if="row.method.type === 'CARD' ">
@@ -43,14 +43,23 @@
 				>{{ row.status }}
 				</UBadge>
 			</template>
+			<template #empty-state>
+				<div class="flex flex-col items-center justify-center py-6 gap-3">
+					<span class="italic text-sm">No has realizado ningún pago anteriormente</span>
+					<NuxtLink to="/payment">
+						<UButton label="Volverme un premium"/>
+					</NuxtLink>
+				</div>
+			</template>
 		</UTable>
+		<UPagination v-model="page" :page-count="pageCount" :total="elements.length" />
 	</UCard>
 
 
 </template>
 
 <script setup lang="ts">
-import type {MethodInterface, SubscriptionInterface} from "~/interfaces";
+import type {SubscriptionInterface} from "~/interfaces";
 import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
@@ -58,6 +67,8 @@ import {format_date} from "~/helpers";
 
 const {subscriptions} = defineProps<{ subscriptions: SubscriptionInterface[] }>()
 
+const page = ref(1)
+const pageCount = 8
 
 const elements = computed(() => {
 	return subscriptions.map((e: SubscriptionInterface) => ({
@@ -76,7 +87,8 @@ const elements = computed(() => {
 		brand: e.transaction.brand,
 		last_four: e.transaction.last_four,
 		method: e.transaction.method,
-		status: TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],	}))
+		status: TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],
+	}))
 })
 
 const columns: TableColumn[] = [
@@ -91,7 +103,7 @@ const columns: TableColumn[] = [
 
 
 const rows = computed(() => {
-	return elements.value
+	return elements.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
 
 const brands = {

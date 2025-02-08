@@ -1,14 +1,30 @@
 <template>
+	<AdminModalMessage
+		v-model:is_open="modal_data.is_open"
+		:labels="{
+				header: modal_data.header,
+				confirm: 'Confirmar',
+				description: 'Debes indicar una razón para realizar esta acción.',
+				loading,
+				error,
+		}"
+		:on_submit="submit"
+		:on_close="close_modal"
+		:schema="message_schema"
+	/>
+
 	<JobPostTable
 		:posts="posts"
 		:reload="fetch"
 		:loading="loading"
+		:options="options"
 	/>
 </template>
 
 <script setup lang="ts">
 import type {PostInterface} from "~/interfaces";
-import {postFindAll} from "~/queries";
+import {postActivateOrDeactivate, postFindAll} from "~/queries";
+import {message_schema} from "~/schemas";
 
 const {result, refetch, loading} = useQuery<{
 	"postFindAll": PostInterface[]
@@ -24,4 +40,63 @@ const fetch = async () => {
 onMounted(async () => {
 	await fetch();
 })
+
+const modal_data = ref({
+	is_open: false,
+	header: undefined as string | undefined,
+	id: undefined as number | undefined
+})
+
+const close_modal = () => {
+	modal_data.value.is_open = false
+	modal_data.value.header = undefined
+	modal_data.value.id = undefined
+}
+
+const options = (row: any) => [
+	[
+		...([{
+			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
+			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
+			click: () => {
+				modal_data.value.is_open = true
+				modal_data.value.header = (row.is_active) ? 'Deshabilitar publicación' : 'Volver a habilitar publicación'
+				modal_data.value.id = row.id
+			}
+		}]),
+		{
+			label: 'Editar',
+			icon: 'ri:edit-line',
+			click: () => useRouter().push(`/admin/posts/${row.id}`)
+		}
+	],
+	[
+		{
+			label: 'Ver detalles',
+			icon: 'ri:align-left',
+			click: () => useRouter().push(`/jobs/${row.id}`)
+		},
+	]
+]
+
+const {
+	mutate,
+	error,
+	loading: loading_mutation
+} = useMutation(postActivateOrDeactivate)
+
+const submit = async (message: string) => {
+	await mutate({
+		"postActivateOrDeactivateId": Number(modal_data.value.id),
+		"messageOptInput": {
+			"message": message
+		}
+	}).then(async (e) => {
+		close_modal()
+		useToast().add({title: e?.data?.postActivateOrDeactivate})
+		await fetch()
+	}).catch((e) => {
+		console.log(e)
+	});
+}
 </script>
