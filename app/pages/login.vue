@@ -57,7 +57,8 @@
 							label="Recuérdame"
 						/>
 						<NuxtLink to="forgot-password" class="hyper"
-							>¿Olvidaste tu contraseña?</NuxtLink
+						>¿Olvidaste tu contraseña?
+						</NuxtLink
 						>
 					</div>
 				</UForm>
@@ -66,7 +67,7 @@
 			<div class="flex flex-col gap-4 mt-4">
 				También puedes probar:
 				<div class="flex flex-col tablet:flex-row gap-3 w-full">
-					<AuthExternal />
+					<AuthExternal/>
 				</div>
 			</div>
 		</div>
@@ -74,13 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Reactive } from "vue";
+import type {Reactive} from "vue";
 import * as yup from "yup";
-import { loginQuery } from "~/queries";
+import {loginQuery, subscriptionUserDetails} from "~/queries";
+import type {employer_info_interface} from "~/interfaces";
 
 const toast = useToast();
 
-const userStore = useUserStore();
+const {set_token, set_user, set_employer_info} = useUserStore();
 
 const schema = yup.object({
 	usernameOrEmail: yup.string().required("Este campo es requerido"),
@@ -97,17 +99,24 @@ const state: Reactive<{
 	remember_me: false,
 });
 
-const { mutate: login, onDone, loading, error } = useMutation(loginQuery);
+const {mutate: login, onDone, loading, error} = useMutation(loginQuery);
+const {result: result_subscription, refetch} = useQuery<{
+	subscriptionUserDetails: employer_info_interface
+}>(subscriptionUserDetails, {}, {prefetch: false})
 
-onDone((result) => {
-	userStore.set_token(result.data.login.token);
-	userStore.set_user(result.data.login.user);
-	useRouter().push("/");
-	toast.add({ title: "Inicio de sesión exitoso." });
+onDone(async (result) => {
+	set_token(result.data.login.token);
+	set_user(result.data.login.user);
+	if (result.data.login.user.role === "EMPLOYER") {
+		await refetch()
+		set_employer_info(result_subscription.value?.subscriptionUserDetails!);
+	}
+	await useRouter().push("/");
+	toast.add({title: "Inicio de sesión exitoso."});
 });
 
+
 const onSubmit = async () => {
-	await login({ loginInput: state });
-	//useRouter().go(0);
+	await login({loginInput: state});
 };
 </script>

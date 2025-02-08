@@ -37,6 +37,4 @@
 const {computed_navigation_options} = useUserStore();
 
 const is_open = ref(false);
-
-const is_premium = ref(true);
 </script>
