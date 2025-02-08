@@ -22,3 +22,4 @@ export type { PlanInterface } from "~/interfaces/server/plan.interface";
 export type { SubscriptionInterface } from "~/interfaces/server/subscription.interface";
 export type { TransactionInterface } from "~/interfaces/server/transaction.interface";
 export type { MethodInterface } from "~/interfaces/server/method.interface";
+export type { employer_info_interface } from "~/interfaces/employer_info.interface";

@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import type {UserInterface} from "~/interfaces";
+import type {employer_info_interface, PlanInterface, UserInterface} from "~/interfaces";
 import {
 	RolesEnum,
 	type AdminRolesEnum,
@@ -22,6 +22,11 @@ export const useUserStore = defineStore("user", () => {
 	const initial_loading = ref(true);
 	const is_open_modal_login = ref(false);
 	const router = useRouter();
+	const employer_info:Ref<employer_info_interface> = ref({} as employer_info_interface)
+	
+	const set_employer_info = (info: employer_info_interface) => {
+		employer_info.value = info
+	}
 	
 	const get_token = () => {
 		let token_from_storage = useCookie("token");
@@ -143,6 +148,8 @@ export const useUserStore = defineStore("user", () => {
 		first_of_fist_name,
 		computed_navigation_options,
 		computed_image,
-		is_premium
+		is_premium,
+		employer_info,
+		set_employer_info,
 	};
 });

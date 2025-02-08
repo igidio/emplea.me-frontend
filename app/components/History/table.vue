@@ -11,8 +11,15 @@
 					<span>{{ row.amount.usd }} USD</span>
 				</div>
 			</template>
-			<template #method-data="{row}">
+			<template #date_interval-data="{row}">
 				<div class="flex flex-col gap-1">
+					<span>Incio: {{ row.date_interval.starts_at }}</span>
+					<span>Finalización {{ row.date_interval.ends_at }}</span>
+				</div>
+			</template>
+
+			<template #method-data="{row}">
+				<div class="flex flex-col gap-1 bg-gray-100 p-2 rounded-medium">
 					{{ TransactionTypeEnum[ row.method.type  as unknown as keyof typeof TransactionTypeEnum] }}
 					<div
 						class="flex flex-row place-items-center place-content-between"
@@ -29,6 +36,13 @@
 					</div>
 				</div>
 			</template>
+			<template #status-data="{row}">
+				<UBadge
+					:color="row.status == 'Aprobado' ? 'green' : 'gray'"
+					variant="soft"
+				>{{ row.status }}
+				</UBadge>
+			</template>
 		</UTable>
 	</UCard>
 
@@ -40,6 +54,7 @@ import type {MethodInterface, SubscriptionInterface} from "~/interfaces";
 import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
+import {format_date} from "~/helpers";
 
 const {subscriptions} = defineProps<{ subscriptions: SubscriptionInterface[] }>()
 
@@ -48,8 +63,11 @@ const elements = computed(() => {
 	return subscriptions.map((e: SubscriptionInterface) => ({
 		id: e.id,
 		plan: e.plan.name,
-		date: es_date(e.created_at!),
-		start_date: es_date(e.starts_at),
+		date: es_date(e.created_at!, true),
+		date_interval: {
+			starts_at: format_date(new Date(e.starts_at)),
+			ends_at: format_date(new Date(e.ends_at))
+		},
 		end_date: es_date(e.ends_at),
 		amount: {
 			usd: e.transaction.amount.toFixed(2),
@@ -65,8 +83,7 @@ const columns: TableColumn[] = [
 	// {label: 'ID', key: 'id'},
 	{label: 'Plan', key: 'plan'},
 	{label: 'Fecha de transacción', key: 'date'},
-	{label: 'Fecha de inicio', key: 'start_date'},
-	{label: 'Fecha de fin', key: 'end_date'},
+	{label: 'Fechas de inicio y fin', key: 'date_interval'},
 	{label: 'Monto', key: 'amount'},
 	{label: 'Método de pago', key: 'method'},
 	{label: 'Estado', key: 'status'},

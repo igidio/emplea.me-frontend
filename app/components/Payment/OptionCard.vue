@@ -2,7 +2,7 @@
 	<div
 		class="flex tablet:flex-row desktop:flex-col rounded-large p-4 text-center place-content-between h-full shadow shadow-black/20"
 
-		:class="'bg-'+color"
+		:class="`bg-${color}`"
 	>
 		<div class="flex flex-col">
 			<span class="font-semibold">{{ name }}</span>
