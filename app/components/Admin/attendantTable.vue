@@ -63,6 +63,8 @@ const rows = computed(() => {
 		level: e.level,
 		is_first_user: e.is_first_user,
 		full_name: `${e.user.contact.first_name} ${e.user.contact.last_name}`,
+		has_confirm: e.has_confirm,
+		is_active: e.is_active,
 		status:
 			(e.has_confirm && e.is_active) ? {label: 'Activo', color: 'green'}
 				: (!e.has_confirm && e.is_active) ? {label: 'Pendiente', color: 'orange'}

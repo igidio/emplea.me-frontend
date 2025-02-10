@@ -7,7 +7,14 @@
 				:attendants="attendants"
 				:options="options"
 			/>
-			<AdminAddAttendant/>
+			<AdminAddAttendant
+				v-if="active_length <= 4"
+				:reload="refetch"
+			/>
+			<UAlert
+				v-else
+				description="No puedes agregar más asistentes, el límite es de cuatro asistentes activos." color="red"
+			/>
 		</div>
 	</UCard>
 </template>
@@ -25,22 +32,29 @@ const {result, refetch} = useQuery<{
 }, {prefetch: true})
 attendants.value = result.value?.employerUserFindByEmployer || []
 
+onMounted(() => {
+	refetch()
+})
+
 const options = (row: any) => [
 	[
-		...([{
+		...((row.has_confirm) ? [{
 			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
 			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
 			click: () => {
-				modal_data.value.is_open = true
-				modal_data.value.header = (row.is_active) ? 'Deshabilitar publicación' : 'Volver a habilitar publicación'
-				modal_data.value.id = row.id
+				// TODO: Deshabilitar o habilitar asistente
 			}
-		}]),
-		{
-			label: 'Editar',
-			icon: 'ri:edit-line',
-			click: () => useRouter().push(`/admin/posts/${row.id}`)
-		}
+		}] : []),
+		...((!row.has_confirm) ? [{
+				label: 'Eliminar',
+				icon: 'ri:delete-bin-line',
+				click: () => {
+
+				}
+			}] : []
+		)
 	]
 ]
+
+const active_length = computed(() => attendants.value.filter((e: EmployerUserInterface) => e.is_active).length)
 </script>

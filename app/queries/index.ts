@@ -63,6 +63,7 @@ import subscriptionUserDetails from "./subscriptionUserDetails.query";
 import subscriptionFindAll from "./subscriptionFindAll.query";
 // Employer User
 import employerUserFindByEmployer from "./employerUserFindByEmployer.query";
+import employerUserSendInvitation from "./employerUserSendInvitation.query";
 
 export {
 	plansGet,
@@ -130,5 +131,6 @@ export {
 	subscriptionUserDetails,
 	subscriptionFindAll,
 	// Employer User
-	employerUserFindByEmployer
+	employerUserFindByEmployer,
+	employerUserSendInvitation,
 };

@@ -180,6 +180,9 @@ export default defineAppConfig({
 			color: {
 				violet: {
 					solid: 'bg-violet-100 text-violet-500',
+				},
+				red: {
+					solid: 'bg-red-100 text-red-500',
 				}
 			}
 		},
