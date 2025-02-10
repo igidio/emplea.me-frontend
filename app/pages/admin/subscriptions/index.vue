@@ -1,7 +1,10 @@
 <template>
-	<HistoryTable
-		:subscriptions="subscriptions"
-	/>
+	<ClientOnly>
+		<HistoryTable
+			:subscriptions="subscriptions"
+			:loading="loading"
+		/>
+	</ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -11,8 +14,11 @@ import {subscriptionFindAll} from "~/queries";
 
 const subscriptions = ref<SubscriptionInterface[]>([])
 
-const { result } = useQuery<{ subscriptionFindAll: SubscriptionInterface[]}>(subscriptionFindAll)
-onMounted(() => {
+const {result, refetch, loading} = useQuery<{ subscriptionFindAll: SubscriptionInterface[] }>(
+	subscriptionFindAll, {}, {prefetch: true})
+
+onMounted(async () => {
+	await refetch()
 	subscriptions.value = result.value?.subscriptionFindAll || []
 })
 </script>1

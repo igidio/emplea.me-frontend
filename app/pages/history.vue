@@ -5,6 +5,7 @@
 		</div>
 		<HistoryTable
 			:subscriptions="data?.subscriptionMyHistory!"
+			:loading="false"
 		/>
 	</div>
 

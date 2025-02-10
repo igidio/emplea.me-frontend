@@ -1,5 +1,8 @@
 <template>
 	<ModalLogin v-model:is_open="is_open_modal_login"/>
+
+	<LoadingIndicator/>
+	<LoadingFallback/>
 	<div>
 		<UNotifications/>
 		<NuxtLayout :name="(['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) ? 'admin' : 'main'">
@@ -10,6 +13,7 @@
 
 <script setup lang="ts">
 import {useUserStore} from "~/stores/user.pinia";
+import LoadingFallback from "~/components/LoadingFallback.vue";
 
 useHead({
 	title: 'Bienvenidos a Empleame',

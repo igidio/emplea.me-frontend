@@ -4,6 +4,7 @@
 		<UTable
 			:rows="rows"
 			:columns="columns"
+			:loading="loading"
 		>
 			<template #amount-data="{row}">
 				<div class="flex flex-col gap-1">
@@ -19,7 +20,7 @@
 			</template>
 
 			<template #method-data="{row}">
-				<div class="flex flex-col gap-1 bg-gray-100 p-2 rounded-medium">
+				<div class="flex flex-col gap-1 bg-gray-100 p-2 rounded-medium w-24">
 					{{ TransactionTypeEnum[row.method.type as unknown as keyof typeof TransactionTypeEnum] }}
 					<div
 						class="flex flex-row place-items-center place-content-between"
@@ -44,17 +45,24 @@
 				</UBadge>
 			</template>
 			<template #empty-state>
-				<div class="flex flex-col items-center justify-center py-6 gap-3">
+				<div
+					class="flex flex-col items-center justify-center py-6 gap-3"
+					v-if="user_role === 'EMPLOYER'"
+				>
 					<span class="italic text-sm">No has realizado ningún pago anteriormente</span>
 					<NuxtLink to="/payment">
 						<UButton label="Volverme un premium"/>
 					</NuxtLink>
 				</div>
+				<div
+					class="flex flex-col items-center justify-center py-6 gap-3"
+					v-else>
+					<span class="italic text-sm">No se encontraron pagos.</span>
+				</div>
 			</template>
 		</UTable>
-		<UPagination v-model="page" :page-count="pageCount" :total="elements.length" />
+		<UPagination v-model="page" :page-count="pageCount" :total="elements.length"/>
 	</UCard>
-
 
 </template>
 
@@ -65,13 +73,18 @@ import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
 import {format_date} from "~/helpers";
 
-const {subscriptions} = defineProps<{ subscriptions: SubscriptionInterface[] }>()
+const props = defineProps<{
+	subscriptions: SubscriptionInterface[],
+	loading: boolean
+}>()
+const {subscriptions} = toRefs(props)
 
 const page = ref(1)
 const pageCount = 8
+const {user_role} = useUserStore()
 
 const elements = computed(() => {
-	return subscriptions.map((e: SubscriptionInterface) => ({
+	return subscriptions.value.map((e: SubscriptionInterface) => ({
 		id: e.id,
 		plan: e.plan.name,
 		date: es_date(e.created_at!, true),
