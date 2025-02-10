@@ -12,6 +12,7 @@
 						type="text"
 						size="lg"
 						placeholder="Buscar trabajo"
+						:ui="{rounded: 'lg'}"
 					/>
 				</UFormGroup>
 
@@ -26,7 +27,7 @@
 						:options="searchOptions.locations"
 						option-attribute="name"
 						size="lg"
-						class="grow"
+						class="w-1/2"
 					/>
 
 					<USelectMenu
