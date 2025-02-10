@@ -4,11 +4,14 @@ import type {PostInterface} from "~/interfaces/server/post.interface";
 
 
 export interface EmployerUserInterface {
-	id:          string;
-	created_at:  Date;
+	id:          number;
 	employer:    EmployerInterface;
 	user:        UserInterface;
 	level:       string;
-	modified_at: Date;
 	post?:			 PostInterface[];
+	is_first_user?: boolean;
+	has_confirm: boolean;
+	is_active?: boolean;
+	created_at:  Date;
+	modified_at: Date;
 }

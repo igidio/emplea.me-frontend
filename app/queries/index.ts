@@ -61,6 +61,8 @@ import subscriptionCreate from "./subscriptionCreate.query";
 import subscriptionMyHistory from "./subscriptionMyHistory.query";
 import subscriptionUserDetails from "./subscriptionUserDetails.query";
 import subscriptionFindAll from "./subscriptionFindAll.query";
+// Employer User
+import employerUserFindByEmployer from "./employerUserFindByEmployer.query";
 
 export {
 	plansGet,
@@ -127,4 +129,6 @@ export {
 	subscriptionMyHistory,
 	subscriptionUserDetails,
 	subscriptionFindAll,
+	// Employer User
+	employerUserFindByEmployer
 };
