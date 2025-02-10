@@ -24,6 +24,12 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 		postStore.set_locations((data.value as any).allLocations);
 	}
 	
+	const get_plans = async () => {
+		const {data} = await useAsyncQuery<{ allPlans: PlanInterface[] }>(plansGet, {server: true});
+		postStore.set_plans((data.value as any).allPlans);
+	}
+	
 	await get_categories()
 	await get_locations()
+	await get_plans()
 });
