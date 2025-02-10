@@ -2,8 +2,8 @@
 	<UTable
 		:columns="columns"
 		:rows="rows"
+		:loading="loading"
 	>
-
 		<template #level-data="{row}">
 			<div class="items-center flex flex-row gap-1">
 				<UIcon
@@ -47,8 +47,10 @@ import {EmployerLevelEnum} from "~/enums";
 
 const props = defineProps<{
 	attendants: EmployerUserInterface[],
-	options: (row: any) => any[]
+	options: (row: any) => any[],
+	loading: boolean
 }>()
+const { attendants } = toRefs(props)
 
 const columns: TableColumn[] = [
 	{label: 'Nombres y apellidos', key: 'full_name'},
@@ -57,8 +59,10 @@ const columns: TableColumn[] = [
 	{label: 'Opciones', key: 'options'},
 ]
 
+{{attendants.value}}
+
 const rows = computed(() => {
-	return props.attendants.map((e: EmployerUserInterface) => ({
+	return (attendants.value && attendants.value.length > 0) ? attendants.value.map((e: EmployerUserInterface) => ({
 		id: e.id,
 		level: e.level,
 		is_first_user: e.is_first_user,
@@ -69,6 +73,6 @@ const rows = computed(() => {
 			(e.has_confirm && e.is_active) ? {label: 'Activo', color: 'green'}
 				: (!e.has_confirm && e.is_active) ? {label: 'Pendiente', color: 'orange'}
 					: {label: 'Inactivo', color: 'red'},
-	}))
+	})) : []
 })
 </script>

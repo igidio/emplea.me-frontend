@@ -6,10 +6,11 @@
 			<AdminAttendantTable
 				:attendants="attendants"
 				:options="options"
+				:loading="loading"
 			/>
 			<AdminAddAttendant
 				v-if="active_length <= 4"
-				:reload="refetch"
+				:reload="reload"
 			/>
 			<UAlert
 				v-else
@@ -25,16 +26,20 @@ import type {EmployerUserInterface} from "~/interfaces";
 
 const attendants = ref<EmployerUserInterface[]>([])
 
-const {result, refetch} = useQuery<{
+const {result, refetch, loading} = useQuery<{
 	"employerUserFindByEmployer": EmployerUserInterface[]
 }>(employerUserFindByEmployer, {
 	"employerUserFindByEmployerId": Number(useRoute().params.id)
 }, {prefetch: true})
-attendants.value = result.value?.employerUserFindByEmployer || []
 
-onMounted(() => {
-	refetch()
+onMounted( async() => {
+	await reload()
 })
+
+const reload = async () => {
+	await refetch()
+	attendants.value = result.value?.employerUserFindByEmployer || []
+}
 
 const options = (row: any) => [
 	[

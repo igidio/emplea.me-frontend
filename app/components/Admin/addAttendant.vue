@@ -18,6 +18,7 @@
 		<UForm
 			class="flex flex-row gap-2 w-full"
 			@submit="submit"
+			:state="state"
 		>
 			<UInput
 				color="gray"
@@ -57,7 +58,7 @@ const confirmation_modal = reactive({
 	name: undefined as string | undefined
 })
 
-const submit = async (e: any) => {
+const submit = async () => {
 	state.input = state.input.trim()
 	await mutate({
 		"input": state.input,

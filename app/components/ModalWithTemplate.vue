@@ -26,8 +26,5 @@ const {close} = defineProps<{
 }>()
 const is_open: ModelRef<boolean> = defineModel('is_open', {required: true, type: Boolean});
 
-const close_modal = () => {
-	//is_open.value = false
-	close()
-}
+const close_modal = () => close()
 </script>
