@@ -132,6 +132,7 @@ export default defineAppConfig({
 			},
 		},
 		selectMenu: {
+			rounded: "rounded-medium",
 			option: {
 				size: "text-base",
 				rounded: "rounded-small",
