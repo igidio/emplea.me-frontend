@@ -4,13 +4,27 @@
 		:on_close="close_toggle_verify"
 		:schema="message_schema"
 		:labels="{
-		header: modal_valid_options.header,
-		confirm: 'Confirmar',
-		description: modal_valid_options.description,
-		loading: false,
-		error: error_toggle_verify,
+			header: toggle_verify_options.header,
+			confirm: 'Confirmar',
+			description: toggle_verify_options.description,
+			loading: false,
+			error: error_toggle_verify,
 		}"
-		:is_open="modal_valid_options.is_open"
+		:is_open="toggle_verify_options.is_open"
+	/>
+
+	<AdminModalMessage
+		:on_submit="submit_toggle_renew"
+		:on_close="close_toggle_renew"
+		:schema="message_schema"
+		:labels="{
+			header: toggle_renew_options.header,
+			confirm: 'Confirmar',
+			description: toggle_renew_options.description,
+			loading: false,
+			error: error_toggle_renew,
+		}"
+		:is_open="toggle_renew_options.is_open"
 	/>
 
 	<AdminModalSubscription
@@ -59,41 +73,75 @@ const reload = async () => {
 }
 
 interface modal_options_interface {
-	id: number|undefined,
+	id: number | undefined,
 	is_open: boolean,
 	header: string,
 	description: string,
-	message: string|undefined
+	message: string | undefined
 }
 
-const modal_valid_options:Ref<modal_options_interface> = ref({
-	id: undefined as number|undefined,
+const toggle_verify_options: Ref<modal_options_interface> = ref({
+	id: undefined as number | undefined,
 	is_open: false,
 	header: '',
 	description: 'Debes indicar una razón para realizar esta acción.',
-	message: undefined as string|undefined
+	message: undefined as string | undefined
 })
 const {
 	mutate: mutate_toggle_verify,
 	error: error_toggle_verify
 } = useMutation<{}>(subscriptionGql.toggle_verify)
-const submit_toggle_verify = async () => {
+const submit_toggle_verify = async (message: string) => {
 	await mutate_toggle_verify({
-		"subscriptionToggleVerifyId": Number(modal_valid_options.value.id),
-		"message": modal_valid_options.value.message
+		"subscriptionToggleVerifyId": Number(toggle_verify_options.value.id),
+		"message": message
 	})
 		.then(async () => {
 			await reload()
 			useToast().add({title: 'Suscripción actualizada con éxito'})
-			modal_valid_options.value.is_open = false
+			toggle_verify_options.value.is_open = false;
+			toggle_verify_options.value.description = 'Debes indicar una razón para realizar esta acción.';
+
 		})
 		.catch((error) => console.log(error))
 }
 const close_toggle_verify = () => {
-	modal_valid_options.value = {} as modal_options_interface
+	toggle_verify_options.value = {} as modal_options_interface;
+	toggle_verify_options.value.description = 'Debes indicar una razón para realizar esta acción.';
 }
 
+const toggle_renew_options: Ref<modal_options_interface> = ref({
+	id: undefined as number | undefined,
+	is_open: false,
+	header: '',
+	description: 'Debes indicar una razón para realizar esta acción.',
+	message: undefined as string | undefined
+})
+const {
+	mutate: mutate_toggle_renew,
+	error: error_toggle_renew
+} = useMutation<{}>(subscriptionGql.toggle_renew)
+const submit_toggle_renew = async (message: string) => {
+	await mutate_toggle_renew({
+		"subscriptionToggleRenewId": Number(toggle_renew_options.value.id),
+		"messageInput": {
+			"message": message
+		}
+	})
+		.then(async () => {
+			await reload()
+			useToast().add({title: 'Suscripción actualizada con éxito'})
+			toggle_renew_options.value.is_open = false;
+			toggle_renew_options.value.description = 'Debes indicar una razón para realizar esta acción.';
 
+		})
+		.catch((error) => console.log(error))
+}
+const close_toggle_renew = () => {
+	toggle_renew_options.value = {} as modal_options_interface
+	toggle_renew_options.value.description = 'Debes indicar una razón para realizar esta acción.';
+
+}
 
 const options = (row: any) => [
 	[
@@ -101,16 +149,18 @@ const options = (row: any) => [
 			label: (row.is_valid) ? 'Invalidar' : 'Volver a validar',
 			icon: (row.is_valid) ? 'ri:inbox-archive-line' : 'ri:inbox-unarchive-line',
 			click: async () => {
-				modal_valid_options.value.id = row.id
-				modal_valid_options.value.is_open = true
-				modal_valid_options.value.header = (row.is_valid) ? 'Invalidar suscripción' : 'Volver a validar suscripción'
+				toggle_verify_options.value.id = row.id
+				toggle_verify_options.value.is_open = true
+				toggle_verify_options.value.header = (row.is_valid) ? 'Invalidar suscripción' : 'Volver a validar suscripción'
 			}
 		},
 		...((row.is_valid && row.method?.id == 1) ? [{
 			label: (row.autorenew) ? 'Desactivar auto-renovación' : 'Activar auto-renovación',
 			icon: (row.autorenew) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
 			click: async () => {
-				//await submit_disable(row.id)
+				toggle_renew_options.value.id = row.id
+				toggle_renew_options.value.is_open = true
+				toggle_renew_options.value.header = (row.is_valid) ? 'Desactivar auto-renovación' : 'Activar auto-renovación'
 			}
 		}] : [])
 	]

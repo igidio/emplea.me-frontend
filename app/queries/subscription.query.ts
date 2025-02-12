@@ -32,6 +32,11 @@ export default {
         mutation SubscriptionToggleVerify($subscriptionToggleVerifyId: Int!, $message: String) {
             subscriptionToggleVerify(id: $subscriptionToggleVerifyId, message: $message)
         }
-		`
+		`,
+    'toggle_renew': gql`
+        mutation SubscriptionToggleRenew($subscriptionToggleRenewId: Int!, $messageInput: MessageOptInput) {
+            subscriptionToggleRenew(id: $subscriptionToggleRenewId, messageInput: $messageInput)
+        }
+		`,
 
 }
