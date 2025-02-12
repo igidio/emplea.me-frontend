@@ -6,6 +6,7 @@ export default gql`
             ends_at
             created_at
             autorenew
+            is_valid
             plan {
                 name
                 id

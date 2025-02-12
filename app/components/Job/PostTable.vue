@@ -123,8 +123,6 @@ import type {EmployerUserInterface, FeaturedInterface, PostInterface} from "~/in
 import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {SalaryEnum} from "~/enums";
-import {message_schema} from "~/schemas";
-import {postActivateOrDeactivate} from "~/queries";
 
 const props = defineProps<{
 	posts: PostInterface[],

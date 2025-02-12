@@ -1,5 +1,6 @@
 <template>
-	<UCard :class="`bg-${employer_info.plan.color}`">
+	<UCard>
+		<div class="h-1 w-full mb-2 rounded-large" :class="'bg-'+(employer_info.plan.color)" />
 		<div class="flex flex-col gap-1">
 			<div class="justify-between flex flex-row">
 				<h5>{{ employer_info.plan.name }}</h5>
@@ -20,6 +21,5 @@
 </template>
 
 <script setup lang="ts">
-const {plans} = usePostStore()
 const {employer_info} = useUserStore()
 </script>

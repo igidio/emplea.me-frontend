@@ -27,6 +27,11 @@ export default {
                 id
             }
         }
+		`,
+		'toggle_verify': gql`
+        mutation SubscriptionToggleVerify($subscriptionToggleVerifyId: Int!, $message: String) {
+            subscriptionToggleVerify(id: $subscriptionToggleVerifyId, message: $message)
+        }
 		`
 
 }

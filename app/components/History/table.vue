@@ -42,7 +42,7 @@
 			</template>
 			<template #status-data="{row}">
 				<UBadge
-					:color="row.status == 'Aprobado' ? 'green' : 'gray'"
+					:color="row.status == 'Aprobado' ? 'green' : row.status ==  'Invalidado' ? 'red' : 'gray'"
 					variant="soft"
 				>{{ row.status }}
 				</UBadge>
@@ -63,6 +63,26 @@
 					<span class="italic text-sm">No se encontraron pagos.</span>
 				</div>
 			</template>
+			<template #autorenew-data="{row}">
+				<div v-if="row.method.id == 1">{{ row.autorenew ? 'Sí' : 'No' }}</div>
+				<div v-else/>
+			</template>
+			<template #options-data="{row}">
+				<UDropdown
+					:items="options(row)"
+					:ui="{
+						width: 'w-48'
+					}"
+					v-if="!(user_role == 'EMPLOYER' && (row.method.id != 1))"
+				>
+					<UButton
+						color="gray"
+						variant="ghost"
+						icon="ri:more-fill"
+					/>
+				</UDropdown>
+				<div v-else/>
+			</template>
 		</UTable>
 		<UPagination v-model="page" :page-count="pageCount" :total="elements.length"/>
 	</UCard>
@@ -75,11 +95,14 @@ import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
 import {format_date} from "~/helpers";
+import {card} from "#ui/ui.config";
+import ModalMessage from "~/components/Admin/ModalMessage.vue";
 
 const props = withDefaults(defineProps<{
 	subscriptions: SubscriptionInterface[],
 	loading: boolean,
-	show_users?: boolean
+	show_users?: boolean,
+	options: (row: any) => any[]
 }>(), {
 	show_users: false,
 })
@@ -107,7 +130,10 @@ const elements = computed(() => {
 		brand: e.transaction.brand,
 		last_four: e.transaction.last_four,
 		method: e.transaction.method,
-		status: TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],
+		is_valid: e.is_valid,
+		autorenew: e.autorenew,
+		status: (!e.is_valid) ? 'Invalidado' : TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],
+		options: props.options(e)
 	}))
 })
 const columns: TableColumn[] = [
@@ -119,6 +145,8 @@ const columns: TableColumn[] = [
 	{label: 'Monto', key: 'amount'},
 	{label: 'Método de pago', key: 'method'},
 	{label: 'Estado', key: 'status'},
+	{label: 'Auto renovar', key: 'autorenew'},
+	{label: 'Opciones', key: 'options'},
 ]
 
 

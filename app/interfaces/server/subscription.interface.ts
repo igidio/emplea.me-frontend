@@ -5,6 +5,7 @@ export interface SubscriptionInterface {
 	starts_at: Date;
 	ends_at: Date;
 	autorenew: boolean;
+	is_valid: boolean;
 	user: UserInterface;
 	plan: PlanInterface;
 	transaction: TransactionInterface;
