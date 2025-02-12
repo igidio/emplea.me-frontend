@@ -140,7 +140,6 @@ const submit_toggle_renew = async (message: string) => {
 const close_toggle_renew = () => {
 	toggle_renew_options.value = {} as modal_options_interface
 	toggle_renew_options.value.description = 'Debes indicar una razón para realizar esta acción.';
-
 }
 
 const options = (row: any) => [

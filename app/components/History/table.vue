@@ -73,7 +73,8 @@
 					:ui="{
 						width: 'w-48'
 					}"
-					v-if="!(user_role == 'EMPLOYER' && (row.method.id != 1))"
+					v-if="(['SUPERUSER', 'ADMIN'].includes(user_role)) ||
+					((user_role === 'EMPLOYER') && (row.method.id == 1 ))"
 				>
 					<UButton
 						color="gray"
