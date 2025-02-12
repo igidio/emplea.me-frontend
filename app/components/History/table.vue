@@ -21,7 +21,10 @@
 
 			<template #method-data="{row}">
 				<div class="flex flex-col gap-1 bg-gray-100 p-2 rounded-medium w-24">
-					{{ TransactionTypeEnum[row.method.type as unknown as keyof typeof TransactionTypeEnum] }}
+					<span class="text-wrap">
+						{{ TransactionTypeEnum[row.method.type as unknown as keyof typeof TransactionTypeEnum] }}
+					</span>
+
 					<div
 						class="flex flex-row place-items-center place-content-between"
 						v-if="row.method.type === 'CARD' ">
@@ -73,10 +76,13 @@ import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
 import {format_date} from "~/helpers";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	subscriptions: SubscriptionInterface[],
-	loading: boolean
-}>()
+	loading: boolean,
+	show_users?: boolean
+}>(), {
+	show_users: false,
+})
 const {subscriptions} = toRefs(props)
 
 const page = ref(1)
@@ -97,15 +103,16 @@ const elements = computed(() => {
 			usd: e.transaction.amount.toFixed(2),
 			bob: (e.transaction.amount * 6.91).toFixed(2),
 		},
+		...((props.show_users) ? {user: e.user.contact.first_name + ' ' + e.user.contact.last_name} : null),
 		brand: e.transaction.brand,
 		last_four: e.transaction.last_four,
 		method: e.transaction.method,
 		status: TransactionStatusEnum[e.transaction.status as unknown as keyof typeof TransactionStatusEnum],
 	}))
 })
-
 const columns: TableColumn[] = [
 	// {label: 'ID', key: 'id'},
+	...(props.show_users) ? [{label: 'Nombre de usuario', key: 'user'}] : [],
 	{label: 'Plan', key: 'plan'},
 	{label: 'Fecha de transacción', key: 'date'},
 	{label: 'Fechas de inicio y fin', key: 'date_interval'},

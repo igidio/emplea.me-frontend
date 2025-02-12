@@ -184,7 +184,10 @@ export default defineAppConfig({
 				},
 				red: {
 					solid: 'bg-red-100 text-red-500',
-				}
+				},
+				green: {
+					solid: 'bg-green-100 text-green-800',
+				},
 			}
 		},
 		table: {

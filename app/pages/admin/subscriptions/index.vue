@@ -1,6 +1,7 @@
 <template>
 	<AdminModalSubscription
 		v-model:show="show"
+		:reload="reload"
 	/>
 	<div class="mb-4 flex flex-col gap-4">
 		<h6>Subscripciones</h6>
@@ -18,6 +19,7 @@
 		<HistoryTable
 			:subscriptions="subscriptions"
 			:loading="loading"
+			show_users
 		/>
 	</ClientOnly>
 </template>
@@ -32,8 +34,10 @@ const show = ref(false)
 const {result, refetch, loading} = useQuery<{ subscriptionFindAll: SubscriptionInterface[] }>(
 	subscriptionFindAll, {}, {prefetch: true})
 
-onMounted(async () => {
+onMounted(async () => await reload())
+
+const reload= async () => {
 	await refetch()
 	subscriptions.value = result.value?.subscriptionFindAll || []
-})
+}
 </script>1

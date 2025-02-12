@@ -30,6 +30,9 @@ export default {
 			full: "9999px;",
 		},
 		extend: {
+			transitionProperty: {
+				'height': 'height',
+			},
 			colors: {
 				violet: {
 					50: "#F3F2FF",

@@ -30,6 +30,13 @@ export default gql`
                 created_at
                 modified_at
             }
+            user {
+                id
+                contact {
+                    first_name
+                    last_name
+                }
+            }
         }
     }
 
