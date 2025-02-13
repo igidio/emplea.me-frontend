@@ -71,7 +71,7 @@
 				<UDropdown
 					:items="options(row)"
 					:ui="{
-						width: 'w-48'
+						width: 'w-56'
 					}"
 					v-if="(['SUPERUSER', 'ADMIN'].includes(user_role)) ||
 					((user_role === 'EMPLOYER') && (row.method.id == 1 ))"

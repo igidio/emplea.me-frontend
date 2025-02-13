@@ -11,9 +11,10 @@ export default defineNuxtConfig({
 	],
 	runtimeConfig: {
 		public: {
+			crypto_js_key: process.env.CRYPTO_JS_KEY!,
 			server_host: process.env.SERVER_HOST,
-			google_client_id: process.env.GOOGLE_CLIENT_ID,
 			google_callback: process.env.GOOGLE_CALLBACK,
+			google_client_id: process.env.GOOGLE_CLIENT_ID,
 		},
 	},
 	build: {
@@ -31,10 +32,9 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	// colorMode: {
-	// 	preference: "light",
-	// 	fallback: "light",
-	// },
+	colorMode: {
+		preference: "light",
+	},
 	devServer: {
 		port: 5173,
 	},
@@ -110,7 +110,7 @@ export default defineNuxtConfig({
 			pathPrefix: true,
 		},
 	],
-
+	
 	future: {
 		compatibilityVersion: 4,
 	},

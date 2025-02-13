@@ -13,8 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import type { LocationQueryRaw } from "vue-router";
-
 const config = useRuntimeConfig();
 const router = useRouter();
 const route = useRoute();
@@ -40,6 +38,8 @@ const signInWithGoogle = () => {
 	const left = window.screen.width / 2 - width / 2;
 	const top = window.screen.height / 2 - height / 2;
 
+	console.log(googleAuthUrl)
+
 	window.open(
 		googleAuthUrl,
 		"GoogleAuth",
@@ -62,6 +62,7 @@ const signInWithGoogle = () => {
 		}
 
 		if (event.data.msg) {
+			console.log(queries)
 			router.push({
 				path: "/signup",
 				query: { ...queries },

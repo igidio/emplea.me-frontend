@@ -7,7 +7,7 @@
 			:email="data_oauth.email"
 		/>
 
-		<SignupSelect v-if="selection === undefined" />
+		<SignupSelect v-if="selection === undefined"/>
 
 		<SignupInternalForm
 			v-if="selection !== undefined && Object.keys(data_oauth).length == 0"
@@ -19,12 +19,17 @@
 </template>
 
 <script setup lang="ts">
-const { selection, data_oauth, set_selection, load_data } = useSignup();
+import {definePageMeta, useSignup} from "#imports";
+
+const {selection, data_oauth, set_selection} = useSignup();
+
+definePageMeta({
+	middleware: ['external']
+})
 
 selection.value;
-
 set_selection();
-if (useRoute().query.key) load_data();
+
 
 onUnmounted(() => {
 	selection.value = undefined;
