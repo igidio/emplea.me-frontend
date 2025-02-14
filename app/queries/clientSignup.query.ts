@@ -11,7 +11,7 @@ export default gql`
 				email
 				image
 				google_id
-				linkedin_id
+				facebook_id
 				created_at
 				modified_at
 				role

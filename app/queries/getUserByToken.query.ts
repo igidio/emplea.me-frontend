@@ -18,7 +18,7 @@ export default gql`
 			role
 			image
 			google_id
-			linkedin_id
+			facebook_id
 			created_at
 			modified_at
 		}

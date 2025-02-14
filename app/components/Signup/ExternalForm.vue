@@ -21,6 +21,19 @@
 			class="grid grid-cols-2 bg-violet-100 w-[80%] gap-4 px-4 py-6 rounded-large"
 		>
 			<UFormGroup
+				label="Correo electrónico"
+				name="email"
+				class="col-span-2"
+				v-if="!state.external_includes_email"
+			>
+				<UInput
+					placeholder="correo@mail.com"
+					size="lg"
+					v-model="state.email"
+				/>
+			</UFormGroup>
+
+			<UFormGroup
 				label="Nombre de usuario"
 				help="Con el nombre de usuario podrás ingresar a tu cuenta"
 				name="username"
@@ -134,13 +147,10 @@
 	</UForm>
 
 	<span class="error py-2 inline-block w-full text-center" v-if="error">
-		{{ format_error_message_computed }}
-
 		<span
 			class="inline-block"
-			v-if="format_error_message_computed == 'Un registro similar ya existe.'"
-		>Ya existe otro usuario registrado con el mismo nombre de usuario o cuenta
-			de Google / LinkedIn.</span
+		>Ya existe otro usuario registrado con el mismo nombre de usuario, correo o cuenta
+			de Google / Facebook.</span
 		>
 	</span>
 
@@ -158,16 +168,16 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import "~/assets/css/vue-datepicker.css";
 
 import signupData from "~/data/signup.data.js";
-import {format_date, format_name, create_error_message} from "~/helpers";
+import {format_name} from "~/helpers";
 import {clientSignupQuery} from "~/queries";
 import {external_form_schema} from "~/schemas";
 
 const toast = useToast();
 const userStore = useUserStore();
 
-const {change_selection, clear_state} =
+const {change_selection, clear_state, state} =
 	useSignupStore();
-const {state, past_date, selection } = storeToRefs(useSignupStore());
+const {past_date, selection} = storeToRefs(useSignupStore());
 
 const {
 	mutate: signup,
@@ -176,37 +186,35 @@ const {
 	onDone,
 } = useMutation(clientSignupQuery);
 
-const format_error_message_computed = create_error_message(error);
-
 const schema = external_form_schema
 
 const on_submit = async () => {
-	console.log("dsadasd dsfdsfdsfds")
+	console.log(state);
 	await signup({
 		createUser: {
-			email: state.value.email!.trim(),
-			username: state.value.username!.trim(),
-			google_id: state.value.google_id ? state.value.google_id : undefined,
+			username: state.username!.trim(),
+			email: state.email!.trim(),
+			google_id: state.google_id ? state.google_id : undefined,
+			facebook_id: state.facebook_id ? state.facebook_id : undefined,
 			password: 'THIS_IS_A_FAKE_PASSWORd123',
 			contact: {
-				phone: state.value.phone!,
-				first_name: format_name(state.value.first_name!.trim()),
-				last_name: format_name(state.value.last_name!.trim()),
-				gender: state.value.gender,
-				date_of_birth: format_date(new Date(state.value.date_of_birth!)),
+				phone: state.phone!,
+				first_name: format_name(state.first_name!.trim()),
+				last_name: format_name(state.last_name!.trim()),
+				gender: state.gender,
+				date_of_birth: new Date(state.date_of_birth!),
 			}
 		},
 		clientRole: {
-			role: signupData[selection.value!]?.type,
+			role: String(signupData[selection.value!]?.type),
 		},
 	}).catch((e) => console.log(e));
 };
 
 onDone((result) => {
-	userStore.set_token(result.data.clientSignup.token);
-	userStore.set_user(result.data.clientSignup.user);
 	clear_state();
-	useRouter().push("/");
+	//userStore.set_user(result.data.clientSignup.user);
+	userStore.set_token(result.data.clientSignup.token);
 	useRouter().go(0);
 	toast.add({title: "Te registraste correctamente."});
 });

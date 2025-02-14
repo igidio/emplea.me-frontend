@@ -16,21 +16,24 @@ export const useSignupStore = defineStore("signup", () => {
 		password: undefined,
 		password_repeat: undefined,
 		google_id: undefined,
-		linkedin_id: undefined,
+		facebook_id: undefined,
 		phone: undefined,
 		first_name: undefined,
 		last_name: undefined,
 		gender: undefined,
 		date_of_birth: new Date(past_date.value),
+		external_includes_email: false,
 	});
 	
 	const selection: Ref<number | undefined> = ref();
 	
 	interface dataInterface {
-		google_id: string;
-		email: string;
+		google_id: string | null;
+		facebook_id: string | null;
+		email: string | null;
 		first_name: string;
 		last_name?: string;
+		from: string;
 	}
 	
 	const data_oauth: Ref<dataInterface> = ref({} as dataInterface);
@@ -62,11 +65,13 @@ export const useSignupStore = defineStore("signup", () => {
 	
 	const load_data = (key: object) => {
 		data_oauth.value = key as dataInterface;
-		state.email = data_oauth.value.email;
+		state.email = (data_oauth.value.email) || undefined;
 		state.first_name = data_oauth.value.first_name;
 		if (data_oauth.value.last_name)
 			state.last_name = data_oauth.value.last_name;
-		state.google_id = data_oauth.value.google_id;
+		state.google_id = (data_oauth.value.google_id) || undefined;
+		state.facebook_id = (data_oauth.value.facebook_id) || undefined;
+		state.external_includes_email = !!(data_oauth.value.email);
 	};
 	
 	const clear_state = () => {
@@ -75,7 +80,7 @@ export const useSignupStore = defineStore("signup", () => {
 		state.password = undefined;
 		state.password_repeat = undefined;
 		state.google_id = undefined;
-		state.linkedin_id = undefined;
+		state.facebook_id = undefined;
 		state.phone = undefined;
 		state.first_name = undefined;
 		state.last_name = undefined;

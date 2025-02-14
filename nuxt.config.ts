@@ -15,6 +15,8 @@ export default defineNuxtConfig({
 			server_host: process.env.SERVER_HOST,
 			google_callback: process.env.GOOGLE_CALLBACK,
 			google_client_id: process.env.GOOGLE_CLIENT_ID,
+			facebook_callback: process.env.FACEBOOK_CALLBACK,
+			facebook_client_id: process.env.FACEBOOK_CLIENT_ID,
 		},
 	},
 	build: {

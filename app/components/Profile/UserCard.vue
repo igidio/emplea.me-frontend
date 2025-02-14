@@ -95,7 +95,7 @@
 					<UButton
 						icon="ri:google-fill"
 						label="Conectar con LinkedIn"
-						v-if="!user.linkedin_id"
+						v-if="!user.facebook_id"
 					/>
 				</div>
 			</div>
