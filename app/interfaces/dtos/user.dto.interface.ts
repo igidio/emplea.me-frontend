@@ -1,4 +1,4 @@
-import type { GenderEnum } from "~/enums";
+import type {GenderEnum} from "~/enums";
 
 export interface userDtoInterface {
 	email: string | undefined;
@@ -7,11 +7,9 @@ export interface userDtoInterface {
 	password_repeat: string | undefined;
 	google_id: string | undefined;
 	linkedin_id: string | undefined;
-	contact: {
-		first_name: string | undefined;
-		last_name: string | undefined;
-		phone: string | undefined;
-		gender: GenderEnum | undefined;
-		date_of_birth: Date | undefined;
-	};
+	first_name: string | undefined;
+	last_name: string | undefined;
+	phone: string | undefined;
+	gender: GenderEnum | undefined;
+	date_of_birth: Date | undefined;
 }

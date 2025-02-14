@@ -32,6 +32,9 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	pinia: {
+		storesDirs: ['./app/stores/**'],
+	},
 	colorMode: {
 		preference: "light",
 	},

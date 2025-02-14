@@ -13,12 +13,7 @@
 			size="lg"
 			class="w-full"
 			v-for="(result, index) in signupData"
-			@click="
-				() => {
-					selection = index;
-					modify_query_params({ selection: index });
-				}
-			"
+			@click="change(index)"
 			>{{ result.message }}</UButton
 		>
 		{{ selection }}
@@ -28,7 +23,12 @@
 <script setup lang="ts">
 import signupData from "~/data/signup.data.js";
 
-const { selection, modify_query_params, data_oauth } = useSignup();
+const { modify_query_params } = useSignupStore();
+const { selection, data_oauth } = storeToRefs(useSignupStore());
 
+const change = async (i:number) => {
+	selection.value = i;
+	await modify_query_params({ selection: i });
+}
 //const selection = defineModel();
 </script>

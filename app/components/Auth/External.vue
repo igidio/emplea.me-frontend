@@ -14,8 +14,6 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
-const router = useRouter();
-const route = useRoute();
 
 interface Props {
 	textPrefix?: string;
@@ -38,8 +36,6 @@ const signInWithGoogle = () => {
 	const left = window.screen.width / 2 - width / 2;
 	const top = window.screen.height / 2 - height / 2;
 
-	console.log(googleAuthUrl)
-
 	window.open(
 		googleAuthUrl,
 		"GoogleAuth",
@@ -52,18 +48,17 @@ const signInWithGoogle = () => {
 			key: event.data.msg,
 		};
 
-		if (route.query.selection)
-			queries.selection = route.query.selection.toString();
+		if (useRoute().query.selection)
+			queries.selection = useRoute().query.selection?.toString();
 
 		if (event.data.token) {
 			useUserStore().set_token(event.data.token);
-			router.go(0);
+			useRouter().go(0);
 			return;
 		}
 
 		if (event.data.msg) {
-			console.log(queries)
-			router.push({
+			useRouter().push({
 				path: "/signup",
 				query: { ...queries },
 			});

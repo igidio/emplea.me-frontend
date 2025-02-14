@@ -8,10 +8,10 @@
 		/>
 
 		<SignupSelect v-if="selection === undefined"/>
-
 		<SignupInternalForm
 			v-if="selection !== undefined && Object.keys(data_oauth).length == 0"
 		/>
+
 		<SignupExternalForm
 			v-if="selection !== undefined && Object.keys(data_oauth).length > 0"
 		/>
@@ -19,9 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import {definePageMeta, useSignup} from "#imports";
+import {definePageMeta} from "#imports";
+import {useSignupStore} from "~/stores/signup.pinia";
 
-const {selection, data_oauth, set_selection} = useSignup();
+const {set_selection} = useSignupStore();
+const {selection, data_oauth} = storeToRefs(useSignupStore());
 
 definePageMeta({
 	middleware: ['external']
@@ -30,8 +32,8 @@ definePageMeta({
 selection.value;
 set_selection();
 
-
 onUnmounted(() => {
 	selection.value = undefined;
 });
+
 </script>

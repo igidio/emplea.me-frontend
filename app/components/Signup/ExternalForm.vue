@@ -4,7 +4,8 @@
 			{{ signupData[selection!]?.message }}
 		</h5>
 		<UButton color="white" @click="change_selection" class="w-fit"
-			>Cambiar</UButton
+		>Cambiar
+		</UButton
 		>
 		<div><b>Falta poco para completar tu registro</b></div>
 	</div>
@@ -34,37 +35,52 @@
 			<UFormGroup
 				label="Número telefónico"
 				help="Tu número no se va a mostrar públicamente"
-				name="contact.phone"
+				name="phone"
 			>
-				<UInput placeholder="--------" size="lg" v-model="state.contact.phone">
+				<UInput
+					placeholder="--------"
+					size="lg"
+					v-model="state.phone"
+					type="number"
+				>
 					<template #leading>
-						<span class="font-bold dark:text-gray-400 text-xs">+591</span>
+						<span class="font-bold">+591</span>
 					</template>
 				</UInput>
 			</UFormGroup>
 
-			<UFormGroup label="Nombres" name="contact.first_name">
+			<UFormGroup
+				label="Nombres"
+				name="first_name"
+			>
 				<UInput
 					placeholder="Tus nombres"
 					size="md"
-					v-model="state.contact.first_name"
+					v-model="state.first_name"
 					class="capitalize"
 				/>
 			</UFormGroup>
 
-			<UFormGroup label="Apellidos" name="contact.last_name">
+			<UFormGroup
+				label="Apellidos"
+				name="last_name"
+			>
 				<UInput
 					placeholder="Tus apellidos"
 					size="md"
-					v-model="state.contact.last_name"
+					v-model="state.last_name"
 				/>
 			</UFormGroup>
 
-			<UFormGroup label="Género" class="w-full" name="contact.gender">
+			<UFormGroup
+				label="Género"
+				class="w-full"
+				name="gender"
+			>
 				<USelect
 					placeholder="Seleccione"
 					size="md"
-					v-model="state.contact.gender"
+					v-model="state.gender"
 					:options="[
 						{ name: 'Masculino', value: 'MALE' },
 						{ name: 'Femenino', value: 'FEMALE' },
@@ -74,14 +90,31 @@
 				/>
 			</UFormGroup>
 
-			<UFormGroup label="Fecha de nacimiento" name="contact.date_of_birth">
+			<UFormGroup
+				label="Fecha de nacimiento"
+				name="date_of_birth"
+			>
 				<VueDatePicker
-					v-model="state.contact.date_of_birth"
+					v-model="state.date_of_birth"
 					locale="es"
 					:enable-time-picker="false"
+					:timezone="{ emitTimezone: 'America/Santiago' }"
 					:max-date="new Date(past_date)"
 					auto-apply
-				/>
+					format="dd/MM/yyyy"
+
+				>
+					<template
+						#dp-input="{value}"
+						#trigger
+					>
+						<UInput
+							:model-value="value"
+							:readonly="true"
+							icon="ri:calendar-line"
+						/>
+					</template>
+				</VueDatePicker>
 			</UFormGroup>
 		</div>
 
@@ -89,8 +122,13 @@
 			<NuxtLink to="/login">
 				<UButton variant="ghost" size="lg" class="w-40">Cancelar</UButton>
 			</NuxtLink>
-			<UButton size="lg" class="w-40" type="submit" :loading="loading"
-				>Registrarme</UButton
+			<UButton
+				size="lg"
+				class="w-40"
+				type="submit"
+				:disabled="loading"
+			>Registrarme
+			</UButton
 			>
 		</div>
 	</UForm>
@@ -101,7 +139,7 @@
 		<span
 			class="inline-block"
 			v-if="format_error_message_computed == 'Un registro similar ya existe.'"
-			>Ya existe otro usuario registrado con el mismo nombre de usuario o cuenta
+		>Ya existe otro usuario registrado con el mismo nombre de usuario o cuenta
 			de Google / LinkedIn.</span
 		>
 	</span>
@@ -109,27 +147,27 @@
 	<span class="font-semibold mt-4">
 		Al registrarte estás aceptandos los
 		<NuxtLink class="hyper" to="/terms-of-service"
-			>términos y condiciones.</NuxtLink
+		>términos y condiciones.</NuxtLink
 		>
 	</span>
 </template>
 
 <script setup lang="ts">
-import * as yup from "yup";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "~/assets/css/vue-datepicker.css";
 
 import signupData from "~/data/signup.data.js";
-import { format_date, format_name, create_error_message } from "~/helpers";
-import { clientSignupQuery } from "~/queries";
-import { user_schema } from "~/schemas";
+import {format_date, format_name, create_error_message} from "~/helpers";
+import {clientSignupQuery} from "~/queries";
+import {external_form_schema} from "~/schemas";
 
 const toast = useToast();
 const userStore = useUserStore();
 
-const { state, past_date, selection, change_selection, clear_state } =
-	useSignup();
+const {change_selection, clear_state} =
+	useSignupStore();
+const {state, past_date, selection } = storeToRefs(useSignupStore());
 
 const {
 	mutate: signup,
@@ -140,30 +178,28 @@ const {
 
 const format_error_message_computed = create_error_message(error);
 
-const schema = yup.object().shape({
-	email: user_schema.email,
-	contact: user_schema.contact,
-});
+const schema = external_form_schema
 
 const on_submit = async () => {
+	console.log("dsadasd dsfdsfdsfds")
 	await signup({
 		createUser: {
-			email: state.email!.trim(),
-			username: state.username!.trim(),
-			password: state.password!.trim(),
-			google_id: state.google_id ? state.google_id : undefined,
+			email: state.value.email!.trim(),
+			username: state.value.username!.trim(),
+			google_id: state.value.google_id ? state.value.google_id : undefined,
+			password: 'THIS_IS_A_FAKE_PASSWORd123',
 			contact: {
-				phone: parseInt(state.contact.phone!.trim()),
-				first_name: format_name(state.contact.first_name!.trim()),
-				last_name: format_name(state.contact.last_name!.trim()),
-				gender: state.contact.gender,
-				date_of_birth: format_date(state.contact.date_of_birth! as Date),
-			},
+				phone: state.value.phone!,
+				first_name: format_name(state.value.first_name!.trim()),
+				last_name: format_name(state.value.last_name!.trim()),
+				gender: state.value.gender,
+				date_of_birth: format_date(new Date(state.value.date_of_birth!)),
+			}
 		},
 		clientRole: {
 			role: signupData[selection.value!]?.type,
 		},
-	});
+	}).catch((e) => console.log(e));
 };
 
 onDone((result) => {
@@ -172,6 +208,6 @@ onDone((result) => {
 	clear_state();
 	useRouter().push("/");
 	useRouter().go(0);
-	toast.add({ title: "Te registraste correctamente." });
+	toast.add({title: "Te registraste correctamente."});
 });
 </script>
