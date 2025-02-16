@@ -33,6 +33,7 @@ import experienceDelete from "./experienceDelete.query";
 import seekerChangeLocation from "./seekerChangeLocation.query";
 import contactUpdate from "./contactUpdate.query";
 // USER
+import gqlUser from "./user.query";
 import userChangePassword from "./userChangePassword.query";
 import deleteEmployerImage from "./deleteEmployerImage.query";
 import employerUpdate from "./employerUpdate.query";
@@ -135,4 +136,6 @@ export {
 	employerUserFindByEmployer,
 	employerUserSendInvitation,
 	subscriptionGql,
+	
+	gqlUser,
 };

@@ -1,5 +1,5 @@
 <template>
-	<ProfileUserModal v-model="modal_user" />
+	<ProfileUserModal v-model="modal_user"/>
 	<ProfileModalContact
 		v-model="modal_contact"
 		:props="{
@@ -17,13 +17,13 @@
 		:loading="loading"
 		:computed_image="computed_image"
 	/>
-	<ProfileModalPassword v-model="modal_password" />
+	<ProfileModalPassword v-model="modal_password"/>
 	<UCard>
 		<div class="flex flex-col tablet:flex-row gap-4">
 			<div
 				class="w-48 h-full relative image-container self-center tablet:self-auto"
 			>
-				<img :src="computed_image.value" alt="" class="rounded-full h-fit border" />
+				<img :src="computed_image.value" alt="" class="rounded-full h-fit border"/>
 				<UButton
 					icon="ri:pencil-fill"
 					color="white"
@@ -39,7 +39,9 @@
 				>
 					<div class="flex flex-col gap-2 items-center tablet:items-start">
 						<h3>{{ user.contact.first_name }} {{ user.contact.last_name }}</h3>
-						<span>{{ (get_gender_computed && get_gender_computed !== GenderEnum.OTHER ) && `${get_gender_computed} |` }} {{ get_age_computed }}</span>
+						<span>{{ (get_gender_computed && get_gender_computed !== GenderEnum.OTHER) && `${get_gender_computed} |` }} {{
+								get_age_computed
+							}}</span>
 					</div>
 					<UDropdown
 						:items="items"
@@ -59,7 +61,7 @@
 						/>
 					</UDropdown>
 				</div>
-				<hr />
+				<hr/>
 				<item
 					icon="ri:user-3-fill"
 					:label="`@${user.username}`"
@@ -86,16 +88,38 @@
 					one_line
 				/>
 
+				<div
+					class="flex flex-row gap-1"
+					v-if="user.google_id"
+				>
+					<Icon name="ri:google-fill" class="bg-violet-600" size="18"/>
+					<span class="font-semibold inline-block">Vinculado con Google</span>
+					<span class="hyper" @click="unlink_google">Desvincular</span>
+				</div>
+
+				<div
+					class="flex flex-row gap-1"
+					v-if="user.facebook_id"
+				>
+					<Icon name="ri:facebook-fill" class="bg-violet-600" size="18"/>
+					<span class="font-semibold inline-block">Vinculado con Facebook</span>
+					<span class="hyper" @click="unlink_facebook">Desvincular</span>
+				</div>
+
 				<div class="flex flex-col desktop:flex-row gap-2">
 					<UButton
 						icon="ri:google-fill"
 						label="Conectar con Google"
 						v-if="!user.google_id"
+						@click="signInWithGoogle"
+						:disabled="loading_link_google"
 					/>
 					<UButton
-						icon="ri:google-fill"
-						label="Conectar con LinkedIn"
+						icon="ri:facebook-fill"
+						label="Conectar con Facebook"
 						v-if="!user.facebook_id"
+						@click="signInWithFacebook"
+						:disabled="loading_link_facebook"
 					/>
 				</div>
 			</div>
@@ -104,9 +128,9 @@
 </template>
 
 <script setup lang="ts">
-import { get_age, get_date, get_gender } from "~/helpers";
-import {GenderEnum} from "../../enums";
-import {deleteImage} from "~/queries";
+import {get_age, get_date, get_gender} from "~/helpers";
+import {GenderEnum} from "~/enums";
+import {deleteImage, gqlUser} from "~/queries";
 
 const modal_user = ref(false);
 const modal_contact = ref(false);
@@ -115,8 +139,8 @@ const modal_password = ref(false);
 
 const userStore = useUserStore();
 const store = storeToRefs(userStore);
-const { computed_image } = store;
-const { user } = storeToRefs(userStore);
+const {computed_image} = store;
+const {user} = storeToRefs(userStore);
 
 const get_age_computed = computed(() => {
 	return `${get_age(new Date(user.value.contact.date_of_birth))} años`;
@@ -146,7 +170,7 @@ const items = [
 	],
 ];
 
-const { mutate: delete_image_mutation, loading } = useMutation(deleteImage);
+const {mutate: delete_image_mutation, loading} = useMutation(deleteImage);
 
 const delete_image = async () => {
 	await delete_image_mutation()
@@ -155,12 +179,94 @@ const delete_image = async () => {
 
 const update_image = {
 	query: "mutation UploadImage($body: UploadDto!) {uploadImage(body: $body)}",
-	on_change: ( new_image: string ) => {
+	on_change: (new_image: string) => {
 		user.value.image = new_image
 	},
 	field: "uploadImage",
 }
 
+const {mutate: mutate_unlink_google} = useMutation<{ userUnlinkGoogle: string }>(gqlUser.unlinkGoogle)
+const unlink_google = () => {
+	let confirmation = confirm("¿Estás seguro de que deseas desvincular tu cuenta de Google?");
+	if (confirmation) {
+		mutate_unlink_google()
+			.then(() => {
+				user.value.google_id = null
+				useToast().add({title: "Tu cuenta de Google ha sido desvinculada."})
+			})
+			.catch(() => alert("Ha ocurrido un error al desvincular tu cuenta de Google."));
+	}
+}
+
+const {mutate: mutate_unlink_facebook} = useMutation<{ userUnlinkFacebook: string }>(gqlUser.unlinkFacebook)
+const unlink_facebook = () => {
+	let confirmation = confirm("¿Estás seguro de que deseas desvincular tu cuenta de Facebook?");
+	if (confirmation) {
+		mutate_unlink_facebook()
+			.then(() => {
+				user.value.facebook_id = null
+				useToast().add({title: "Tu cuenta de Facebook ha sido desvinculada."})
+			})
+			.catch(() => alert("Ha ocurrido un error al desvincular tu cuenta de Facebook."));
+	}
+}
+
+const config = useRuntimeConfig();
+
+const signInWithGoogle = () => {
+	const googleAuthUrl = `${config.public.server_host}/auth/google`;
+	const width = 500;
+	const height = 600;
+	const left = window.screen.width / 2 - width / 2;
+	const top = window.screen.height / 2 - height / 2;
+
+	window.open(
+		googleAuthUrl,
+		"GoogleAuth",
+		`width=${width},height=${height},top=${top},left=${left}`
+	);
+	window.addEventListener("message", (event) => handleMessage(event, "google"), {once: true});
+};
+
+const signInWithFacebook = () => {
+	const googleAuthUrl = `${config.public.server_host}/auth/facebook`;
+	const width = 500;
+	const height = 600;
+	const left = window.screen.width / 2 - width / 2;
+	const top = window.screen.height / 2 - height / 2;
+
+	window.open(
+		googleAuthUrl,
+		"FacebookAuth",
+		`width=${width},height=${height},top=${top},left=${left}`
+	);
+
+	window.addEventListener("message", (event) => handleMessage(event, "facebook"), {once: true});
+};
+
+const {mutate: mutate_link_google, loading: loading_link_google} = useMutation<{ userLinkGoogle: string }>(gqlUser.linkGoogle);
+const {mutate: mutate_link_facebook, loading: loading_link_facebook} = useMutation<{ userLinkFacebook: string }>(gqlUser.linkFacebook);
+
+let handleMessage = async (event: MessageEvent, method: string) => {
+	let queries = {
+		method: event.data.method,
+		id: event.data.id,
+	};
+
+	method === 'google' && await mutate_link_google({"googleId": queries.id})
+		.then((e) => {
+			useToast().add({title: e?.data?.userLinkGoogle})
+			user.value.google_id = queries.id
+		})
+		.catch((e) => alert(e.message));
+
+	method === 'facebook' && await mutate_link_facebook({"facebookId": queries.id})
+		.then((e) => {
+			useToast().add({title: e?.data?.userLinkFacebook})
+			user.value.facebook_id = queries.id
+		})
+		.catch((e) => alert(e.message));
+}
 
 </script>
 
@@ -168,6 +274,7 @@ const update_image = {
 .button-from-container {
 	@apply opacity-0 transition-all;
 }
+
 .image-container:hover .button-from-container {
 	@apply opacity-100;
 }

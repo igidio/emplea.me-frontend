@@ -213,9 +213,7 @@ const on_submit = async () => {
 
 onDone((result) => {
 	clear_state();
-	//userStore.set_user(result.data.clientSignup.user);
 	userStore.set_token(result.data.clientSignup.token);
 	useRouter().go(0);
-	toast.add({title: "Te registraste correctamente."});
 });
 </script>

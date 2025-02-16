@@ -12,8 +12,8 @@ export interface UserInterface {
 	is_active: boolean;
 	role: AdminRolesEnum | ClientRolesEnum;
 	image: string | null;
-	google_id: string;
-	facebook_id: string;
+	google_id: string|null;
+	facebook_id: string|null;
 	created_at: Date;
 	modified_at: Date;
 }

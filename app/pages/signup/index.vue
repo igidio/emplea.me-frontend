@@ -1,5 +1,4 @@
 <template>
-	{{ data_oauth }}
 	<div class="flex flex-col items-center mx-4">
 		<SignupGoogle
 			v-if="Object.keys(data_oauth).length > 0"

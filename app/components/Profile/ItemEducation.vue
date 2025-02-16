@@ -55,7 +55,7 @@
 							:search="search_institute"
 							:loading="loading_find_any_institute"
 							trailing
-							placeholder="Busca una habilidad"
+							placeholder="Busca una institución educativa"
 							option-attribute="name"
 						/>
 					</UFormGroup>

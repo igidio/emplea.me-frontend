@@ -47,7 +47,7 @@ const sign_in_with_facebook = () => {
 		`width=${width},height=${height},top=${top},left=${left}`
 	);
 
-	window.addEventListener("message", (event) => handleMessage(event, "facebook"), { once: true });
+	window.addEventListener("message", (event) => handleMessage(event, "facebook"), {once: true});
 }
 
 const signInWithGoogle = () => {
@@ -63,7 +63,8 @@ const signInWithGoogle = () => {
 		`width=${width},height=${height},top=${top},left=${left}`
 	);
 
-	window.addEventListener("message", (event) => handleMessage(event, "google"), { once: true });};
+	window.addEventListener("message", (event) => handleMessage(event, "google"), {once: true});
+};
 
 let handleMessage = (event: MessageEvent, method: string) => {
 	let queries: queriesInterface = {
@@ -83,7 +84,7 @@ let handleMessage = (event: MessageEvent, method: string) => {
 	if (event.data.msg) {
 		useRouter().push({
 			path: "/signup",
-			query: { ...queries },
+			query: {...queries},
 		});
 	}
 };
