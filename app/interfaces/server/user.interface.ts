@@ -13,6 +13,7 @@ export interface UserInterface {
 	role: AdminRolesEnum | ClientRolesEnum;
 	image: string | null;
 	google_id: string|null;
+	has_activated: boolean;
 	facebook_id: string|null;
 	created_at: Date;
 	modified_at: Date;

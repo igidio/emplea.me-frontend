@@ -5,8 +5,8 @@
 			<div class="w-full max-w-[652px] flex flex-col gap-4">
 				<p>
 					A continuación introduzca el correo electrónico asociado a su cuenta,
-					se le enviará un enlace para reestablecer su contraseña, dicho enlace
-					tendrá una duración de 24 hours:
+					se le enviará un enlace para restablecer su contraseña, dicho enlace
+					tendrá una duración de 24 horas:
 				</p>
 				<UFormGroup name="email">
 					<UInput placeholder="correo@mail.com" v-model="state.email" />
@@ -18,11 +18,16 @@
 							variant="ghost"
 							size="lg"
 							label="Cancelar"
-							:loading="loading"
+							:disabled="loading"
 						/>
 					</NuxtLink>
 
-					<UButton size="lg" label="Confirmar" type="submit" />
+					<UButton
+						size="lg"
+						label="Confirmar"
+						type="submit"
+						:disabled="loading"
+					/>
 				</div>
 			</div>
 		</UForm>

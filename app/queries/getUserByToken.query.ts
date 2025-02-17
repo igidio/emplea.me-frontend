@@ -21,6 +21,7 @@ export default gql`
 			facebook_id
 			created_at
 			modified_at
+			has_activated
 		}
 	}
 `;

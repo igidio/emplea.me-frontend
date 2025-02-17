@@ -66,6 +66,7 @@ import subscriptionFindAll from "./subscriptionFindAll.query";
 import employerUserFindByEmployer from "./employerUserFindByEmployer.query";
 import employerUserSendInvitation from "./employerUserSendInvitation.query";
 import subscriptionGql from "./subscription.query";
+import gqlConfirmation from "./confirmation.query";
 
 export {
 	plansGet,
@@ -138,4 +139,5 @@ export {
 	subscriptionGql,
 	
 	gqlUser,
+	gqlConfirmation
 };

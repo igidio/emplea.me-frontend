@@ -9,6 +9,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	if (!to.query.key) {
 		data_oauth.value = {} as {
 			google_id: string;
+			facebook_id: string;
 			email: string;
 			first_name: string;
 			last_name?: string;
