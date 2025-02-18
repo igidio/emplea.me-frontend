@@ -43,12 +43,14 @@ export default defineNuxtConfig({
 	devServer: {
 		port: 5173,
 	},
+	
 	// googleAdsense: {
 	// 	id: 'ca-pub-6257864254238276',
 	// 	onPageLoad: true,
 	// 	pageLevelAds: true,
 	// 	test: true
 	// },
+
 	components: [
 		{
 			path: "components",
@@ -124,4 +126,7 @@ export default defineNuxtConfig({
 		"~/assets/css/vue-datepicker.css"
 	],
 	compatibilityDate: "2024-08-10",
+	plugins: [
+		"~/plugins/auth",
+	]
 });

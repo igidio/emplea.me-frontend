@@ -3,14 +3,14 @@ import {useUserStore} from "~/stores/user.pinia";
 import {usePostStore} from "~/stores/post.pinia";
 import type {LocationInterface, PlanInterface} from "~/interfaces";
 
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async () => {
 	const userStore = useUserStore();
 	const postStore = usePostStore();
 	
 	const {getToken} = useApollo();
-	
 	await getToken();
-	const {data, error} = await useAsyncQuery(getUserByToken, {server: true});
+	
+	const {data, error} = await useAsyncQuery(getUserByToken, {server: false});
 	
 	if (data && !error.value)
 		userStore.set_user((data.value as any).getUserByToken);
