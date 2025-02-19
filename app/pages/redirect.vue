@@ -11,6 +11,7 @@ const route = useRoute()
 
 const where = {
 	"confirm": "confirm",
+	"forgot-password": "recovery",
 }
 
 if (!(route.query.token && route.query.identifier && route.query.next)) {

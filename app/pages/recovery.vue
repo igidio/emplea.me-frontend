@@ -8,7 +8,7 @@
 		>
 			<h3 class="text-center">Olvidé mi contraseña</h3>
 			<span class="text-center"
-				>Introduzca su nueva contraseña, con la que podrá ingresar a su
+			>Introduzca su nueva contraseña, con la que podrá ingresar a su
 				cuenta:</span
 			>
 			<UFormGroup label="Contraseña:" name="password">
@@ -31,7 +31,7 @@
 			<span class="error" v-if="error">{{ error.message }}</span>
 
 			<div class="flex flex-col-reverse tablet:flex-row gap-4 justify-center">
-				<UButton variant="ghost" label="Cancelar" to="/login" />
+				<UButton variant="ghost" label="Cancelar" to="/login"/>
 				<UButton
 					type="submit"
 					color="primary"
@@ -45,17 +45,28 @@
 </template>
 
 <script setup lang="ts">
-import { user_schema } from "~/schemas";
+import {user_schema} from "~/schemas";
 import * as yup from "yup";
-import { confirmationRecoveryAccount } from "~/queries";
+import {confirmationRecoveryAccount, gqlConfirmation, gqlUser} from "~/queries";
 
-definePageMeta({
-	middleware: ["recovery"],
-});
+const route = useRoute()
+const router = useRouter()
+const queries = {
+	token: route.query.token,
+	identifier: route.query.identifier,
+}
 
-onNuxtReady(() => {
-	console.log("recovery page");
-});
+const { error: error_verify } = await useAsyncQuery<{ confirmationVerifyToken: Boolean }>(gqlConfirmation.verify, {
+	"verify": {
+		"identifier": queries.identifier,
+		"token": queries.token
+	}
+})
+
+if (error_verify.value) {
+	router.replace('/');
+	useToast().add({ title: error_verify.value?.message })
+}
 
 const schema = yup.object({
 	password: user_schema.password,
@@ -67,15 +78,16 @@ const state = reactive({
 	password_repeat: "",
 });
 
-const { mutate, error, loading, onDone } = useMutation(
-	confirmationRecoveryAccount
-);
+const {mutate, error, loading, onDone} = useMutation(gqlUser.recovery_account);
 
 const onSubmit = () => {
 	mutate({
-		token: useRoute().query.t,
+		verify: {
+			identifier: queries.identifier,
+			token: queries.token,
+		},
 		password: state.password,
-	});
+	}).catch((e) => console.log(e));
 };
 
 onDone(() => {

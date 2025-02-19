@@ -45,15 +45,15 @@ const confirm = async () => {
 		}
 	}).then(() => {
 		is_filled.value = true;
-		//setTimeout(() => window.location.replace('/'), 2000)
+		setTimeout(() => window.location.replace('/'), 2000)
 	})
 		.catch((e) => console.log(e)).then((e) => {
 		console.log(e)
 	})
 }
 
-if ( !user.value.has_activated ) await confirm()
-else {
-	setTimeout(() => window.location.replace('/'), 2000)
-}
+onMounted(async () => await confirm())
+
+//if ( !user.value.has_activated ) await confirm()
+///else setTimeout(() => window.location.replace('/'), 2000)
 </script>

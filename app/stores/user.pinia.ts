@@ -56,9 +56,6 @@ export const useUserStore = defineStore("user", () => {
 	
 	const set_user = (new_user: UserInterface) => (user.value = new_user);
 	
-	const update_user = async () => {
-	};
-	
 	const user_role: ComputedRef<AdminRolesEnum | ClientRolesEnum> =
 		computed(() => {
 			return user.value.role;
@@ -67,16 +64,11 @@ export const useUserStore = defineStore("user", () => {
 	const is_premium = computed(() => false);
 	
 	const logout_user = async () => {
-		await router.push({
-			path: "/",
-		})
-		await new Promise((resolve) => {
-			setTimeout(() => resolve('Promesa'), 1);
-		});
 		delete_token();
+		await router.replace('/redirect')
+		if (import.meta.client) window.location.replace('/')
 		user.value = {} as UserInterface;
 		employer_info.value = {} as employer_info_interface
-		useToast().add({title: "Sesión finalizada"});
 	};
 	
 	const dropdown_options: ComputedRef<any[][]> = computed(() => {
@@ -140,7 +132,6 @@ export const useUserStore = defineStore("user", () => {
 		set_token,
 		set_user,
 		initial_loading,
-		update_user,
 		logout_user,
 		// computed
 		user_role,

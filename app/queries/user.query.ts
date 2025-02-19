@@ -14,10 +14,14 @@ export default {
             userLinkFacebook(facebook_id: $facebookId)
         }
 		`,
-		unlinkFacebook: gql`
+    unlinkFacebook: gql`
         mutation Mutation {
             userUnlinkFacebook
         }
 		`,
-		
+    recovery_account: gql`
+        mutation Mutation($verify: VerifyTokenInput!, $password: String!) {
+            userRecoveryAccount(verify: $verify, password: $password)
+        }
+    `
 }

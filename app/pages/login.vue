@@ -111,8 +111,9 @@ onDone(async (result) => {
 		await refetch()
 		set_employer_info(result_subscription.value?.subscriptionUserDetails!);
 	}
-	await useRouter().push("/");
-	toast.add({title: "Inicio de sesión exitoso."});
+	//if (import.meta.client) {
+		window.location.replace('/')
+	//}
 });
 
 
