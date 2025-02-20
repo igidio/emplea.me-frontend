@@ -1,5 +1,13 @@
 <template>
 	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Ver perfil',
+      to: '/'
+		}]"/>
 		<ProfileUserCard/>
 
 		<div class="flex flex-col desktop:flex-row w-full gap-4">

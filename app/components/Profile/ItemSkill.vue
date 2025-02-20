@@ -100,8 +100,7 @@ interface Props {
 	reload: () => Promise<void>
 }
 
-const {props} = defineProps<{ props: Props }>();
-const reactiveProps = toRef(props)
+const p = defineProps<{ props: Props }>();
 
 const skill_level_icon = {
 	'BASIC': 'ri:progress-2-line',
@@ -113,8 +112,8 @@ const state: Reactive<{
 	skill: skillInterface;
 	level: string | undefined;
 }> = reactive({
-	skill: props.skill,
-	level: props.level
+	skill: p.props.skill,
+	level: p.props.level
 })
 
 const cancel = () => {
@@ -122,8 +121,8 @@ const cancel = () => {
 	reset()
 }
 const reset = () => {
-	state.skill = props.skill;
-	state.level = props.level;
+	state.skill = p.props.skill;
+	state.level = p.props.level;
 	error.value = null
 }
 
@@ -160,18 +159,18 @@ const search_skill = async (q: string) => {
 
 const is_the_same = computed(() => {
 	if (!state.skill) return true
-	return state.skill === props.skill && state.level == props.level
+	return state.skill === p.props.skill && state.level == p.props.level
 })
 
 const submit = async () => {
 	await update({
 		"updateSeekerSkillInput": {
-			"id": Number(reactiveProps.value.id),
+			"id": Number(p.props.id),
 			"level": state.level,
 			"name": state.skill.name
 		}
 	}).then(async (e) => {
-		await props.reload()
+		await p.props.reload()
 		useToast().add({title: e?.data?.seekerSkillUpdate})
 		is_editable.value = false;
 	}).catch((e: Error) => {
@@ -186,9 +185,9 @@ const {
 
 const delete_skill = async () => {
 	await delete_skill_mutation({
-		"seekerSkillDeleteId": Number(reactiveProps.value.id)
+		"seekerSkillDeleteId": Number(p.props.id)
 	}).then(async (r) => {
-		await props.reload()
+		await p.props.reload()
 		useToast().add({title: r?.data?.seekerSkillDelete})
 	}).catch((e: Error) => {
 		//console.log(e)
