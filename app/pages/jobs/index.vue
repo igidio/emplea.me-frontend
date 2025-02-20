@@ -1,59 +1,67 @@
 <template>
-	<GoToPrevious></GoToPrevious>
-	<div v-if="!loading">
-		<!-- Only for mobile viewports -->
-		<div
-			class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-2"
-		>
-			<h5>
-				<JobTitle :title="title"/>
-			</h5>
-			<span v-if="state.searchQuery"
-			><UIcon name="ri:search-line" class="w-3 h-3"/>
-				{{ state.searchQuery }}</span
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Buscar trabajo',
+      to: '/'
+		}]"/>
+
+		<div v-if="!loading">
+			<div
+				class="flex flex-col desktop:hidden w-full sticky top-16 bg-violet-50 p-4 gap-2"
 			>
-			<div class="flex flex-wrap gap-2">
+				<h5>
+					<JobTitle :title="title"/>
+				</h5>
+				<span v-if="state.searchQuery"
+				><UIcon name="ri:search-line" class="w-3 h-3"/>
+				{{ state.searchQuery }}</span
+				>
+				<div class="flex flex-wrap gap-2">
+					<UButton
+						:label="modality.name"
+						v-for="modality in modalities"
+						@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
+						size="sm"
+					/>
+				</div>
 				<UButton
-					:label="modality.name"
-					v-for="modality in modalities"
-					@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
-					size="sm"
+					color="black"
+					label="Opciones de búsqueda"
+					@click="isOpen = true"
 				/>
 			</div>
-			<UButton
-				color="black"
-				label="Opciones de búsqueda"
-				@click="isOpen = true"
-			/>
-		</div>
-		<!-- END: Only for mobile viewports -->
+			<!-- END: Only for mobile viewports -->
 
-		<div class="flex flex-col desktop:flex-row gap-4">
-			<div class="flex flex-col w-[100%] desktop:w-[75%] gap-4">
-				<h4 class="hidden desktop:block">
-					<JobTitle :title="title"/>
-				</h4>
-				<UCard>
-					<template #header>
-						{{ list_total }}
-						<span v-if="state.searchQuery"
-						>para "{{ state.searchQuery }}"</span
-						>
-					</template>
+			<div class="flex flex-col desktop:flex-row gap-4">
+				<div class="flex flex-col w-[100%] desktop:w-[75%] gap-4">
+					<h4 class="hidden desktop:block">
+						<JobTitle :title="title"/>
+					</h4>
+					<UCard>
+						<template #header>
+							{{ list_total }}
+							<span v-if="state.searchQuery"
+							>para "{{ state.searchQuery }}"</span
+							>
+						</template>
 
-					<div class="flex flex-col gap-4 w-full">
-<!--						{{ state.modalities }}-->
-						<div class="hidden desktop:flex flex-wrap gap-2">
-							<UButton
-								:label="modality.name"
-								v-for="modality in modalities"
-								@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
-								size="sm"
-							/>
-						</div>
-						<div class="flex flex-col gap-4">
-							<JobListElement
-								:props="{
+						<div class="flex flex-col gap-4 w-full">
+							<!--						{{ state.modalities }}-->
+							<div class="hidden desktop:flex flex-wrap gap-2">
+								<UButton
+									:label="modality.name"
+									v-for="modality in modalities"
+									@click="() => {state.modalities[modality.id - 1 ]!.active = false}"
+									size="sm"
+								/>
+							</div>
+							<div class="flex flex-col gap-4">
+								<JobListElement
+									:props="{
 									id: e.id,
 									title: e.name,
 									description: e.description,
@@ -62,59 +70,63 @@
 									location: e.employer.location,
 									employer_id: e.employer.id
 								}"
-								v-for="e in list"
-							/>
-							<!--<Add class="h-32"/>-->
+									v-for="e in list"
+								/>
+								<!--<Add class="h-32"/>-->
 
-							<UButton block color="black" v-if="!locked && !loading_more"
-							         @click="async () => { current_skip++; await get_job_list(true)}">Cargar más
-							</UButton>
+								<UButton block color="black" v-if="!locked && !loading_more"
+								         @click="async () => { current_skip++; await get_job_list(true)}">Cargar más
+								</UButton>
 
-							<div class="w-full center-text p-4 bg-violet-100 rounded-medium" v-if="loading_more">
-								<UIcon name="ri:loader-5-line" class="animate-spin bg-primary" size="32"/>
-							</div>
+								<div class="w-full center-text p-4 bg-violet-100 rounded-medium" v-if="loading_more">
+									<UIcon name="ri:loader-5-line" class="animate-spin bg-primary" size="32"/>
+								</div>
 
-							<div class="text-slate-500 bg-slate-100 p-4 rounded-medium text-center" v-if="locked">Fin de los
-								resultados
+								<div class="text-slate-500 bg-slate-100 p-4 rounded-medium text-center" v-if="locked">Fin de los
+									resultados
+								</div>
 							</div>
 						</div>
-					</div>
-				</UCard>
-			</div>
-			<div
-				class="w-[25%] hidden desktop:flex flex-col gap-4 sticky top-16 h-[calc(100vh-70px)] overflow-x-auto p-1 menu-fade"
-			>
-				<JobSearchOptions
-					add
-					:search-options="searchOptions"
-					v-model:search-model="state"
-					v-model:isOpen="isOpen"
+					</UCard>
+				</div>
+				<div
+					class="w-[25%] hidden desktop:flex flex-col gap-4 sticky top-16 h-[calc(100vh-70px)] overflow-x-auto p-1 menu-fade"
+				>
+					<JobSearchOptions
+						add
+						:search-options="searchOptions"
+						v-model:search-model="state"
+						v-model:isOpen="isOpen"
 
-				/>
+					/>
 
+				</div>
 			</div>
+			<UModal v-model="isOpen">
+				<div class="p-4 rounded-medium flex flex-col gap-4">
+					<JobSearchOptions
+						fullscreen
+						!add
+						:search-options="searchOptions"
+						v-model:search-model="state"
+						v-model:isOpen="isOpen"
+
+					/>
+					<UButton
+						size="lg"
+						label="Aplicar y cerrar"
+						@click="isOpen = false"
+						color="black"
+					/>
+
+				</div>
+			</UModal>
 		</div>
-		<UModal v-model="isOpen">
-			<div class="p-4 rounded-medium flex flex-col gap-4">
-				<JobSearchOptions
-					fullscreen
-					!add
-					:search-options="searchOptions"
-					v-model:search-model="state"
-					v-model:isOpen="isOpen"
-
-				/>
-				<UButton
-					size="lg"
-					label="Aplicar y cerrar"
-					@click="isOpen = false"
-					color="black"
-				/>
-
-			</div>
-		</UModal>
+		<div class="flex flex-col" v-else>
+			<UIcon name="ri:loader-4-fill" class="animate-spin bg-primary self-center my-16" size="48"/>
+		</div>
+<!--		<div v-else>Cargando...</div>-->
 	</div>
-	<div v-else>Cargando...</div>
 </template>
 
 <script setup lang="ts">
@@ -126,7 +138,6 @@ import postFromRangeQuery from "~/queries/postFromRange.query";
 import type {PostInterface} from "~/interfaces";
 import modalitiesData from "~/data/search/modalities.data";
 import {definePageMeta} from "#imports";
-
 
 
 const {searchOptions, state, sendSearchQuery} = useSearch();
@@ -152,8 +163,8 @@ const title: ComputedRef<TitleInterface> = computed(() => ({
 	location: state.location?.name,
 }));
 
-const modalities: ComputedRef<{name: string, id: number}[]> = computed(() => {
-	return state.modalities.reduce((acc: {name: string, id: number}[], e: ModalitiesInterface) => {
+const modalities: ComputedRef<{ name: string, id: number }[]> = computed(() => {
+	return state.modalities.reduce((acc: { name: string, id: number }[], e: ModalitiesInterface) => {
 		if (e.active) acc.push({name: e.name, id: e.id});
 		return acc;
 	}, []);
