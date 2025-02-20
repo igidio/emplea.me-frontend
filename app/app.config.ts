@@ -161,7 +161,7 @@ export default defineAppConfig({
 		},
 		popover: {
 			background: "bg-white",
-			rounded: "rounded-large",
+			rounded: "rounded-medium",
 			ring: "ring-0",
 		},
 		notification: {

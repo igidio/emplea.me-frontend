@@ -35,8 +35,6 @@ const queries: Ref<queriesInterface> = ref({
 
 const {mutate, loading, error} = useMutation(gqlConfirmation.confirm)
 
-console.log(queries.value)
-
 const confirm = async () => {
 	await mutate({
 		"verify": {
