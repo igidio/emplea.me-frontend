@@ -129,7 +129,7 @@
 				<EmployerInfo
 					:profile_image="post?.employer.profile_image!"
 					:name="post?.employer.name!"
-					:id="post?.id!.toString()!"
+					:id="post?.employer.id.toString()!"
 				/>
 
 				<EmployerContactInfo
