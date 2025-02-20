@@ -23,3 +23,4 @@ export type { SubscriptionInterface } from "~/interfaces/server/subscription.int
 export type { TransactionInterface } from "~/interfaces/server/transaction.interface";
 export type { MethodInterface } from "~/interfaces/server/method.interface";
 export type { employer_info_interface } from "~/interfaces/employer_info.interface";
+export type { notification_interface } from "~/interfaces/server/notification.interface";

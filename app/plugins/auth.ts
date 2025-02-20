@@ -1,14 +1,16 @@
-import {categoryGet, getUserByToken, locationGet, plansGet} from "~/queries";
+import {categoryGet, getUserByToken, gqlNotification, locationGet, plansGet} from "~/queries";
 import {useUserStore} from "~/stores/user.pinia";
 import {usePostStore} from "~/stores/post.pinia";
-import type {LocationInterface, PlanInterface} from "~/interfaces";
+import type {LocationInterface, notification_interface, PlanInterface} from "~/interfaces";
 
 export default defineNuxtPlugin(async () => {
 	const userStore = useUserStore();
 	const postStore = usePostStore();
+	const notificationStore = useNotificationStore();
 	
 	const {getToken} = useApollo();
 	await getToken();
+	
 	
 	const {data, error} = await useAsyncQuery(getUserByToken, {server: false});
 	
@@ -28,6 +30,9 @@ export default defineNuxtPlugin(async () => {
 		const {data} = await useAsyncQuery<{ allPlans: PlanInterface[] }>(plansGet, {server: true});
 		postStore.set_plans((data.value as any).allPlans);
 	}
+	
+	const { data: data_notifications } = await useAsyncQuery<{ notificationByUser: notification_interface[] }>(gqlNotification.by_user)
+	notificationStore.initialize(data_notifications.value?.notificationByUser || [])
 	
 	await get_categories()
 	await get_locations()

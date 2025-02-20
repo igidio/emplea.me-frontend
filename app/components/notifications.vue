@@ -6,34 +6,40 @@
 	>
 	</UDropdown> -->
 	<UPopover :popper="{ placement: 'auto-end' }">
-		<UButton
-			variant="ghost"
-			icon="ri:notification-3-fill"
-			class="text-violet-600"
-		></UButton>
-
-		<template #panel>
-<!--			<UButton @click="send_message" label="socket"/>-->
-			<div class="px-2 pt-3 pb-4">
+		<UChip size="md" color="green" inset>
+			<UButton
+				variant="ghost"
+				icon="ri:notification-3-fill"
+				class="text-violet-600"
+			/>
+		</UChip>
+		<template #panel >
+			<!--			<UButton @click="send_message" label="socket"/>-->
+			<div class="px-2 pt-3 pb-4 w-56" >
 				<div class="flex flex-col gap-2">
 					<div
-						v-for="notification in notifications"
-						class="hover:bg-gray-100 active:bg-gray-200 p-2 rounded-medium border"
+						v-for="notification in computed_notifications"
+						class="hover:bg-gray-100 active:bg-gray-200 p-2 rounded-medium border flex flex-col gap-1 cursor-pointer"
 					>
-						<b>{{ notification.title }}</b>
-						<p>{{ notification.description }}</p>
+						<UBadge
+							variant="soft"
+							size="xs"
+							class="w-fit"
+						><UIcon name="ri:link" class="mr-1"/><span class="text-xs">{{ notification.goto }}</span></UBadge>
+						<p class="text-sm">{{ notification.message }}</p>
+						<span class="text-xs text-gray-500">{{ last_time(new Date(new Date(notification?.created_at!).getTime() - 6 * 60 * 60 * 1000)) }}</span>
 					</div>
 					<div>
 						<div
 							class="p-4 rounded-medium h-24 items-center center-text flex flex-col gap-2"
-							v-if="notifications.length == 0"
+							v-if="computed_notifications.length == 0"
 						>
 							<UIcon name="ri:notification-snooze-line" size="32" class="text-gray-500"/>
 							<span class="text-gray-500">No tienes notificaciones</span>
 						</div>
 					</div>
-					<NuxtLink to="/notifications" v-if="notifications.length > 0">
-						<UButton block color="black">Ver todas las notificaciones</UButton>
+					<NuxtLink to="/notifications" v-if="computed_notifications.length > 0">
+						<UButton block variant="ghost">Ver todas</UButton>
 					</NuxtLink>
 				</div>
 			</div>
@@ -42,30 +48,20 @@
 </template>
 
 <script setup lang="ts">
+import {useNotificationStore} from "~/stores/notifications.pinia";
+import {last_time} from "../helpers/last_time";
+
+const { computed_notifications } = useNotificationStore();
+
 const {$socket} = useNuxtApp();
 
-const notifications = [
-	// {
-	// 	title: "New message",
-	// 	description: "You have a new message from John Doe",
-	// },
-	// {
-	// 	title: "New message",
-	// 	description: "You have a new message from John Doe",
-	// },
-	// {
-	// 	title: "New message",
-	// 	description: "You have a new message from John Doe",
-	// },
-	// {
-	// 	title: "New message",
-	// 	description: "You have a new message from John Doe",
-	// },
-	// {
-	// 	title: "New message",
-	// 	description: "You have a new message from John Doe",
-	// },
-];
+
+if (import.meta.client) {
+	$socket.on('update', (data) => {
+		console.log(data);
+		//notifications.push(data);
+	});
+}
 
 const send_message = () => {
 	$socket.emit('message', {text: '¡Hola desde Nuxt 3!'});
@@ -75,6 +71,8 @@ const send_message = () => {
 			useToast().add({title: data});
 		});
 	}
+
+
 
 };
 </script>

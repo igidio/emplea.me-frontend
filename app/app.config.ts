@@ -11,13 +11,13 @@ export default defineAppConfig({
 	gray: "gray",
 	ui: {
 		primary: "violet",
-		
 		button: {
-			base: "trainsition-all",
+			base: "transition-all",
 			font: "text-base font-semibold",
+			rounded: "rounded-medium",
 			size: {
-				sm: "text-sm justify-center rounded-medium px-1",
-				md: "text-base justify-center rounded-medium px-2",
+				sm: "text-sm justify-center",
+				md: "text-base justify-center",
 				lg: "text-base justify-center rounded-large",
 			},
 			padding: {
@@ -196,6 +196,9 @@ export default defineAppConfig({
 					label: 'No hay registros',
 				}
 			}
+		},
+		pagination: {
+			rounded: "first:rounded-s-medium last:rounded-e-medium",
 		}
 	},
 

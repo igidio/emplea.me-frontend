@@ -7,11 +7,11 @@
 		v-model="is_open_modal_active"
 		:reload="fetch"
 	/>
-	
+
 	<UCard>
 		<template #header>Empleadores</template>
 		<div class="flex flex-col gap-4">
-			
+
 			<div class="flex flex-row gap-2 justify-end">
 				<UInput
 					icon="ri:search-2-line"
@@ -20,7 +20,7 @@
 					color="gray"
 					class="w-64"
 				/>
-				
+
 				<USelect
 					color="gray"
 					size="md"
@@ -35,8 +35,9 @@
 				]"
 				/>
 			</div>
-			
+
 			<UTable
+				class="h-[600px]"
 				:columns="columns"
 				:rows="rows"
 				:loading="loading"
@@ -44,7 +45,7 @@
 				v-model:expand="expand"
 			>
 				<template #profile_image-data="{row}">
-					<img :src="row.profile_image" class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
+					<img :src="row.profile_image || '/images/empleame_employer_silhouette.png'" class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
 				</template>
 				<template #status-data="{row}">
 					<UBadge
@@ -52,7 +53,7 @@
 						:color="row.status.color"
 					>{{ row.status.label }}
 					</UBadge>
-				
+
 				</template>
 				<template #options-data="{row}">
 					<UDropdown :items="options(row)">
@@ -69,7 +70,15 @@
 				</template>
 			</UTable>
 		</div>
+		<template #footer>
+			<div class="w-full flex flex-row justify-end gap-4">
+				<UPagination v-model="page" :page-count="pageCount" :total="employers.length" size="md"/>
+			</div>
+		</template>
+
 	</UCard>
+
+
 </template>
 
 <script setup lang="ts">
@@ -105,7 +114,7 @@ const set_open_modal_active = (id: number, name: string, is_active: boolean) => 
 	is_open_modal_active.value.id = Number(id)
 	is_open_modal_active.value.name = name
 	is_open_modal_active.value.is_active = is_active
-	
+
 }
 
 const employers: ComputedRef = computed(() => (result.value?.employerFindAll && result.value?.employerFindAll.length > 0) ?
@@ -155,7 +164,7 @@ const columns: TableColumn[] = [
 ]
 
 const page = ref(1)
-const pageCount = 6
+const pageCount = 8
 
 const options = (row: any) => [
 	[
@@ -189,21 +198,21 @@ const options = (row: any) => [
 
 const rows: ComputedRef<TableRow[]> = computed(() => {
 	let results = [];
-	
+
 	if (!q.value) {
 		results = employers.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 	}
-	
+
 	if (q.value) results = employers.value.filter((e: any) => {
 		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
 			return String(value).toLowerCase().includes(q.value.toLowerCase())
 		})
 	})
-	
+
 	if (search_by_status.value) {
 		results = results.filter((e: any) => e.status.label.includes(search_by_status.value))
 	}
-	
+
 	return results
 })
 
