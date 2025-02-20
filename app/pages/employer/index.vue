@@ -1,5 +1,14 @@
 <template>
 	<div class="flex flex-col gap-4 center ">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Mis empleos',
+      to: `/employer`
+		}]"/>
+
 		<div class="flex flex-row gap-4 h-36 overflow-y-hidden">
 			<EmployerCardButton
 				v-for="(employment, i) in employments"
@@ -37,7 +46,8 @@ import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 definePageMeta({
 	middleware: 'role',
-	roles: ['EMPLOYER']
+	roles: ['EMPLOYER'],
+	keepalive: false
 })
 
 const user = useUserStore()
@@ -74,7 +84,7 @@ onMounted(() => {
 })
 
 const get_employer = async (i: number) => {
-	await useRouter().push({ query: {e: i}})
+	await useRouter().push({query: {e: i}})
 	loading.value = true
 	result.value = undefined
 	const employer_user = employerGetByUserData.value?.employerListByUser[i];

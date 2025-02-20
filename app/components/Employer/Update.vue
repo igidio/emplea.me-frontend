@@ -14,7 +14,6 @@
 		:schema="schema"
 		@submit="props.update"
 	>
-		<GoToPrevious/>
 		<UCard>
 			<template #header> Editar empleador</template>
 			

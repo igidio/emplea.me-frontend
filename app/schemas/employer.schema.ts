@@ -12,7 +12,9 @@ export const employer_schema = yup.object({
 		.required("El correo electrónico es obligatorio"),
 	description: yup
 		.string()
-		.max(2000, "La descripción debe tener como mucho 2000 caracteres"),
+		.max(2000, "La descripción debe tener como mucho 2000 caracteres")
+		.optional()
+		.nullable(),
 	establishment_date: yup
 		.date()
 		.required("La fecha de establecimiento es obligatoria"),

@@ -12,7 +12,7 @@
 		:on_close="close_modal"
 		:schema="message_schema"
 	/>
-	
+
 	<EmployerUpdate
 		v-model:state="state"
 		:props="{
@@ -23,7 +23,7 @@
 			cancel: `/admin/employers`
 		}"
 	/>
-	
+
 </template>
 
 <script setup lang="ts">

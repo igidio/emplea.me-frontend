@@ -2,14 +2,15 @@
 	<UCard>
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-row justify-between p-4">
-				<div class="flex flex-row gap-4">
+				<div class="flex flex-col tablet:flex-row gap-4 w-full">
+
 					<img
 						:src="result.profile_image ? result.profile_image : '/images/empleame_employer_silhouette.png'"
-						class="w-24 aspect-[1:1] rounded-medium border border-slate-200"
+						class="h-24 w-fit aspect-[1/1] rounded-medium border border-slate-200 self-center"
 						alt="Logo de empresa"
 					/>
 					<div class="flex flex-col">
-						<div class="flex flex-col gap-2">
+						<div class="flex flex-col gap-2 self-center">
 							<h3>{{ result.name }}</h3>
 							<item icon="ri:calendar-line" :label="'Fundado el ' + new Date(result.establishment_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })"/>
 							<item icon="ri:mail-line" :label="result.email"/>
@@ -26,8 +27,8 @@
 				</NuxtLink>
 			</div>
 
-			<hr v-if="result.description || result.description !== ''" />
-			<p class="text-justify" v-if="result.description || result.description !== ''">{{ result.description }}</p>
+			<hr v-if="result.description || (result.description != '' && result.description)" />
+			<p class="text-justify" v-if="result.description || (result.description != '' && result.description)">{{ result.description }}</p>
 		</div>
 	</UCard>
 </template>

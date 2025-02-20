@@ -1,6 +1,16 @@
 <template>
 	<div class="flex flex-col gap-4">
-		<h4>Crear publicación de trabajo</h4>
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: result?.findOneEmployer.employer.name!,
+      to: `/employer/${result?.findOneEmployer.employer.id}`
+		}, {
+			label: 'Editar contacto de empleador',
+      to: `/employer/${route.params.id}/edit`
+		}]"/>
 
 		<UForm class="flex flex-row w-full gap-4"
 		       :schema="schema"
@@ -9,6 +19,7 @@
 		>
 
 			<UCard class="grow">
+				<template #header>Crear publicación de trabajo</template>
 				<div class="grow flex flex-col gap-4">
 					<UFormGroup
 						label="Título"
@@ -153,11 +164,32 @@
 
 <script setup lang="ts">
 import {usePostStore} from "~/stores/post.pinia";
-import type {CategoryInterface, LocationInterface, PostInterface} from "~/interfaces";
+import type {
+	CategoryInterface,
+	EmployerInterface,
+	EmployerUserInterface,
+	LocationInterface,
+	PostInterface
+} from "~/interfaces";
 import {enum_to_array} from "~/helpers";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {post_schema} from "~/schemas";
-import {postCreate} from "~/queries";
+import {employerFindOne, postCreate} from "~/queries";
+
+const user = useUserStore()
+const route = useRoute()
+definePageMeta({
+	middleware: 'role',
+	roles: ['EMPLOYER'],
+	keepalive: false,
+})
+useHead({
+	title: 'Crear publicación de trabajo'
+})
+
+const {result, refetch} = useQuery<{
+	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
+}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
 
 const {categories, location_options} = usePostStore()
 
@@ -174,6 +206,11 @@ const state = reactive({
 
 const {mutate, loading, error} = useMutation<{ "postCreate": PostInterface }>(postCreate)
 
+if (!result.value?.findOneEmployer.employer.is_verified) {
+	await useRouter().replace(`/employer/${result.value?.findOneEmployer.employer.id}`)
+	if (import.meta.client) useToast().add({title: 'No puedes editar un empleador no verificado.'})
+}
+
 const submit = async () => {
 	await mutate({
 		"createPostInput": {
@@ -184,12 +221,12 @@ const submit = async () => {
 			"salary": Number(state.salary),
 			"salary_type": state.salary_type,
 			"modality": state.modality,
-			"id_employer": Number(useRoute().params.id)
+			"id_employer": Number(route.params.id)
 		}
-	}).then((e) => {
+	}).then(async (e) => {
 		console.log(e)
 		useToast().add({title: 'Publicación creada.'})
-		useRouter().push(`/jobs/${e?.data?.postCreate.id}`)
+		await useRouter().push(`/jobs/${e?.data?.postCreate.id}`)
 	}).catch((e) => {
 		console.log(e)
 	});

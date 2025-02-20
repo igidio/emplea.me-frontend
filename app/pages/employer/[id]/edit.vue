@@ -1,4 +1,17 @@
 <template>
+	<div class="flex flex-col gap-4">
+	<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: employer.name,
+      to: `/employer/${employer.id}`
+		}, {
+			label: 'Editar empleador',
+      to: `/employer/${employer.id}/edit`
+		}]"/>
+
 	<EmployerUpdate
 		v-model:state="state"
 		:props="{
@@ -9,6 +22,7 @@
 			cancel: `/employer/${employer.id}`
 		}"
 	/>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +35,9 @@ const postStore = usePostStore();
 definePageMeta({
 	middleware: 'role',
 	roles: ['EMPLOYER']
+})
+useHead({
+	title: 'Editar empleador'
 })
 
 const {data} = await useAsyncQuery<{
@@ -54,7 +71,7 @@ const state = reactive({
 	establishment_date: employer.establishment_date,
 	email: employer.email,
 	description: employer.description,
-	profile_image: employer.profile_image as string|null,
+	profile_image: employer.profile_image as string | null,
 	location: employer.location ? postStore.location_options.find((e) => {
 		if (e.id === employer.location?.id) return e
 	}) : undefined,

@@ -6,7 +6,7 @@ import type {EmployerSocialInterface} from "~/interfaces/server/employer_social.
 export interface EmployerInterface {
 	id:                 string;
 	name:               string;
-	profile_image:      string;
+	profile_image:      string
 	modified_at:        Date;
 	location:           LocationInterface;
 	post?:						 PostInterface[];
