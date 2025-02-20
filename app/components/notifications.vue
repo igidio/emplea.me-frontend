@@ -5,29 +5,45 @@
 		:ui="{ width: 'w-48' }"
 	>
 	</UDropdown> -->
-	<UPopover :popper="{ placement: 'auto-end' }">
+	<UPopover
+		:popper="{ placement: 'auto-end' }"
+		v-model:open="is_open"
+	>
 		<UChip size="md" color="green" inset>
+
 			<UButton
 				variant="ghost"
 				icon="ri:notification-3-fill"
 				class="text-violet-600"
 			/>
 		</UChip>
-		<template #panel >
+		<template #panel>
 			<!--			<UButton @click="send_message" label="socket"/>-->
-			<div class="px-2 pt-3 pb-4 w-56" >
+			<div class="px-2 pt-3 pb-4 w-56">
 				<div class="flex flex-col gap-2">
 					<div
 						v-for="notification in computed_notifications"
-						class="hover:bg-gray-100 active:bg-gray-200 p-2 rounded-medium border flex flex-col gap-1 cursor-pointer"
+						class="hover:bg-gray-100 active:bg-gray-200 p-2 rounded-medium border flex flex-col gap-2 cursor-pointer"
+						@click="() => {
+							notification.goto ? $router.push(notification.goto) : null;
+							is_open = false;
+						}"
 					>
 						<UBadge
+							v-if="notification.goto"
 							variant="soft"
 							size="xs"
 							class="w-fit"
-						><UIcon name="ri:link" class="mr-1"/><span class="text-xs">{{ notification.goto }}</span></UBadge>
-						<p class="text-sm">{{ notification.message }}</p>
-						<span class="text-xs text-gray-500">{{ last_time(new Date(new Date(notification?.created_at!).getTime() - 6 * 60 * 60 * 1000)) }}</span>
+						>
+							<UIcon name="ri:link" class="mr-1"/>
+							<span class="text-xs">{{ notification.goto }}</span></UBadge>
+						<div class="flex flex-col gap-1">
+							<span class="text-sm font-semibold">{{ notification.title }}</span>
+							<p class="text-sm">{{ notification.message }}</p>
+							<span class="text-xs text-gray-500">{{
+									last_time(new Date(new Date(notification?.created_at!).getTime() - 6 * 60 * 60 * 1000))
+								}}</span>
+						</div>
 					</div>
 					<div>
 						<div
@@ -39,7 +55,7 @@
 						</div>
 					</div>
 					<NuxtLink to="/notifications" v-if="computed_notifications.length > 0">
-						<UButton block variant="ghost">Ver todas</UButton>
+						<UButton block variant="ghost" @click="is_open = false">Ver todas</UButton>
 					</NuxtLink>
 				</div>
 			</div>
@@ -51,28 +67,17 @@
 import {useNotificationStore} from "~/stores/notifications.pinia";
 import {last_time} from "../helpers/last_time";
 
-const { computed_notifications } = useNotificationStore();
-
-const {$socket} = useNuxtApp();
-
-
-if (import.meta.client) {
-	$socket.on('update', (data) => {
-		console.log(data);
-		//notifications.push(data);
-	});
-}
-
-const send_message = () => {
-	$socket.emit('message', {text: '¡Hola desde Nuxt 3!'});
-	if (import.meta.client) {
-		$socket.on('update', (data) => {
-			console.log(data);
-			useToast().add({title: data});
-		});
-	}
+const is_open: Ref<undefined | boolean> = ref(undefined);
+const {computed_notifications} = useNotificationStore();
 
 
-
-};
+// const send_message = () => {
+// 	$socket.emit('message', {text: '¡Hola desde Nuxt 3!'});
+// 	if (import.meta.client) {
+// 		$socket.on('update', (data) => {
+// 			console.log(data);
+// 			useToast().add({title: data});
+// 		});
+// 	}
+// };
 </script>

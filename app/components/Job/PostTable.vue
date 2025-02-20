@@ -98,7 +98,7 @@
 				<template #expand="{ row }">
 					<div class="flex flex-col p-4 gap-1">
 						<span class="inline-block font-semibold">Descripción</span>
-						<p class="text-justify">{{ row.description }}</p>
+						<p class="text-justify">{{ row.message }}</p>
 						<div v-if="row.interaction && row.interaction.length > 0">
 							<span class="font-semibold">Interacciones</span>
 						</div>
@@ -138,7 +138,7 @@ const pageCount = 5
 interface post_computed_interface {
 	id: number,
 	available: boolean,
-	description: string,
+	message: string,
 	category: any,
 	employer: any,
 	employer_user: EmployerUserInterface,

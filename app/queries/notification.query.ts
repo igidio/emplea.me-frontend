@@ -5,6 +5,7 @@ export default {
               id
               goto
               message
+              title
               was_read
               was_cleared
               created_at

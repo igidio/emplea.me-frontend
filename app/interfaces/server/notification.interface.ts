@@ -3,7 +3,8 @@ import type {UserInterface} from "~/interfaces";
 export interface notification_interface {
 	id?: number;
 	user: UserInterface;
-	goto: string;
+	goto?: string;
+	title: string;
 	message: string;
 	was_read: boolean;
 	was_cleared: boolean;

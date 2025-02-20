@@ -65,7 +65,7 @@
 						<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
 						<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
 						<span class="inline-block font-semibold">Descripción</span>
-						<p class="text-justify">{{ row.description }}</p>
+						<p class="text-justify">{{ row.message }}</p>
 					</div>
 				</template>
 			</UTable>
@@ -168,15 +168,20 @@ const pageCount = 8
 
 const options = (row: any) => [
 	[
-		...((!row.is_verified) ? [{
+		{
 			label: 'Verificar',
 			icon: 'ri:checkbox-circle-line',
 			click: () => set_open_modal_verify(row.id, row.name)
-		},] : [{
-			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
-			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
-			click: () => set_open_modal_active(row.id, row.name, row.is_active)
-		}]),
+		},
+		// ...((!row.is_verified) ? [{
+		// 	label: 'Verificar',
+		// 	icon: 'ri:checkbox-circle-line',
+		// 	click: () => set_open_modal_verify(row.id, row.name)
+		// },] : [{
+		// 	label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
+		// 	icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
+		// 	click: () => set_open_modal_active(row.id, row.name, row.is_active)
+		// }]),
 		{
 			label: 'Editar',
 			icon: 'ri:edit-line',

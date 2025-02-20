@@ -14,6 +14,12 @@ export default defineNuxtPlugin(() => {
 			}
 		})
 		
+		socket.on('update', (data) => {
+			console.log(data);
+			//notifications.push(data);
+			useToast().add({ title: data.message });
+		});
+		
 		return {
 			provide: {
 				socket

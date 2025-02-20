@@ -11,8 +11,9 @@
 		}]"/>
 
 		<NotificationsListElement
-			:description="notification.message"
+			:message="notification.message"
 			:goto="notification.goto"
+			:title="notification.title"
 			:date="last_time(new Date(new Date(notification?.created_at!).getTime() - 6 * 60 * 60 * 1000))"
 			v-for="notification in notifications"
 		/>
