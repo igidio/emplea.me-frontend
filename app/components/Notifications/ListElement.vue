@@ -25,9 +25,9 @@
 			variant="ghost"
 			icon="ri:delete-bin-2-line"
 			class="h-fit hidden tablet:flex"
-		>
-			Eliminar
-		</UButton>
+			label="Eliminar"
+			@click="clear"
+		/>
 	</div>
 
 </template>
@@ -40,6 +40,7 @@ interface Props {
 	message: string;
 	goto?: string;
 	date: string;
+	clear: () => Promise<void>;
 }
 
 defineProps<Props>();

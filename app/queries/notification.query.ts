@@ -17,5 +17,10 @@ export default {
         mutation Mutation {
             notificationByUserAndCheck
         }
-		`
+		`,
+    by_user_and_clear: gql`
+        mutation NotificationByUserAndClear($idNotification: Float!) {
+            notificationByUserAndClear(id_notification: $idNotification)
+        }
+    `
 }
