@@ -28,4 +28,5 @@
 useHead({
 	title: 'Inicio'
 })
+
 </script>

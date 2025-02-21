@@ -10,10 +10,25 @@ export const useNotificationStore = defineStore('notification', () => {
 		notifications.value = data;
 	}
 	
+	const has_unread = computed(() => {
+		return !!computed_notifications.value.filter((notification) => !notification.was_read).length
+	});
+	
+	const mark_all_as_read = () => {
+		console.log(notifications.value)
+		return notifications.value.forEach((notification) => notification.was_read = true);
+	}
+	
+	const add_notifications = (data: notification_interface[]) => {
+		notifications.value = [...data, ...toRaw(notifications.value)];
+	}
 	
 	return {
 		notifications,
 		computed_notifications,
-		initialize
+		initialize,
+		has_unread,
+		mark_all_as_read,
+		add_notifications
 	}
 })
