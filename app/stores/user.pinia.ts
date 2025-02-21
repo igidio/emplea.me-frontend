@@ -22,10 +22,13 @@ export const useUserStore = defineStore("user", () => {
 	const initial_loading = ref(true);
 	const is_open_modal_login = ref(false);
 	const router = useRouter();
-	const employer_info:Ref<employer_info_interface> = ref({} as employer_info_interface)
+	const employer_info: Ref<employer_info_interface> = ref({} as employer_info_interface)
+	const is_premium = computed(() => (employer_info.value.plan && employer_info.value.plan.id != 1) || false);
+	//const is_premium = computed(() => false);
 	
 	const set_employer_info = (info: employer_info_interface) => {
 		employer_info.value = info
+		
 	}
 	
 	const get_token = () => {
@@ -61,8 +64,6 @@ export const useUserStore = defineStore("user", () => {
 			return user.value.role;
 		});
 	
-	const is_premium = computed(() => false);
-	
 	const logout_user = async () => {
 		delete_token();
 		await router.replace('/redirect')
@@ -78,7 +79,7 @@ export const useUserStore = defineStore("user", () => {
 			click: () => {
 				router.push("/profile");
 			},
-		};
+		}
 		
 		let payment = {
 			label: "Tus compras",
@@ -94,34 +95,32 @@ export const useUserStore = defineStore("user", () => {
 			},
 		};
 		
-		if (user.value.role === RolesEnum.EMPLOYER.toUpperCase()) {
+		if (user.value.role as any === 'EMPLOYER') {
 			return [[profile, payment, logout]];
 		} else {
 			return [[profile, logout]];
 		}
 	});
 	
-	const computed_navigation_options: ComputedRef<navigationOptionsInterface[]> =
-		computed(() => {
-			let cases: any = {
-				EMPLOYER: [my_employments_option, my_posts_option],
-				SEEKER: [jobs_option, favorites_option],
-			};
-			is_premium.value
-				? cases.EMPLOYER.push(my_services_option)
-				: cases.EMPLOYER.push(premium_option);
-			
-			return cases[user.value.role];
-		});
+	const computed_navigation_options: ComputedRef<navigationOptionsInterface[]> = computed(() => {
+		let cases: any = {
+			EMPLOYER: [my_employments_option, my_posts_option],
+			SEEKER: [jobs_option, favorites_option],
+		};
+		!is_premium.value && cases.EMPLOYER.push(premium_option);
+		
+		console.log(cases[user.value.role]);
+		return cases[user.value.role];
+	});
 	
 	const first_of_fist_name = computed(
 		() => user.value.contact.first_name.split(" ")[0]
 	);
 	
 	const computed_image = computed(() => ({
-		value: user.value.image ? user.value.image : "/images/empleame_user_silhouette.png",
-		exists: !!user.value.image,
-	})
+			value: user.value.image ? user.value.image : "/images/empleame_user_silhouette.png",
+			exists: !!user.value.image,
+		})
 	);
 	
 	return {

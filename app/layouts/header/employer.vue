@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-const {computed_navigation_options} = useUserStore();
+const {computed_navigation_options} = storeToRefs(useUserStore());
 
 const is_open = ref(false);
 </script>

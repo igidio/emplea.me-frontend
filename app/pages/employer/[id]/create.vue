@@ -28,7 +28,7 @@
 					>
 						<UInput
 							color="gray"
-							size="sm"
+							size="md"
 							placeholder="Nombre del nuevo trabajo"
 							v-model="state.name"
 						/>

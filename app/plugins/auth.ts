@@ -37,7 +37,6 @@ export default defineNuxtPlugin(async () => {
 	
 	const { data: data_notifications } = await useAsyncQuery<{ notificationByUser: notification_interface[] }>(gqlNotification.by_user)
 	notificationStore.initialize(data_notifications.value?.notificationByUser || [])
-	console.log(notificationStore.notifications)
 	
 	await get_categories()
 	await get_locations()

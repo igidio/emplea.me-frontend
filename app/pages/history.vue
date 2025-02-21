@@ -15,7 +15,16 @@
 import {subscriptionGql, subscriptionMyHistory} from "~/queries";
 import type {SubscriptionInterface} from "~/interfaces";
 
+definePageMeta({
+	middleware: 'role',
+	roles: ['EMPLOYER']
+})
+useHead({
+	title: 'Historial de pagos'
+})
+
 const subscriptions = ref<SubscriptionInterface[]>([])
+const { is_premium } = useUserStore()
 
 const {result, refetch, loading} = useQuery<{ "subscriptionMyHistory": SubscriptionInterface[] }>(subscriptionMyHistory)
 

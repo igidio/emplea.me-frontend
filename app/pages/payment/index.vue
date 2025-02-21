@@ -1,4 +1,13 @@
 <template>
+	<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Sé un premium',
+      to: '/profile'
+		}]"/>
+
 	<div class="flex flex-col items-center gap-6">
 		<div class="flex flex-col text-center gap-1">
 		<h1>Ser Premium tiene sus beneficios</h1>
