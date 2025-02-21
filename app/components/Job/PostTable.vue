@@ -40,7 +40,7 @@
 				/>
 			</div>
 			<UTable
-				:rows="rows"
+				:rows="rows.results"
 				:columns="selectedColumns"
 				:loading="loading"
 				:sort="{ column: 'created_at', direction: 'desc' }"
@@ -112,9 +112,13 @@
 					</UDropdown>
 				</template>
 			</UTable>
-			<UPagination v-model="page" :page-count="pageCount" :total="posts.length"/>
 
 		</div>
+		<template #footer>
+			<div class="w-full flex flex-row justify-end gap-4">
+				<UPagination v-model="page" :page-count="pageCount" :total="rows.total" size="md" v-if="rows.total"/>
+			</div>
+		</template>
 	</UCard>
 </template>
 
@@ -194,22 +198,24 @@ const search_by_status = ref(undefined)
 
 const q = ref('')
 const rows = computed(() => {
-	let results: post_computed_interface[] = [];
-	if (!q.value) {
-		results = posts.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
-	}
+	let results = posts.value;
 
-	if (q.value) results = posts.value.filter((e: any) => {
-		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
-			return String(value).toLowerCase().includes(q.value.toLowerCase())
+	if (q.value) {
+		results = results.filter((e: any) => {
+			return Object.values(e).some((value) => {
+				return String(value).toLowerCase().includes(q.value.toLowerCase())
+			})
 		})
-	})
+	}
 
 	if (search_by_status.value) {
 		results = results.filter((e: any) => e.status.label.includes(search_by_status.value))
 	}
 
-	return results
+	return {
+		results: results.slice((page.value - 1) * pageCount, page.value * pageCount),
+		total: results.length
+	}
 })
 
 onMounted(() => {

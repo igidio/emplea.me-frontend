@@ -32,6 +32,19 @@
 		:reload="reload"
 	/>
 	<div class="mb-4 flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Panel',
+      to: '/admin'
+		}, {
+			label: 'Subscripciones',
+      to: '/admin/subscriptions'
+		},
+		]"/>
+
 		<h6>Subscripciones</h6>
 		<hr/>
 		<UButton
@@ -58,6 +71,15 @@ import type {SubscriptionInterface} from "~/interfaces";
 import {subscriptionFindAll, subscriptionGql} from "~/queries";
 import ModalMessage from "~/components/Admin/ModalMessage.vue";
 import {message_schema} from "~/schemas";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['ADMIN', 'SUPERUSER']
+})
+
+useHead({
+	title: 'Subscripciones'
+})
 
 const subscriptions = ref<SubscriptionInterface[]>([])
 const show = ref(false)

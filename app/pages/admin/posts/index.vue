@@ -13,18 +13,41 @@
 		:schema="message_schema"
 	/>
 
-	<JobPostTable
-		:posts="posts"
-		:reload="fetch"
-		:loading="loading"
-		:options="options"
-	/>
+	<div class="mb-4 flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Panel',
+      to: '/admin'
+		}, {
+			label: 'Publicaciones',
+      to: '/admin/posts'
+		},
+		]"/>
+		<JobPostTable
+			:posts="posts"
+			:reload="fetch"
+			:loading="loading"
+			:options="options"
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
 import type {PostInterface} from "~/interfaces";
 import {postActivateOrDeactivate, postFindAll} from "~/queries";
 import {message_schema} from "~/schemas";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['ADMIN', 'SUPERUSER']
+})
+
+useHead({
+	title: 'Publicaciones'
+})
 
 const {result, refetch, loading} = useQuery<{
 	"postFindAll": PostInterface[]

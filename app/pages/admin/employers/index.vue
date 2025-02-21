@@ -8,76 +8,91 @@
 		:reload="fetch"
 	/>
 
-	<UCard>
-		<template #header>Empleadores</template>
-		<div class="flex flex-col gap-4">
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Panel',
+      to: '/admin'
+		}, {
+			label: 'Empleadores',
+      to: '/admin/employers'
+		},
+		]"/>
 
-			<div class="flex flex-row gap-2 justify-end">
-				<UInput
-					icon="ri:search-2-line"
-					v-model="q"
-					placeholder="Filtrar resultados"
-					color="gray"
-					class="w-64"
-				/>
+		<UCard>
+			<template #header>Empleadores</template>
+			<div class="flex flex-col gap-4">
 
-				<USelect
-					color="gray"
-					size="md"
-					placeholder="Filtrar por estado"
-					icon="ri:filter-line"
-					v-model="search_by_status"
-					:options="[
+				<div class="flex flex-row gap-2 justify-end">
+					<UInput
+						icon="ri:search-2-line"
+						v-model="q"
+						placeholder="Filtrar resultados"
+						color="gray"
+						class="w-64"
+					/>
+
+					<USelect
+						color="gray"
+						size="md"
+						placeholder="Filtrar por estado"
+						icon="ri:filter-line"
+						v-model="search_by_status"
+						:options="[
 					{label: 'Todos', value: undefined},
 					{label: 'Activo', value: 'Activo'},
 					{label: 'No activo', value: 'No activo'},
 					{label: 'No verificado', value: 'No verificado'}
 				]"
-				/>
+					/>
+				</div>
+
+				<UTable
+					class="h-[600px]"
+					:columns="columns"
+					:rows="rows.results"
+					:loading="loading"
+					:sort="{ column: 'created_at', direction: 'desc' }"
+					v-model:expand="expand"
+				>
+					<template #profile_image-data="{row}">
+						<img :src="row.profile_image || '/images/empleame_employer_silhouette.png'"
+						     class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
+					</template>
+					<template #status-data="{row}">
+						<UBadge
+							variant="soft"
+							:color="row.status.color"
+						>{{ row.status.label }}
+						</UBadge>
+
+					</template>
+					<template #options-data="{row}">
+						<UDropdown :items="options(row)">
+							<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
+						</UDropdown>
+					</template>
+					<template #expand="{ row }">
+						<div class="flex flex-col p-4 text-sm gap-1">
+							<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
+							<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
+							<span class="inline-block font-semibold">Descripción</span>
+							<p class="text-justify">{{ row.message }}</p>
+						</div>
+					</template>
+				</UTable>
 			</div>
+			<template #footer>
+				<div class="w-full flex flex-row justify-end gap-4">
+					<UPagination v-model="page" :page-count="pageCount" :total="rows.total" size="md" v-if="rows.total"/>
+				</div>
+			</template>
 
-			<UTable
-				class="h-[600px]"
-				:columns="columns"
-				:rows="rows"
-				:loading="loading"
-				:sort="{ column: 'created_at', direction: 'desc' }"
-				v-model:expand="expand"
-			>
-				<template #profile_image-data="{row}">
-					<img :src="row.profile_image || '/images/empleame_employer_silhouette.png'" class="border rounded-medium w-10 aspect-square" alt="Foto de perfil"/>
-				</template>
-				<template #status-data="{row}">
-					<UBadge
-						variant="soft"
-						:color="row.status.color"
-					>{{ row.status.label }}
-					</UBadge>
-
-				</template>
-				<template #options-data="{row}">
-					<UDropdown :items="options(row)">
-						<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
-					</UDropdown>
-				</template>
-				<template #expand="{ row }">
-					<div class="flex flex-col p-4 text-sm gap-1">
-						<div><span class="font-semibold">Fecha de creación:</span> {{ row.created_at }}</div>
-						<div><span class="font-semibold">Última modificación:</span> {{ row.modified_at }}</div>
-						<span class="inline-block font-semibold">Descripción</span>
-						<p class="text-justify">{{ row.message }}</p>
-					</div>
-				</template>
-			</UTable>
-		</div>
-		<template #footer>
-			<div class="w-full flex flex-row justify-end gap-4">
-				<UPagination v-model="page" :page-count="pageCount" :total="employers.length" size="md"/>
-			</div>
-		</template>
-
-	</UCard>
-
+		</UCard>
+	</div>
 
 </template>
 
@@ -90,7 +105,10 @@ import {last_time} from "~/helpers/last_time";
 
 definePageMeta({
 	middleware: 'role',
-	role: ['ADMIN', 'SUPERUSER']
+	roles: ['ADMIN', 'SUPERUSER']
+})
+useHead({
+	title: 'Empleadores'
 })
 
 const route = useRoute()
@@ -201,24 +219,25 @@ const options = (row: any) => [
 	]
 ]
 
-const rows: ComputedRef<TableRow[]> = computed(() => {
-	let results = [];
+const rows = computed(() => {
+	let results = employers.value;
 
-	if (!q.value) {
-		results = employers.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
-	}
-
-	if (q.value) results = employers.value.filter((e: any) => {
-		return Object.values(e).slice((page.value - 1) * pageCount, (page.value) * pageCount).some((value) => {
-			return String(value).toLowerCase().includes(q.value.toLowerCase())
+	if (q.value) {
+		results = results.filter((e: any) => {
+			return Object.values(e).some((value) => {
+				return String(value).toLowerCase().includes(q.value.toLowerCase())
+			})
 		})
-	})
+	}
 
 	if (search_by_status.value) {
 		results = results.filter((e: any) => e.status.label.includes(search_by_status.value))
 	}
 
-	return results
+	return {
+		results: results.slice((page.value - 1) * pageCount, page.value * pageCount),
+		total: results.length
+	}
 })
 
 onMounted(() => {

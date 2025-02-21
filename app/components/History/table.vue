@@ -50,7 +50,7 @@
 			<template #empty-state>
 				<div
 					class="flex flex-col items-center justify-center py-6 gap-3"
-					v-if="user_role === 'EMPLOYER'"
+					v-if="user_role as any === 'EMPLOYER'"
 				>
 					<span class="italic text-sm">No has realizado ningún pago anteriormente</span>
 					<NuxtLink to="/payment">
@@ -74,7 +74,7 @@
 						width: 'w-56'
 					}"
 					v-if="(['SUPERUSER', 'ADMIN'].includes(user_role)) ||
-					((user_role === 'EMPLOYER') && (row.method.id == 1 ))"
+					((user_role as any === 'EMPLOYER') && (row.method.id == 1 ))"
 				>
 					<UButton
 						color="gray"
@@ -85,7 +85,11 @@
 				<div v-else/>
 			</template>
 		</UTable>
-		<UPagination v-model="page" :page-count="pageCount" :total="elements.length"/>
+		<template #footer>
+			<div class="w-full flex flex-row justify-end gap-4">
+				<UPagination v-model="page" :page-count="pageCount" :total="rows.length" size="md" v-if="rows.length"/>
+			</div>
+		</template>
 	</UCard>
 
 </template>
@@ -96,8 +100,7 @@ import type {TableColumn} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {TransactionStatusEnum, TransactionTypeEnum} from "~/enums";
 import {format_date} from "~/helpers";
-import {card} from "#ui/ui.config";
-import ModalMessage from "~/components/Admin/ModalMessage.vue";
+
 
 const props = withDefaults(defineProps<{
 	subscriptions: SubscriptionInterface[],

@@ -139,7 +139,10 @@ import {RolesEnum} from "~/enums/server/roles.enum";
 
 definePageMeta({
 	middleware: 'role',
-	role: ['ADMIN', 'SUPERUSER']
+	roles: ['ADMIN', 'SUPERUSER']
+})
+useHead({
+	title: 'Usuarios'
 })
 
 const {user_role} = useUserStore()
