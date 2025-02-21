@@ -13,6 +13,10 @@ export default defineNuxtPlugin(async () => {
 	
 	
 	const {data, error} = await useAsyncQuery(getUserByToken, {server: false});
+	if (error.value?.message && error.value.message == 'El usuario está inactivo, hable con un administrador') {
+		alert(error.value);
+		await userStore.logout_user();
+	}
 	
 	if (data && !error.value)
 		userStore.set_user((data.value as any).getUserByToken);

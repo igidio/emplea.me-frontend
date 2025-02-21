@@ -47,6 +47,11 @@ const options = [
 		icon: 'ri:dashboard-horizontal-line'
 	},
 	{
+		label: 'Usuarios',
+		to: '/admin/users',
+		icon: 'ri:user-3-line'
+	},
+	{
 		label: 'Empleadores',
 		to: '/admin/employers',
 		icon: 'ri:group-2-line'
@@ -70,11 +75,6 @@ const options = [
 		label: 'Aplicantes',
 		to: '/',
 		icon: 'ri:briefcase-4-line'
-	},
-	{
-		label: 'Misceláneo',
-		to: '/',
-		icon: 'ri:box-3-line'
 	},
 ]
 </script>

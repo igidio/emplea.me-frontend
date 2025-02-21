@@ -23,5 +23,35 @@ export default {
         mutation Mutation($verify: VerifyTokenInput!, $password: String!) {
             userRecoveryAccount(verify: $verify, password: $password)
         }
+    `,
+    find_all: gql`
+        query UserFindAll {
+            userFindAll {
+                id
+                image
+                username
+                contact {
+                    first_name
+                    last_name
+                    id
+                    phone
+                    gender
+                    date_of_birth
+                }
+                is_active
+                email
+                role
+                google_id
+                facebook_id
+                has_activated
+                created_at
+                modified_at
+            }
+        }
+    `,
+    toggle_active: gql`
+        mutation UserToggleActive($messageInput: MessageInput!, $userToggleActiveId: Int!) {
+            userToggleActive(messageInput: $messageInput, id: $userToggleActiveId)
+        }
     `
 }

@@ -88,6 +88,11 @@ import type {TableColumn, TableRow} from "#ui/types";
 import {es_date} from "~/helpers/es_date";
 import {last_time} from "~/helpers/last_time";
 
+definePageMeta({
+	middleware: 'role',
+	role: ['ADMIN', 'SUPERUSER']
+})
+
 const route = useRoute()
 const q = ref('')
 
@@ -168,20 +173,15 @@ const pageCount = 8
 
 const options = (row: any) => [
 	[
-		{
+		...((!row.is_verified) ? [{
 			label: 'Verificar',
 			icon: 'ri:checkbox-circle-line',
 			click: () => set_open_modal_verify(row.id, row.name)
-		},
-		// ...((!row.is_verified) ? [{
-		// 	label: 'Verificar',
-		// 	icon: 'ri:checkbox-circle-line',
-		// 	click: () => set_open_modal_verify(row.id, row.name)
-		// },] : [{
-		// 	label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
-		// 	icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
-		// 	click: () => set_open_modal_active(row.id, row.name, row.is_active)
-		// }]),
+		},] : [{
+			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
+			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
+			click: () => set_open_modal_active(row.id, row.name, row.is_active)
+		}]),
 		{
 			label: 'Editar',
 			icon: 'ri:edit-line',

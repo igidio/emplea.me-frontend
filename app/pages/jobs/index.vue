@@ -34,7 +34,6 @@
 					@click="isOpen = true"
 				/>
 			</div>
-			<!-- END: Only for mobile viewports -->
 
 			<div class="flex flex-col desktop:flex-row gap-4">
 				<div class="flex flex-col w-[100%] desktop:w-[75%] gap-4">

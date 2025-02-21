@@ -10,10 +10,15 @@ export default defineNuxtRouteMiddleware((to) => {
 	if (!token.value) return
 	const {user} = toRefs(useUserStore())
 
+	if (user.value && !user.value.is_active &&
+		!["/unable"].includes(to.path.toString())) {
+		return navigateTo("/unable");
+	}
+	
 	if (
 		user.value &&
 		!user.value.has_activated &&
-		!["/confirmation", "/confirm"].includes(to.path.toString())
+		!["/confirmation", "/confirm", "profile"].includes(to.path.toString())
 	) {
 		return navigateTo("/confirmation");
 	}

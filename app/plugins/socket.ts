@@ -2,6 +2,7 @@ import {io} from 'socket.io-client'
 
 export default defineNuxtPlugin(() => {
 	const {user} = storeToRefs(useUserStore())
+	const { notifications } = storeToRefs(useNotificationStore())
 	
 	let autoConnect = false
 	if (user.value.id) autoConnect = true
@@ -15,9 +16,11 @@ export default defineNuxtPlugin(() => {
 		})
 		
 			socket.on('update', (data) => {
-				console.log(data);
-				//notifications.push(data);
-				useToast().add({title: data.message});
+				notifications.value.unshift(data);
+				useToast().add({title: data.title, description: data.message});
+				if (data.goto === '/') {
+					if (import.meta.client) window.location.replace('/');
+				}
 			});
 			
 		if (['ADMIN', 'SUPERUSER'].includes(user.value.role)) {

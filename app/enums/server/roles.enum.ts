@@ -1,11 +1,11 @@
 export enum ClientRolesEnum {
-	SEEKER = "SEEKER",
-	EMPLOYER = "EMPLOYER",
+	SEEKER = "Aplicante",
+	EMPLOYER = "Empleador",
 }
 
 export enum AdminRolesEnum {
-	ADMIN = "ADMIN",
-	SUPERUSER = "SUPERSUSER",
+	ADMIN = "Administrador",
+	SUPERUSER = "Superusuario",
 }
 
 export const RolesEnum = {
