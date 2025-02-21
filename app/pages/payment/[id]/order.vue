@@ -6,7 +6,7 @@
       to: '/'
 		}, {
 			label: 'Sé un premium',
-      to: '/profile'
+      to: '/payment'
 		},{
 			label: plan.name,
 			to: `/payment/${plan.id}`
@@ -175,7 +175,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-	middleware: ["order"]
+	middleware: ["order", "role"],
+	roles: ["EMPLOYER"]
 })
 
 import type {employer_info_interface, PlanInterface, SubscriptionInterface} from "~/interfaces";
@@ -256,4 +257,8 @@ const submit_form = async () => {
 		console.log(error)
 	});
 }
+
+useHead({
+	title: 'Pagar ' + plan.name
+})
 </script>

@@ -5,7 +5,7 @@
       to: '/'
 		}, {
 			label: 'Sé un premium',
-      to: '/profile'
+      to: '/payment'
 		}]"/>
 
 	<div class="flex flex-col items-center gap-6">
@@ -32,9 +32,10 @@ definePageMeta({
 	middleware: 'role',
 	roles: ['EMPLOYER']
 })
+useHead({
+	title: 'Sé un premium'
+})
 
 const { plans } = usePostStore()
-
-
 const current = ref(0)
 </script>

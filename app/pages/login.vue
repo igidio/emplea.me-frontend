@@ -80,7 +80,9 @@ import * as yup from "yup";
 import {loginQuery, subscriptionUserDetails} from "~/queries";
 import type {employer_info_interface} from "~/interfaces";
 
-const toast = useToast();
+useHead({
+	title: "Iniciar sesión",
+});
 
 const {set_token, set_user, set_employer_info} = useUserStore();
 
@@ -105,6 +107,7 @@ const {result: result_subscription, refetch} = useQuery<{
 }>(subscriptionUserDetails, {}, {prefetch: false})
 
 onDone(async (result) => {
+	useRouter().push('/redirect')
 	set_token(result.data.login.token);
 	set_user(result.data.login.user);
 	if (result.data.login.user.role === "EMPLOYER") {

@@ -13,10 +13,11 @@
 		</div>
 
 		<NuxtLink
-			:to="{ path: `payment/${id-1}` }"
+			:to="`/payment/${id-1}`"
 			v-if="show_select_button"
 		>
 			<UButton
+				v-if="!current"
 				color="black"
 				class="w-fit self-center"
 				:label="current ? 'Activo' : 'Seleccionar'"

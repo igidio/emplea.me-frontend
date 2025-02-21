@@ -5,5 +5,6 @@ export interface employer_info_interface {
 	starts_at: Date,
 	featured_remaining: number,
 	posts_remaining: number,
-	plan: PlanInterface
+	plan: PlanInterface,
+	is_valid: boolean,
 }

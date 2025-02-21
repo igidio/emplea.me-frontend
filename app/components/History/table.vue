@@ -74,7 +74,7 @@
 						width: 'w-56'
 					}"
 					v-if="(['SUPERUSER', 'ADMIN'].includes(user_role)) ||
-					((user_role as any === 'EMPLOYER') && (row.method.id == 1 ))"
+					((user_role as any === 'EMPLOYER') && (row.method.id == 1 )) && options(row).flat().length > 0"
 				>
 					<UButton
 						color="gray"

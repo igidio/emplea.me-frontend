@@ -26,7 +26,7 @@
 			</div>
 			<div class="flex flex-col gap-4 w-full tablet:w-96 justify-center">
 				<span class="font-semibold">Selecciona un método de pago</span>
-				<UButton color="primary" size="lg" label="Pagar con tarjeta" :to="`${useRoute().params.id}/order`"/>
+				<UButton color="primary" size="lg" label="Pagar con tarjeta" :to="`/payment/${useRoute().params.id}/order`"/>
 				<UButton
 					color="primary"
 					size="lg"
@@ -49,13 +49,15 @@
 
 <script setup lang="ts">
 definePageMeta({
-	middleware: ["order"]
+	middleware: ["order", "role"],
+	roles: ["EMPLOYER"]
 })
-
 const {plans} = usePostStore()
-
+const current_plan = ref(Number(useRoute().params.id) > 0 && plans[Number(useRoute().params.id!)])
 const modal_qr_is_open = ref(false)
 const modal_ftf_is_open = ref(false)
 
-const current_plan = ref(Number(useRoute().params.id) > 0 && plans[Number(useRoute().params.id!)])
+useHead({
+	title: current_plan.value ? current_plan.value?.name : 'Redirigiendo...'
+})
 </script>
