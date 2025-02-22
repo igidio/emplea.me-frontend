@@ -18,5 +18,21 @@ export default {
         mutation ConfirmationJoin($email: String!) {
             confirmationJoin(email: $email)
         }
+		`,
+		'get_all_admin_invitations': gql`
+        query ConfirmationGetAllAdminInvitations {
+            confirmationGetAllAdminInvitations {
+                id
+                type
+                was_read
+                created_at
+                modified_at
+            }
+        }
+		`,
+		'read': gql`
+        mutation ConfirmationReadOne($confirmationReadOneId: Float!) {
+            confirmationReadOne(id: $confirmationReadOneId)
+        }
 		`
 }

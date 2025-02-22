@@ -4,10 +4,10 @@
 		v-if="user_role as any === 'SUPERUSER'"
 	/>
 
-<!--	<AdminModalSendedMails-->
-<!--		v-model:is_open="modal_sended_mails"-->
-<!--		v-if="user_role as any === 'SUPERUSER'"-->
-<!--	/>-->
+	<AdminModalSendedMails
+		v-model:is_open="modal_sended_mails"
+		v-if="user_role as any === 'SUPERUSER'"
+	/>
 
 	<AdminModalMessage
 		v-model:is_open="modal_data.is_open"
@@ -44,15 +44,15 @@
 				icon="ri:mail-ai-line"
 				@click="modal_join_by_mail = true"
 				block
-				class="col-span-12"
+				class="col-span-11"
 			/>
-<!--			<UButton-->
-<!--				icon="ri:file-list-3-line"-->
-<!--				color="gray"-->
-<!--				size="lg"-->
-<!--				class="w-full"-->
-<!--				@click="modal_sended_mails = true"-->
-<!--			/>-->
+			<UButton
+				icon="ri:file-list-3-line"
+				color="gray"
+				size="lg"
+				class="w-full"
+				@click="modal_sended_mails = true"
+			/>
 		</div>
 		<UCard>
 			<template #header>Usuarios</template>
