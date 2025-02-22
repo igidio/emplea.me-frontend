@@ -74,15 +74,15 @@ export const useUserStore = defineStore("user", () => {
 		let profile = {
 			label: "Ver perfil",
 			shortcuts: ["V"],
-			click: () => {
-				router.push("/profile");
+			click: async () => {
+				await router.push("/profile");
 			},
 		}
 		
 		let payment = {
 			label: "Tus compras",
 			shortcuts: ["P"],
-			click: () => router.push("/history"),
+			click: async () => await router.push("/history"),
 		};
 		
 		let logout = {
@@ -107,7 +107,6 @@ export const useUserStore = defineStore("user", () => {
 		};
 		!is_premium.value && cases.EMPLOYER.push(premium_option);
 		
-		console.log(cases[user.value.role]);
 		return cases[user.value.role];
 	});
 	

@@ -1,3 +1,3 @@
 export default  defineNuxtRouteMiddleware((to, from) => {
-	console.log('employer middleware')
+	//console.log('employer middleware')
 })

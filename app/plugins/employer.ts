@@ -6,7 +6,5 @@ export default defineNuxtPlugin(async () => {
 	if (user_role === undefined || user_role as any != 'EMPLOYER') return
 
 	const {data} = await useAsyncQuery<{ "subscriptionUserDetails": employer_info_interface }>(subscriptionUserDetails)
-	
-	console.log(data.value!.subscriptionUserDetails)
 	set_employer_info(data.value!.subscriptionUserDetails)
 })

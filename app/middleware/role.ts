@@ -4,9 +4,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	const {roles} = to.meta;
 	const userStore = useUserStore();
 	
-	console.log(userStore.user_role)
-	console.log(roles)
-	
 	if (!userStore.user_role) {
 		useToast().add({title: "Debes iniciar sesión para acceder a esta página"});
 		return navigateTo('/')
