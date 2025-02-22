@@ -5,6 +5,7 @@ export default gql`
             featured_remaining
             starts_at
             posts_remaining
+            is_valid
             plan {
                 active
                 id

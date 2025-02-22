@@ -172,9 +172,7 @@ import {format_name} from "~/helpers";
 import {clientSignupQuery} from "~/queries";
 import {external_form_schema} from "~/schemas";
 
-const toast = useToast();
 const userStore = useUserStore();
-
 const {change_selection, clear_state, state} =
 	useSignupStore();
 const {past_date, selection} = storeToRefs(useSignupStore());

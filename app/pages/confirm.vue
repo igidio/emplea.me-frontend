@@ -19,6 +19,13 @@
 import {useRoute} from "vue-router";
 import {gqlConfirmation} from "~/queries";
 
+definePageMeta({
+	middleware: ['verify']
+})
+useHead({
+	title: "Confirmación de cuenta"
+})
+
 const route = useRoute()
 const is_filled = ref(false)
 const { user } = storeToRefs(useUserStore())

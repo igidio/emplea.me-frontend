@@ -1,4 +1,9 @@
 <template>
+	<AdminModalJoinByMail
+		v-model:is_open="modal_join_by_mail"
+		v-if="user_role as any === 'SUPERUSER'"
+	/>
+
 	<AdminModalMessage
 		v-model:is_open="modal_data.is_open"
 		:labels="{
@@ -27,7 +32,14 @@
 		},
 		]"/>
 
-		<!--		TODO: Agregar loading -->
+		<UButton
+			label="Invitar por correo para administrador"
+			v-if="user_role as any === 'SUPERUSER'"
+			size="lg"
+			icon="ri:mail-ai-line"
+			@click="modal_join_by_mail = true"
+		/>
+
 		<UCard>
 			<template #header>Usuarios</template>
 			<div class="flex flex-col gap-4">
@@ -145,8 +157,8 @@ useHead({
 	title: 'Usuarios'
 })
 
+const modal_join_by_mail = ref(false)
 const {user_role} = useUserStore()
-
 const {load, result, loading, refetch} = useLazyQuery<{ userFindAll: UserInterface[] }>(gqlUser.find_all)
 
 onMounted(() => {

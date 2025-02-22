@@ -24,11 +24,9 @@ export const useUserStore = defineStore("user", () => {
 	const router = useRouter();
 	const employer_info: Ref<employer_info_interface> = ref({} as employer_info_interface)
 	const is_premium = computed(() => (employer_info.value.plan && employer_info.value.plan.id != 1 && employer_info.value.is_valid) || false);
-	//const is_premium = computed(() => false);
-	
+
 	const set_employer_info = (info: employer_info_interface) => {
 		employer_info.value = info
-		
 	}
 	
 	const get_token = () => {

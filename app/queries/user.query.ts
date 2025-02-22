@@ -53,5 +53,15 @@ export default {
         mutation UserToggleActive($messageInput: MessageInput!, $userToggleActiveId: Int!) {
             userToggleActive(messageInput: $messageInput, id: $userToggleActiveId)
         }
+    `,
+    admin_register: gql`
+        mutation AdminRegister($verify: VerifyTokenInput!, $createUser: CreateUserInput!) {
+            adminRegister(verify: $verify, createUser: $createUser) {
+                email
+                role
+                token
+                username
+            }
+        }
     `
 }

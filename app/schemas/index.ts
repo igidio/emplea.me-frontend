@@ -10,3 +10,4 @@ export { employer_schema } from "./employer.schema";
 export { post_schema } from "./post.schema";
 export { message_schema } from "./message.schema";
 export {external_form_schema} from "./external_form.schema";
+export {internal_form_schema} from "./internal_form.schema";

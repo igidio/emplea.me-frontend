@@ -1,5 +1,14 @@
 <template>
 	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Tus compras e historial de pagos',
+      to: '/history'
+		}]"/>
+
 		<div class="w-80 self-end">
 			<HistoryCurrentPlan/>
 		</div>
@@ -24,7 +33,7 @@ useHead({
 })
 
 const subscriptions = ref<SubscriptionInterface[]>([])
-const { is_premium } = useUserStore()
+const {is_premium} = useUserStore()
 
 const {result, refetch, loading} = useQuery<{ "subscriptionMyHistory": SubscriptionInterface[] }>(subscriptionMyHistory)
 

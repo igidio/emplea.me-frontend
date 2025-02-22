@@ -1,14 +1,7 @@
 <template>
 	<UNotifications/>
-	<div class="flex flex-col gap-2 items-center">
-		<h3>Ingresa tus datos</h3>
-		<h6>
-			{{ signupData[selection!]?.message }}
-		</h6>
-		<UButton color="white" @click="change_selection">Cambiar</UButton>
-		<div class="flex flex-col tablet:flex-row gap-4 my-4">
-			<AuthExternal/>
-		</div>
+	<div class="flex flex-col gap-2 items-center mb-6">
+		<h6>Te vas a registrar como administrador</h6>
 	</div>
 
 	<UForm
@@ -181,15 +174,23 @@ import "~/assets/css/vue-datepicker.css";
 
 import signupData from "~/data/signup.data";
 import {create_error_message, format_date, format_name} from "~/helpers";
-import {clientSignupQuery} from "~/queries";
+import {clientSignupQuery, gqlUser} from "~/queries";
 import {internal_form_schema, user_schema} from "~/schemas";
 import {useSignupStore} from "~/stores/signup.pinia";
 
-const userStore = useUserStore();
+definePageMeta({
+	middleware: ['verify']
+})
 
+useHead({
+	title: "Registrarse como administrador"
+})
+
+const { set_token } = useUserStore();
+const route = useRoute()
 const toast = useToast();
 
-const {past_date, state, change_selection, clear_state} = useSignupStore();
+const {past_date, state, clear_state} = useSignupStore();
 const { selection } = storeToRefs(useSignupStore());
 
 const {
@@ -197,34 +198,34 @@ const {
 	error,
 	loading,
 	onDone,
-} = useMutation(clientSignupQuery);
+} = useMutation<{ adminRegister: any }>(gqlUser.admin_register);
 
 const format_error_message_computed = create_error_message(error);
 
 const on_submit = async () => {
 	await signup({
-		createUser: {
-			email: state.email!.trim(),
-			username: state.username!.trim(),
-			password: state.password!.trim(),
-			contact: {
-				phone: +state.phone!,
-				first_name: format_name(state.first_name!.trim()),
-				last_name: format_name(state.last_name!.trim()),
-				gender: state.gender,
-				date_of_birth: new Date(state.date_of_birth!),
+		"createUser": {
+			"contact": {
+				"date_of_birth": new Date(state.date_of_birth!),
+				"first_name": format_name(state.first_name!.trim()),
+				"gender": state.gender,
+				"last_name": format_name(state.last_name!.trim()),
+				"phone": +state.phone!,
 			},
+			"email": state.email!.trim(),
+			"password": state.password!.trim(),
+			"username": state.username!.trim(),
 		},
-		clientRole: {
-			role: signupData[selection.value!]?.type,
-		},
-	});
+		"verify": {
+			"identifier": route.query.identifier!.toString(),
+			"token": route.query.token!.toString(),
+		}
+	})
 };
 
 onDone((result) => {
-	userStore.set_token(result.data.clientSignup.token);
-	userStore.set_user(result.data.clientSignup.user);
 	clear_state();
+	set_token(result.data?.adminRegister.token);
 	useRouter().push("/redirect");
 	toast.add({title: "Te registraste correctamente."});
 	window.location.replace('/')

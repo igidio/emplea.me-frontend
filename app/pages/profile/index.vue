@@ -30,6 +30,9 @@
 definePageMeta({
 	middleware: 'role',
 })
+useHead({
+	title: 'Ver perfil',
+})
 
 const user = useUserStore()
 const {user_role} = user

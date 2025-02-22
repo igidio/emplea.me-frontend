@@ -49,23 +49,18 @@ import {user_schema} from "~/schemas";
 import * as yup from "yup";
 import {confirmationRecoveryAccount, gqlConfirmation, gqlUser} from "~/queries";
 
+definePageMeta({
+	middleware: ['verify']
+})
+useHead({
+	title: "Recuperar contraseña"
+})
+
 const route = useRoute()
 const router = useRouter()
 const queries = {
 	token: route.query.token,
 	identifier: route.query.identifier,
-}
-
-const { error: error_verify } = await useAsyncQuery<{ confirmationVerifyToken: Boolean }>(gqlConfirmation.verify, {
-	"verify": {
-		"identifier": queries.identifier,
-		"token": queries.token
-	}
-})
-
-if (error_verify.value) {
-	router.replace('/');
-	useToast().add({ title: error_verify.value?.message })
 }
 
 const schema = yup.object({

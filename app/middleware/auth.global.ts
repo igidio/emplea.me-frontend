@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware((to) => {
 	if (
 		user.value &&
 		!user.value.has_activated &&
-		!["/confirmation", "/confirm", "profile"].includes(to.path.toString())
+		!["/confirmation", "/confirm", "/profile"].includes(to.path.toString())
 	) {
 		return navigateTo("/confirmation");
 	}
