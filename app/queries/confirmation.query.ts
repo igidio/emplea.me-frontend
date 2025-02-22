@@ -14,4 +14,9 @@ export default {
             confirmationVerifyToken(verify: $verify)
         }
 		`,
+		'join': gql`
+        mutation ConfirmationJoin($email: String!) {
+            confirmationJoin(email: $email)
+        }
+		`
 }

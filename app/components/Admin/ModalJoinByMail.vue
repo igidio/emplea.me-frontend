@@ -18,19 +18,22 @@
 						<UInput
 							color="gray"
 							placeholder="Correo electrónico"
+							v-model="state.email"
 						/>
 					</UFormGroup>
+				<span class="error text-end" v-if="error">{{error.message}}</span>
 				</div>
 				<template #footer>
 					<div class="flex flex-rowb gap-2 w-full justify-end">
 						<UButton
 							color="black"
-							@click="is_open = false"
+							@click="() => {is_open = false; state.email = ''}"
 						>
 							Cancelar
 						</UButton>
 						<UButton
-							@click="is_open = false"
+							type="submit"
+							:disabled="loading"
 						>
 							Enviar
 						</UButton>
@@ -44,6 +47,7 @@
 <script setup lang="ts">
 import type {ModelRef} from "vue";
 import * as yup from "yup";
+import {gqlConfirmation} from "~/queries";
 
 const is_open: ModelRef<boolean> = defineModel('is_open', {required: true, type: Boolean});
 
@@ -63,7 +67,21 @@ const state = reactive({
 	email: ""
 })
 
-const confirm = async () => {
+const {mutate, loading, error} = useMutation(gqlConfirmation.join)
 
+const confirm = async () => {
+	await mutate({
+		"email": state.email
+	}).then(() => {
+		is_open.value = false;
+		useToast().add({
+			title: 'Invitación enviada',
+			description: `Se ha enviado una invitación al correo electrónico indicado ${ state.email }`,
+		})
+		state.email = '';
+	})
+	.catch((e) => console.log(e)).then((e) => {
+		console.log(e)
+	})
 }
 </script>
