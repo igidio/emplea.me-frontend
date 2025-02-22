@@ -214,7 +214,8 @@ const options = (row: any) => [
 		},
 		{
 			label: 'Ver personal',
-			icon: 'ri:parent-line'
+			icon: 'ri:parent-line',
+			click: () => useRouter().push(`/admin/attendants?id=${row.id}&q=${row.name}`)
 		}
 	]
 ]

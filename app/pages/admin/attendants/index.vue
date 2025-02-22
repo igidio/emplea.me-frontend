@@ -12,7 +12,7 @@
       to: `/admin/attendants`
 		}]"/>
 		<UCard>
-			<template #header>Asistentes</template>
+			<template #header>Asistentes{{ router.currentRoute.value.query.q && `: ${router.currentRoute.value.query.q}` }}</template>
 			<div class="flex flex-col gap-4">
 
 				<div class="flex flex-row gap-4">
@@ -61,7 +61,7 @@ import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 import {employerUserFindByEmployer, gqlEmployer, gqlEmployerUser} from "~/queries";
 
 const attendants = ref<EmployerUserInterface[]>([])
-const route = useRoute()
+const router = useRouter()
 
 definePageMeta({
 	middleware: 'role',
@@ -97,6 +97,9 @@ const reload = async (id: number) => {
 
 onMounted(async () => {
 	await refetch_list_by_query()
+	if (router.currentRoute.value.query.id) {
+		await reload(+router.currentRoute.value.query.id)
+	}
 })
 
 const search_employer = async (q: string) => {
@@ -108,6 +111,7 @@ const search_employer = async (q: string) => {
 
 watch (current_employer, async (value) => {
 	if (value) await reload(+value.id)
+	await useRouter().push({ query: { id: (value!.id).toString() } })
 })
 
 const { mutate: mutate_toggle_active } = useMutation(gqlEmployerUser.toggle_active)
