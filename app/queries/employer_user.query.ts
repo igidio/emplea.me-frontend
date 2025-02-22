@@ -8,5 +8,15 @@ export default {
       mutation EmployerToggleLevel($employerToggleLevelId: Int!, $idEmployer: Int!) {
           employerToggleLevel(id: $employerToggleLevelId, id_employer: $idEmployer)
       }
+	`,
+	accept_invitation: gql`
+      mutation EmployerUserAcceptInvitation($verify: VerifyTokenInput!) {
+          employerUserAcceptInvitation(verify: $verify)
+      }
+	`,
+	delete_unconfirmed: gql`
+      mutation EmployerUserDeleteUnconfirmed($employerUserDeleteUnconfirmedId: Int!, $idEmployer: Int!) {
+          employerUserDeleteUnconfirmed(id: $employerUserDeleteUnconfirmedId, id_employer: $idEmployer)
+      }
 	`
 }

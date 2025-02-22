@@ -8,6 +8,7 @@
 			label: 'Notificaciones',
       to: `/notifications`
 		}]"/>
+		<h3>Notificaciones</h3>
 
 		<NotificationsListElement
 			:message="notification.message"

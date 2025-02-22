@@ -101,6 +101,17 @@ const toggle_level = async ( id:number ) => {
 	}).catch((e) => alert(e.message))
 }
 
+const { mutate: mutate_delete_unconfirmed } = useMutation(gqlEmployerUser.delete_unconfirmed)
+const delete_unconfirmed = async ( id:number ) => {
+	await mutate_delete_unconfirmed({
+		"employerUserDeleteUnconfirmedId": +id,
+		"idEmployer": +route.params.id!
+	}).then(async () => {
+		await reload()
+		useToast().add({title: 'Asistente sin confirmar eliminado correctamente.'})
+	}).catch((e) => alert(e.message))
+}
+
 const options = (row: any) => [
 	[
 		...((row.has_confirm && !row.is_first_user) ? [{
@@ -117,11 +128,8 @@ const options = (row: any) => [
 		...((!row.has_confirm) ? [{
 				label: 'Eliminar',
 				icon: 'ri:delete-bin-line',
-				click: () => {
-
-				}
-			}] : []
-		)
+				click: async () => await delete_unconfirmed(row.id)
+			}] : [])
 	]
 ]
 

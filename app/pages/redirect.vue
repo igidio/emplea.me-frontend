@@ -13,6 +13,7 @@ const where = {
 	"confirm": "confirm",
 	"forgot-password": "recovery",
 	"join": "join",
+	"attendant": "attendant",
 }
 
 if (!(route.query.token && route.query.identifier && route.query.next)) {

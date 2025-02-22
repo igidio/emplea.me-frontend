@@ -6,10 +6,8 @@
 			size="64"
 			:class="loading && 'animate-spin'"
 		/>
-		<h6>Confirmación de cuenta</h6>
-		<p v-if="user && user.has_activated">No hace falta realizar este cambio, redirigiendo...</p>
-
-		<p v-if="loading">Estamos confirmando tu cuenta, por favor espera...</p>
+		<h6>Confirmación como asistente</h6>
+		<p v-if="loading">Por favor espera mientras se completa la confirmación...</p>
 		<p v-else-if="!loading && is_filled">Tu cuenta ha sido confirmada, redirigiendo en unos segundos.</p>
 		<span v-if="error" class="error">{{ error.message }}</span>
 	</div>
@@ -17,30 +15,30 @@
 
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import {gqlConfirmation} from "~/queries";
+import {gqlConfirmation, gqlEmployerUser} from "~/queries";
 
 definePageMeta({
 	middleware: ['verify']
 })
 useHead({
-	title: "Confirmación de cuenta"
+	title: "Confirmación como asistente"
 })
 
 const route = useRoute()
 const is_filled = ref(false)
-const { user } = storeToRefs(useUserStore())
 
 interface queriesInterface {
 	token: string;
 	identifier: string;
 }
 
+
 const queries: Ref<queriesInterface> = ref({
 	token: route.query.token!.toString(),
 	identifier: route.query.identifier!.toString(),
 })
 
-const {mutate, loading, error} = useMutation(gqlConfirmation.confirm)
+const {mutate, loading, error} = useMutation(gqlEmployerUser.accept_invitation)
 
 const confirm = async () => {
 	await mutate({
@@ -53,12 +51,9 @@ const confirm = async () => {
 		setTimeout(() => window.location.replace('/'), 2000)
 	})
 		.catch((e) => console.log(e)).then((e) => {
-		console.log(e)
-	})
+			console.log(e)
+		})
 }
 
 onMounted(async () => await confirm())
-
-//if ( !user.value.has_activated ) await confirm()
-///else setTimeout(() => window.location.replace('/'), 2000)
 </script>

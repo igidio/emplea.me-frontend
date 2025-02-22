@@ -67,6 +67,7 @@ const submit = async () => {
 		confirmation_modal.is_open = true;
 		confirmation_modal.name = e?.data?.employerUserSendInvitation.contact.first_name + ' ' + e?.data?.employerUserSendInvitation.contact.last_name
 		await reload()
+		state.input = ''
 	}).catch((e) => console.log(e))
 }
 
