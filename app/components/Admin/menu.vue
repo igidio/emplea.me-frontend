@@ -54,7 +54,7 @@ const options = [
 	{
 		label: 'Empleadores',
 		to: '/admin/employers',
-		icon: 'ri:group-2-line'
+		icon: 'ri:briefcase-4-line'
 	},
 	{
 		label: 'Subscripciones',
@@ -63,7 +63,7 @@ const options = [
 	},
 	{
 		label: 'Planes',
-		to: '/',
+		to: '/admin/plans',
 		icon: 'ri:file-list-3-line'
 	},
 	{
@@ -72,9 +72,9 @@ const options = [
 		icon: 'ri:sticky-note-line'
 	},
 	{
-		label: 'Aplicantes',
-		to: '/',
-		icon: 'ri:briefcase-4-line'
+		label: 'Asistentes',
+		to: '/admin/attendants',
+		icon: 'ri:group-2-line'
 	},
 ]
 </script>

@@ -51,7 +51,6 @@ const props = defineProps<{
 	attendants: EmployerUserInterface[],
 	options: (row: any) => any[],
 	loading: boolean,
-	reload: () => Promise<void>
 }>()
 const { attendants } = toRefs(props)
 

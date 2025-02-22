@@ -20,7 +20,6 @@
 					:attendants="attendants"
 					:options="options"
 					:loading="loading"
-					:reload="reload"
 				/>
 				<AdminAddAttendant
 					v-if="active_length <= 4"

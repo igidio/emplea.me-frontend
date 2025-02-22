@@ -69,6 +69,7 @@ import subscriptionGql from "./subscription.query";
 import gqlConfirmation from "./confirmation.query";
 import gqlNotification from "./notification.query";
 import gqlEmployerUser from "./employer_user.query";
+import gqlEmployer from "./employer.query";
 
 export {
 	plansGet,
@@ -130,6 +131,7 @@ export {
 	employerFindAll,
 	employerVerify,
 	employerActivateOrDeactivate,
+	gqlEmployer,
 	// Subscription
 	subscriptionCreate,
 	subscriptionMyHistory,
