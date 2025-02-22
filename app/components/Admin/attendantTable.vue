@@ -29,9 +29,11 @@
 			/>
 		</template>
 		<template #options-data="{row}">
-			<UDropdown :items="options(row)" :ui="{
-						width: 'w-48'
-					}">
+			<UDropdown
+				:items="options(row)"
+				:ui="{width: 'w-56'}"
+				v-if="options(row).flat().length > 0"
+			>
 				<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
 			</UDropdown>
 		</template>
@@ -48,7 +50,8 @@ import {EmployerLevelEnum} from "~/enums";
 const props = defineProps<{
 	attendants: EmployerUserInterface[],
 	options: (row: any) => any[],
-	loading: boolean
+	loading: boolean,
+	reload: () => Promise<void>
 }>()
 const { attendants } = toRefs(props)
 
@@ -58,8 +61,6 @@ const columns: TableColumn[] = [
 	{label: 'Estado', key: 'status'},
 	{label: 'Opciones', key: 'options'},
 ]
-
-{{attendants.value}}
 
 const rows = computed(() => {
 	return (attendants.value && attendants.value.length > 0) ? attendants.value.map((e: EmployerUserInterface) => ({

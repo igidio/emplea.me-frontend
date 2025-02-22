@@ -20,6 +20,7 @@
 					:attendants="attendants"
 					:options="options"
 					:loading="loading"
+					:reload="reload"
 				/>
 				<AdminAddAttendant
 					v-if="active_length <= 4"
@@ -35,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import {employerFindOne, employerUserFindByEmployer} from "~/queries";
+import {employerFindOne, employerUserFindByEmployer, gqlEmployerUser} from "~/queries";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 definePageMeta({
@@ -54,7 +55,7 @@ const route = useRoute()
 
 const {result: result_employer, refetch: refetch_employer} = useQuery<{
 	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
-}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
+}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
 
 
 const {result, refetch, loading} = useQuery<{
@@ -78,15 +79,41 @@ if (!result_employer.value?.findOneEmployer.employer.is_verified) {
 	if (import.meta.client) useToast().add({title: 'No puedes editar un empleador no verificado.'})
 }
 
+const { mutate: mutate_toggle_active } = useMutation(gqlEmployerUser.toggle_active)
+const toggle_active = async ( id:number ) => {
+	await mutate_toggle_active({
+		"employerToggleActiveId": +id,
+		"idEmployer": +route.params.id!
+	}).then(async () => {
+		await reload()
+		useToast().add({title: 'Estado de asistente actualizado correctamente.'})
+	}).catch((e) => alert(e.message))
+}
+
+const { mutate: mutate_toggle_level } = useMutation(gqlEmployerUser.toggle_level)
+const toggle_level = async ( id:number ) => {
+	await mutate_toggle_level({
+		"employerToggleLevelId": +id,
+		"idEmployer": +route.params.id!
+	}).then(async () => {
+		await reload()
+		useToast().add({title: 'Nivel de asistente actualizado correctamente.'})
+	}).catch((e) => alert(e.message))
+}
+
 const options = (row: any) => [
 	[
-		...((row.has_confirm) ? [{
+		...((row.has_confirm && !row.is_first_user) ? [{
 			label: (row.is_active) ? 'Deshabilitar' : 'Volver a habilitar',
 			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
-			click: () => {
-				// TODO: Deshabilitar o habilitar asistente
-			}
+			click: async () => await toggle_active(row.id)
 		}] : []),
+		...((row.has_confirm && !row.is_first_user) ? [{
+			label: (row.level === 'ATTENDANT') ? 'Asignar como administrador' : 'Asignar como engargado',
+			icon: (row.is_active) ? 'ri:close-circle-line' : 'ri:arrow-up-circle-line',
+			click: async () => await toggle_level(row.id)
+		}] : []),
+
 		...((!row.has_confirm) ? [{
 				label: 'Eliminar',
 				icon: 'ri:delete-bin-line',
