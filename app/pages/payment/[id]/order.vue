@@ -163,7 +163,7 @@
 						<UIcon name="fa-brands:stripe" size="30px"></UIcon>
 					</div>
 					<div class="flex flex-col gap-1">
-						<NuxtLink class="hyper text-sm">Términos y privacidad</NuxtLink>
+						<NuxtLink class="hyper text-sm" to="/payment/terms_and_privacy">Términos y privacidad</NuxtLink>
 					</div>
 
 				</div>

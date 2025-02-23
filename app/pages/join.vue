@@ -156,7 +156,7 @@
 
 			<span class="font-semibold text-center">
 				Al registrarte estás aceptandos los
-				<NuxtLink class="hyper" to="/terms-of-service"
+				<NuxtLink class="hyper" to="/app/pages/additional"
 				>términos y condiciones.</NuxtLink
 				>
 			</span>
