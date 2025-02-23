@@ -12,36 +12,39 @@
       to: `/admin/attendants`
 		}]"/>
 		<UCard>
-			<template #header>Asistentes{{ router.currentRoute.value.query.q && `: ${router.currentRoute.value.query.q}` }}</template>
+			<template #header>Asistentes{{
+					router.currentRoute.value.query.q && `: ${router.currentRoute.value.query.q}`
+				}}
+			</template>
 			<div class="flex flex-col gap-4">
 
 				<div class="flex flex-row gap-4">
-				<USelectMenu
-					:searchable="search_employer"
-					searchable-placeholder="Buscar empleador"
-					:options="employers"
-					size="md"
-					color="gray"
-					option-attribute="name"
-					v-model="current_employer"
-					placeholder="Seleccione un empleador"
-				>
-					<template #leading>
-						<img
-							:src="(current_employer) ? current_employer.profile_image : '/images/empleame_employer_silhouette.png'"
-							alt="Foto de perfil"
-							class="w-5 h-5 border rounded-small"
+					<USelectMenu
+						:searchable="search_employer"
+						searchable-placeholder="Buscar empleador"
+						:options="employers"
+						size="md"
+						color="gray"
+						option-attribute="name"
+						v-model="current_employer"
+						placeholder="Seleccione un empleador"
+					>
+						<template #leading>
+							<img
+								:src="(current_employer) ? current_employer.profile_image : '/images/empleame_employer_silhouette.png'"
+								alt="Foto de perfil"
+								class="w-5 h-5 border rounded-small"
+							/>
+						</template>
+					</USelectMenu>
+					<div class="w-4">
+						<UIcon
+							name="ri:loader-5-line"
+							class="animate-spin text-gray-500"
+							size="32"
+							v-if="loading_list_by_query"
 						/>
-					</template>
-				</USelectMenu>
-				<div class="w-4">
-					<UIcon
-						name="ri:loader-5-line"
-						class="animate-spin text-gray-500"
-						size="32"
-						v-if="loading_list_by_query"
-					/>
-				</div>
+					</div>
 				</div>
 
 				<p>Recuerda que se puede disponer de hasta cuatro empleados en un negocio.</p>
@@ -109,13 +112,22 @@ const search_employer = async (q: string) => {
 	return employers.value
 }
 
-watch (current_employer, async (value) => {
-	if (value) await reload(+value.id)
-	await useRouter().push({ query: { id: (value!.id).toString() } })
+watch(current_employer, async (value) => {
+	console.log(value)
+	if (value) {
+		await reload(+value.id)
+	}
+	await useRouter().push({
+		query: {
+			id: (value!.id).toString(),
+			q: (value!.name).toString()
+		}
+	})
+
 })
 
-const { mutate: mutate_toggle_active } = useMutation(gqlEmployerUser.toggle_active)
-const toggle_active = async ( id:number ) => {
+const {mutate: mutate_toggle_active} = useMutation(gqlEmployerUser.toggle_active)
+const toggle_active = async (id: number) => {
 	await mutate_toggle_active({
 		"employerToggleActiveId": +id,
 		"idEmployer": +current_employer.value?.id!
@@ -125,8 +137,8 @@ const toggle_active = async ( id:number ) => {
 	}).catch((e) => alert(e.message))
 }
 
-const { mutate: mutate_toggle_level } = useMutation(gqlEmployerUser.toggle_level)
-const toggle_level = async ( id:number ) => {
+const {mutate: mutate_toggle_level} = useMutation(gqlEmployerUser.toggle_level)
+const toggle_level = async (id: number) => {
 	await mutate_toggle_level({
 		"employerToggleLevelId": +id,
 		"idEmployer": +current_employer.value?.id!
@@ -136,8 +148,8 @@ const toggle_level = async ( id:number ) => {
 	}).catch((e) => alert(e.message))
 }
 
-const { mutate: mutate_delete_unconfirmed } = useMutation(gqlEmployerUser.delete_unconfirmed)
-const delete_unconfirmed = async ( id:number ) => {
+const {mutate: mutate_delete_unconfirmed} = useMutation(gqlEmployerUser.delete_unconfirmed)
+const delete_unconfirmed = async (id: number) => {
 	await mutate_delete_unconfirmed({
 		"employerUserDeleteUnconfirmedId": +id,
 		"idEmployer": +current_employer.value?.id!

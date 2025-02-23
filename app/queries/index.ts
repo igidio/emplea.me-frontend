@@ -70,6 +70,7 @@ import gqlConfirmation from "./confirmation.query";
 import gqlNotification from "./notification.query";
 import gqlEmployerUser from "./employer_user.query";
 import gqlEmployer from "./employer.query";
+import gqlCommon from "./common.query";
 
 export {
 	plansGet,
@@ -146,4 +147,5 @@ export {
 	gqlConfirmation,
 	gqlNotification,
 	gqlEmployerUser,
+	gqlCommon,
 };
