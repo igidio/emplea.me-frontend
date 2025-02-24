@@ -3,6 +3,7 @@ export default (detailed_view: boolean = false ) => detailed_view ? gql`
         postFindAll {
             available
             description
+            has_disabled
             category {
                 icon
                 id
@@ -71,6 +72,7 @@ export default (detailed_view: boolean = false ) => detailed_view ? gql`
         postFindAll {
             available
             description
+            has_disabled
             category {
                 icon
                 id

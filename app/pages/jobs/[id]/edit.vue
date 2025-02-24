@@ -10,6 +10,9 @@
 		}, {
 			label: data?.post.post.name!,
       to: `/jobs/${data?.post.post.id}`
+		}, {
+			label: 'Actualizar publicación de trabajo',
+      to: `/jobs/${data?.post.post.id}/edit`
 		}
 		]"/>
 

@@ -32,9 +32,9 @@
 					variant="soft"
 				><UIcon :name="job.category.icon" class="mr-1"/>{{ job.category?.name }}</UBadge>
 				<UBadge
-					:color="job.is_available ? 'green' : 'red'"
+					:color="computed_status.color as BadgeColor"
 					variant="soft"
-				>{{ job.is_available ? 'Disponible' : 'No disponible' }}</UBadge>
+				>{{ computed_status.label }}</UBadge>
 
 			</span>
 							<h4 class="mb-2">{{ job.title }}</h4>
@@ -44,7 +44,7 @@
 								<UButton label="Editar" size="sm" class="w-full"/>
 							</NuxtLink>
 							<UButton color="gold" label="⭐ Destacar" size="sm" v-if="is_premium"/>
-							<UButton color="black" label="Deshabilitar" size="sm"/>
+							<UButton color="black" label="Deshabilitar" size="sm" @click="reload"/>
 						</div>
 					</div>
 
@@ -102,8 +102,7 @@
 					</div>
 				</UCard>
 
-				<!-- TODO: Crear tabla interacciones e introducir cada una de ellas-->
-				<UCard>
+				<UCard v-if="['SUPER', 'EMPLOYER', 'ATTENDANT'].includes(info?.type!)">
 					<template #header>
 						<div class="flex flex-row justify-between">
 							Interacciones
@@ -115,21 +114,21 @@
 							/>
 						</div>
 					</template>
-					<div class="flex flex-row items-center center-text" v-if="interactions === undefined">
+					<div class="flex flex-col items-center center-text" v-if="interactions === undefined">
 						<UButton
 							label="⭐ Cargar interacciones"
-							@click="is_premium ? load_interactions() : is_open_modal_premium = true"
+							@click="(is_premium || ['ADMIN', 'SUPERUSER'].includes((user_role))) ? load_interactions() : is_open_modal_premium = true"
 							:loading="loading"
 						/>
 						<span class="error" v-if="error">{{ error.message }}</span>
 					</div>
 					<div v-if="interactions" class="flex flex-col">
-							<UIcon
-								name="ri:loader-4-line"
-								size="24"
-								class="animate-spin self-center"
-								v-if="loading"
-							/>
+						<UIcon
+							name="ri:loader-4-line"
+							size="24"
+							class="animate-spin self-center"
+							v-if="loading"
+						/>
 						<div v-if=" interactions.length === 0">
 							<span class="italic">No se ha registrado ninguna interacción todavía.</span>
 						</div>
@@ -195,24 +194,21 @@ import {gqlPost, postFindOne} from "~/queries";
 import type {interactionInterface, PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
-import router from "#app/plugins/router";
 import {definePageMeta} from "#imports";
-
-useHead({
-	title: "Empleo",
-})
+import type {BadgeColor} from "#ui/types";
 
 definePageMeta({
 	keepalive: false
 })
 
 const route = useRoute();
+const router = useRouter();
 const is_hidden = ref(true);
 
 const userStore = useUserStore()
 const {is_premium, user_role, is_open_modal_premium} = storeToRefs(userStore);
 
-const {data, refresh, execute} = await useAsyncQuery<
+const {data} = await useAsyncQuery<
 	{
 		post: {
 			post: PostInterface,
@@ -226,6 +222,10 @@ const {data, refresh, execute} = await useAsyncQuery<
 >(postFindOne(true), {
 	"id": Number(route.params.id),
 	watch: [route.query]
+})
+
+useHead({
+	title: data.value?.post.post.name,
 })
 
 const post = data.value?.post.post
@@ -244,7 +244,9 @@ const job = reactive({
 	salary_type: SalaryEnum[post?.salary_type as keyof typeof SalaryEnum],
 	description: post?.description,
 	is_available: post?.available,
-	skills: post?.post_skill
+	skills: post?.post_skill,
+	is_active: post?.is_active,
+	has_disabled: post?.has_disabled,
 });
 
 const skillLevelIcon = {
@@ -284,12 +286,6 @@ const {refetch, result, load, loading, error} = useLazyQuery<{
 	prefetch: false
 })
 
-onMounted(async () => {
-	//console.log(Number(route.params.id) )
-
-	//await refetch({idPost:2 })?.then((r) => console.log(r))
-})
-
 const load_interactions = async () => {
 	await load()
 	if (result.value?.interactionLoadByPost) interactions.value = result.value?.interactionLoadByPost
@@ -305,4 +301,18 @@ const select_interaction = (interaction: interactionInterface) => {
 	selected_interaction.value = interaction
 	is_open_modal_interaction.value = true
 }
+
+onMounted(async () => {
+	if (post?.has_disabled && !['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) {
+		if (import.meta.client) useToast().add({title: 'Este empleo ha sido deshabilitado por el administrador, si cree que fue un error contáctese con soporte.'})
+		await router.push(`/employer/${post?.employer.id}`)
+	}
+})
+
+const computed_status = computed(() => {
+	return (job.is_available && job.is_active) ? {color: 'green', label: 'Disponible'} :
+		(!job.is_available && job.is_active) ? {color: 'orange', label: 'Ocupado'} :
+			(job.is_available && !job.is_active && job.has_disabled) ? {color: 'red', label: 'Deshabilitado por el administrador'} :
+				{color: 'red', label: 'Deshabilitado'};
+})
 </script>

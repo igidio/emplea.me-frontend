@@ -7,6 +7,7 @@ export default (show_employer_info:boolean = false) => {
                     name
                     description
                     available
+                    has_disabled
                     modality
                     featured {
                         id

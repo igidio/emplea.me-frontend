@@ -105,9 +105,12 @@
 					</div>
 				</template>
 				<template #options-data="{row}">
-					<UDropdown :items="options(row)" :ui="{
+					<UDropdown
+						:items="options(row)" :ui="{
 						width: 'w-48'
-					}" >
+					}"
+						v-if="!(user_role as any == 'EMPLOYER' && row.has_disabled)"
+					>
 						<UButton color="gray" variant="ghost" icon="ri:more-fill"/>
 					</UDropdown>
 				</template>
@@ -135,6 +138,7 @@ const props = defineProps<{
 	options: (row: any) => any[]
 }>()
 
+const { user_role } = useUserStore()
 const route = useRoute()
 const page = ref(1)
 const pageCount = 5
@@ -168,9 +172,11 @@ const posts: ComputedRef = computed(() => (props.posts && props.posts.length > 0
 		featured: e.featured,
 		salary: e.salary,
 		salary_type: e.salary_type,
+		has_disabled: e.has_disabled,
 		status: (e.available && e.is_active) ? {color: 'green', label: 'Disponible'} :
 			(!e.available && e.is_active) ? {color: 'orange', label: 'Ocupado'} :
-				{color: 'red', label: 'Deshabilitado'},
+			(e.available && !e.is_active && e.has_disabled) ? {color: 'red', label: 'Deshabilitado por el administrador'} :
+			{color: 'red', label: 'Deshabilitado'},
 	})) : []
 )
 

@@ -28,4 +28,5 @@ export interface PostInterface {
 	post_skill: postSkillInterface[],
 	created_at?: Date;
 	modified_at?: Date;
+	has_disabled: boolean;
 }

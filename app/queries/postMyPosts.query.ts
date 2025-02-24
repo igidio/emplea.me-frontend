@@ -3,6 +3,7 @@ export default gql`
         postMyPosts {
             available
             description
+            has_disabled
             category {
                 icon
                 id
