@@ -23,14 +23,13 @@
 				</NuxtLink>
 			</div>
 
-			<div class="grid grid-cols-2 tablet:flex-row w-full gap-4">
-<!--				<div class="flex flex-col w-full gap-4">-->
+			<div class="grid grid-cols-1 tablet:grid-cols-2 w-full gap-4">
 					<item
 						v-if="seeker.location"
 						icon="ri:map-pin-2-fill"
 						:label="`${seeker.location?.province} - ${seeker.location?.municipality} - ${seeker.location?.department}`"
 						label_bold="Lugar actual"
-						class="col-span-2"
+						class="tablet:col-span-2"
 					/>
 
 					<div

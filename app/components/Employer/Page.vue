@@ -16,7 +16,7 @@
 					variant="solid"
 					title="Atención"
 					v-if="!data.employer.is_verified"
-					:description="(user_role == 'EMPLOYER') ? 'Para comenzar a agregar publicaciones, debes tener el negocio verificado, un administrador se encargará de comprobar de que tu negocio sea real, si no es verificado en un plazo máximo de un día le sugerimos que escriba a soporte de EMPLEAMWE (info@empleame.com).' : 'Este negocio no ha sido verificado.'"
+					:description="(user_role as any == 'EMPLOYER') ? 'Para comenzar a agregar publicaciones, debes tener el negocio verificado, un administrador se encargará de comprobar de que tu negocio sea real, si no es verificado en un plazo máximo de un día le sugerimos que escriba a soporte de EMPLEAMWE (info@empleame.com).' : 'Este negocio no ha sido verificado.'"
 				/>
 				<EmployerPosts
 					:employer-info="{ image: data.employer.profile_image, name: data.employer.name, id: data.employer.id }"
@@ -31,9 +31,11 @@
 				<div v-if="can_modify" class="flex flex-col gap-4">
 					<span class="font-semibold">Menú de administrador</span>
 					<div class="flex flex-col gap-2">
-						<NuxtLink :to="`/employer/${data.employer.id}/attendants`">
-							<UButton class="w-full">Administrar asistentes</UButton>
-						</NuxtLink>
+							<UButton
+								class="w-full"
+								label="⭐ Administrar asistentes"
+								@click=" is_premium ? useRouter().push({ path: `/employer/${data.employer.id}/attendants`}) : is_open_modal_premium = true "
+							/>
 					</div>
 					<EmployerRoleInfo :role="data.employerUser.level"/>
 				</div>
@@ -107,6 +109,7 @@ interface Props {
 	}
 }
 
+const { is_open_modal_premium } = storeToRefs(useUserStore())
 const {is_premium, user_role} = useUserStore()
 
 const props = defineProps<Props>()

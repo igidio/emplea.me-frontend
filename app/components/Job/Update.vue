@@ -1,6 +1,5 @@
 <template>
 	<div class="flex flex-col gap-4">
-		<h4>Actualizar publicación de trabajo</h4>
 
 		<UForm class="flex flex-row w-full gap-4"
 		       :schema="schema"
@@ -9,6 +8,7 @@
 		>
 
 			<UCard class="grow">
+				<template #header>Actualizar publicación de trabajo</template>
 				<div class="grow flex flex-col gap-4">
 					<UFormGroup
 						label="Título"
@@ -137,10 +137,10 @@
 				<template #footer>
 					<div class="flex flex-row gap-4 justify-end h-fit">
 						<NuxtLink :to="props.cancel">
-						<UButton color="black" size="md"
-						         :disabled="props.loading"
-						>Cancelar
-						</UButton>
+							<UButton color="black" size="md"
+							         :disabled="props.loading"
+							>Cancelar
+							</UButton>
 						</NuxtLink>
 						<UButton size="md" type="submit" :disabled="props.loading">Guardar</UButton>
 					</div>
@@ -173,8 +173,7 @@ interface modelInterface {
 
 const state: ModelRef<modelInterface> = defineModel('state', {required: true})
 
-
-const { props } = defineProps<{
+const {props} = defineProps<{
 	props: {
 		id: number,
 		loading: boolean,

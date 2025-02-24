@@ -21,6 +21,7 @@ export const useUserStore = defineStore("user", () => {
 	const token: Ref<string> = ref("");
 	const initial_loading = ref(true);
 	const is_open_modal_login = ref(false);
+	const is_open_modal_premium = ref(false);
 	const router = useRouter();
 	const employer_info: Ref<employer_info_interface> = ref({} as employer_info_interface)
 	const is_premium = computed(() => (employer_info.value.plan && employer_info.value.plan.id != 1 && employer_info.value.is_valid) || false);
@@ -138,5 +139,6 @@ export const useUserStore = defineStore("user", () => {
 		is_premium,
 		employer_info,
 		set_employer_info,
+		is_open_modal_premium,
 	};
 });

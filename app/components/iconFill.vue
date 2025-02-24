@@ -1,9 +1,9 @@
 <template>
 	<div
-		class="bg-violet-600 aspect-[1/1] h-fit flex items-center justify-center p-[3px]"
+		class="bg-slate-100 aspect-[1/1] h-fit flex items-center justify-center p-[3px]"
 		:class="`${rounded} ${size_computed.parent}`"
 	>
-		<UIcon :name="name" class="bg-white z-0" :class="size_computed.child" />
+		<UIcon :name="name" class="bg-violet-600 z-0" :class="size_computed.child" />
 	</div>
 </template>
 

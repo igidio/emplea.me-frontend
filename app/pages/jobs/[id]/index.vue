@@ -1,4 +1,10 @@
 <template>
+	<JobModalInteraction
+		:interaction="selected_interaction"
+		v-if="selected_interaction"
+		v-model:is_open="is_open_modal_interaction"
+	/>
+
 	<div class="flex flex-col gap-4">
 
 		<UBreadcrumb :links="[{
@@ -46,9 +52,9 @@
 						<div class="flex flex-col desktop:w-[30%] gap-2">
 							<div class="flex flex-row gap-2" v-for="e in additional_info">
 								<div
-									class="bg-violet-600 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
+									class="bg-slate-100 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
 								>
-									<UIcon :name="e.icon" class="bg-white z-0" size="14"/>
+									<UIcon :name="e.icon" class="bg-violet-500 z-0" size="14"/>
 								</div>
 								<div class="flex flex-col">
 									<span class="font-semibold text-sm">{{ e.label }}</span>
@@ -74,11 +80,11 @@
 										v-for="skill in job.skills"
 									>
 										<div
-											class="bg-violet-600 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
+											class="bg-slate-100 aspect-[1/1] w-8 h-8 flex items-center justify-center p-[3px] rounded-small"
 										>
 											<UIcon
 												:name="skillLevelIcon[skill.level as unknown as keyof typeof SkillLevelEnum]"
-												class="bg-white z-0" size="14"
+												class="bg-violet-500 z-0" size="14"
 											/>
 										</div>
 										<div class="flex flex-col">
@@ -97,23 +103,62 @@
 				</UCard>
 
 				<!-- TODO: Crear tabla interacciones e introducir cada una de ellas-->
-				<UCard v-if="is_premium">
-					<template #header>⭐ Interacciones</template>
-					<div class="grid grid-cols-3 gap-2">
-						<div class="flex flex-rows gap-2" v-for="i in 7">
-							<img :src="computed_image" alt="" class="rounded-full h-12"/>
-							<div class="flex flex-col">
-								<span class="font-semibold">Nombre completo</span>
-								<span class="text-sm">@username</span>
-							</div>
+				<UCard>
+					<template #header>
+						<div class="flex flex-row justify-between">
+							Interacciones
+							<UButton
+								icon="ri:history-fill"
+								color="white"
+								@click="reload_interactions"
+								v-if="is_premium"
+							/>
+						</div>
+					</template>
+					<div class="flex flex-row items-center center-text" v-if="interactions === undefined">
+						<UButton
+							label="⭐ Cargar interacciones"
+							@click="is_premium ? load_interactions() : is_open_modal_premium = true"
+							:loading="loading"
+						/>
+						<span class="error" v-if="error">{{ error.message }}</span>
+					</div>
+					<div v-if="interactions" class="flex flex-col">
+							<UIcon
+								name="ri:loader-4-line"
+								size="24"
+								class="animate-spin self-center"
+								v-if="loading"
+							/>
+						<div v-if=" interactions.length === 0">
+							<span class="italic">No se ha registrado ninguna interacción todavía.</span>
+						</div>
+						<div class="grid grid-cols-3 gap-2" v-else>
+							<button
+								class="flex flex-rows gap-2 hover:bg-violet-100 p-2 rounded-medium transition-colors items-center"
+								v-for="interaction in interactions"
+								@click="select_interaction(interaction)"
+							>
+								<img :src="interaction.seeker.user.image || '/images/empleame_user_silhouette.png'" alt=""
+								     class="rounded-full h-12"/>
+								<div class="flex flex-col text-left text-nowrap truncate overflow-hidden">
+									<span class="font-semibold">{{
+											interaction.seeker.user.contact.first_name
+										}} {{ interaction.seeker.user.contact.last_name }}</span>
+									<span class="text-sm" v-if="interaction.confirm">
+										<Icon name="ri:thumb-up-line" size="8"/>
+										Le interesa</span>
+								</div>
+							</button>
 						</div>
 					</div>
 				</UCard>
-				<Add class="w-full h-24" v-else></Add>
+				<Add class="w-full h-24" v-if="!is_premium"></Add>
 			</div>
 
 			<div class="flex flex-col w-full desktop:w-[25%] gap-4">
-				<UButton color="black" label="Administrar" v-if="['ADMIN', 'SUPERUSER'].includes(user_role)" @click="useRouter().push({ path: '/admin/posts', query: { q: job.title! } })"/>
+				<UButton color="black" label="Administrar" v-if="['ADMIN', 'SUPERUSER'].includes(user_role)"
+				         @click="useRouter().push({ path: '/admin/posts', query: { q: job.title! } })"/>
 				<div class="flex flex-col gap-2" v-if="info?.can_modify">
 					<UButton color="black" label="Llenar vacante" v-if="job.is_available"/>
 					<UButton color="black" label="Volver a marcar como disponible" v-else/>
@@ -121,7 +166,6 @@
 						class="bg-yellow-400 rounded-medium p-2 flex flex-row gap-2 border border-slate-200"
 						v-if="is_premium"
 					>
-						<IconFill name="ri:star-fill" class="h-6"></IconFill>
 						<p>Ten en cuenta que puedes destacar # publicaciones.</p>
 					</div>
 				</div>
@@ -147,8 +191,8 @@
 
 <script setup lang="ts">
 import {SkillLevelEnum} from "~/enums/skill_level.enum";
-import {postFindOne} from "~/queries";
-import type {PostInterface} from "~/interfaces";
+import {gqlPost, postFindOne} from "~/queries";
+import type {interactionInterface, PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
 import router from "#app/plugins/router";
@@ -159,16 +203,14 @@ useHead({
 })
 
 definePageMeta({
-	keepalive: {
-		max: 0
-	},
+	keepalive: false
 })
 
 const route = useRoute();
 const is_hidden = ref(true);
 
 const userStore = useUserStore()
-const {is_premium, user_role} = storeToRefs(userStore);
+const {is_premium, user_role, is_open_modal_premium} = storeToRefs(userStore);
 
 const {data, refresh, execute} = await useAsyncQuery<
 	{
@@ -211,10 +253,6 @@ const skillLevelIcon = {
 	'ADVANCED': "ri:progress-8-line",
 };
 
-const computed_image = computed(() =>
-	"/images/empleame_user_silhouette.png"
-);
-
 const additional_info = computed(() => {
 	return [
 		{
@@ -236,4 +274,35 @@ const additional_info = computed(() => {
 	];
 })
 
+const is_open_modal_interaction = ref(false)
+const selected_interaction = ref<interactionInterface | undefined>(undefined)
+const interactions = ref<interactionInterface[] | undefined>(undefined)
+const {refetch, result, load, loading, error} = useLazyQuery<{
+	interactionLoadByPost: interactionInterface[]
+}>(gqlPost.load_interactions, {
+	idPost: +route.params.id!,
+	prefetch: false
+})
+
+onMounted(async () => {
+	//console.log(Number(route.params.id) )
+
+	//await refetch({idPost:2 })?.then((r) => console.log(r))
+})
+
+const load_interactions = async () => {
+	await load()
+	if (result.value?.interactionLoadByPost) interactions.value = result.value?.interactionLoadByPost
+}
+
+const reload_interactions = async () => {
+	await refetch({idPost: +route.params.id!})
+	if (result.value?.interactionLoadByPost) interactions.value = result.value?.interactionLoadByPost
+}
+
+const select_interaction = (interaction: interactionInterface) => {
+	console.log(interaction)
+	selected_interaction.value = interaction
+	is_open_modal_interaction.value = true
+}
 </script>

@@ -1,14 +1,29 @@
 <template>
-	<JobUpdate
-		v-model:state="state"
-		:props="{
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: data?.post.post.employer.name!,
+      to: `/employer/${data?.post.post.employer.id}`
+		}, {
+			label: data?.post.post.name!,
+      to: `/jobs/${data?.post.post.id}`
+		}
+		]"/>
+
+		<JobUpdate
+			v-model:state="state"
+			:props="{
 			id: Number(route.params.id),
 			loading,
 			error,
 			update: submit,
 			cancel: `/jobs/${route.params.id}`
 		}"
-	/>
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
