@@ -74,12 +74,13 @@ const {result: EmploymentData, load, refetch} = useLazyQuery<{
 		employer: EmployerInterface,
 		employerUser: EmployerUserInterface
 	}
-}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": 1})
+}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": 1})
 load()
 
 onMounted(() => {
 	if (useRoute().query.e && employerGetByUserData.value?.employerListByUser[Number(useRoute().query.e)]) {
 		get_employer(Number(useRoute().query.e))
+		console.log(EmploymentData.value)
 	}
 })
 

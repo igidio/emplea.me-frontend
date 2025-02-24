@@ -6,10 +6,13 @@
 		<div class="flex flex-col relative overflow-hidden gap-2">
 			<div
 				class="z-[2] absolute center-absolute font-semibold w-[90%] center-text bg-white p-2 rounded-medium border border-slate-200"
-				v-if="info?.show_employer === false && info.type == 'EMPLOYER'"
+				v-if="info?.show_employer === false && info.type == 'EMPLOYER' || (!is_available && ['GUEST','SEEKER'].includes(info?.type as any))"
 			>
-				Solo un aplicante a trabajo puede ver esta información
+				{{ (!is_available && ['GUEST','SEEKER'].includes(info?.type as any)) ? 'Esta información ya no está disponible.' : '' }}
+				{{ info?.show_employer === false && info.type == 'EMPLOYER' ? 'Solo un aplicante a trabajo puede ver esta información.' : ''}}
 			</div>
+
+
 
 			<UButton
 				class="z-[2] absolute center-absolute"
@@ -68,6 +71,7 @@ interface Props {
 		show_employer: boolean;
 	},
 	is_hidden: boolean;
+	is_available: boolean;
 }
 const props = defineProps<Props>();
 

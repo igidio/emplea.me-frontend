@@ -54,7 +54,7 @@
 						class="flex flex-col grow mb-2"
 						v-if="data.employer.employer_social && data.employer.employer_social?.length > 0">
 
-						<span class="font-semibold mb-2">Contacto</span>
+						<span class="font-semibold mb-2">Teléfono</span>
 						<div class="flex flex-col gap-2">
 							<itemLink
 								v-for="phone in data.employer.phone"

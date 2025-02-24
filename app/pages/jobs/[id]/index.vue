@@ -1,4 +1,9 @@
 <template>
+	<ModalConfirmation
+		:props="modal_data"
+		v-model:is_open="is_open_modal_confirmation"
+	/>
+
 	<JobModalInteraction
 		:interaction="selected_interaction"
 		v-if="selected_interaction"
@@ -44,7 +49,8 @@
 								<UButton label="Editar" size="sm" class="w-full"/>
 							</NuxtLink>
 							<UButton color="gold" label="⭐ Destacar" size="sm" v-if="is_premium"/>
-							<UButton color="black" label="Deshabilitar" size="sm" @click="reload"/>
+							<UButton color="black" :label="!job.is_active ? 'Habilitar' : 'Deshabilitar'" size="sm"
+							         @click="set_toggle_to_modal_data"/>
 						</div>
 					</div>
 
@@ -96,13 +102,13 @@
 										</div>
 									</div>
 								</div>
-								<div class="w-full text-center py-2" v-else>No hay habilidades específicadas.</div>
+								<div class="w-full text-center py-2 italic" v-else>No hay habilidades específicadas.</div>
 							</div>
 						</div>
 					</div>
 				</UCard>
-
-				<UCard v-if="['SUPER', 'EMPLOYER', 'ATTENDANT'].includes(info?.type!)">
+				<UCard v-if="
+				['SUPER', 'EMPLOYER', 'ATTENDANT'].includes(info?.type!) && !(!info?.show_employer && info?.type == 'EMPLOYER')">
 					<template #header>
 						<div class="flex flex-row justify-between">
 							Interacciones
@@ -159,14 +165,11 @@
 				<UButton color="black" label="Administrar" v-if="['ADMIN', 'SUPERUSER'].includes(user_role)"
 				         @click="useRouter().push({ path: '/admin/posts', query: { q: job.title! } })"/>
 				<div class="flex flex-col gap-2" v-if="info?.can_modify">
-					<UButton color="black" label="Llenar vacante" v-if="job.is_available"/>
-					<UButton color="black" label="Volver a marcar como disponible" v-else/>
-					<div
-						class="bg-yellow-400 rounded-medium p-2 flex flex-row gap-2 border border-slate-200"
-						v-if="is_premium"
-					>
-						<p>Ten en cuenta que puedes destacar # publicaciones.</p>
-					</div>
+					<UButton
+						color="black"
+						:label="job.is_available ? 'Llenar vacante' : `Volver a marcar como disponible`"
+						@click="set_disable_to_modal_data"
+					/>
 				</div>
 
 				<EmployerInfo
@@ -180,6 +183,7 @@
 					:social_media="data?.post.post.employer.employer_social"
 					:info="data?.post.info"
 					:is_hidden="is_hidden"
+					:is_available="!!job.is_available"
 				/>
 
 			</div>
@@ -190,7 +194,13 @@
 
 <script setup lang="ts">
 import {SkillLevelEnum} from "~/enums/skill_level.enum";
-import {gqlPost, postFindOne} from "~/queries";
+import {
+	employerActivateOrDeactivate,
+	gqlPost,
+	postActivateOrDeactivate,
+	postFindOne,
+	postToggleAvailability
+} from "~/queries";
 import type {interactionInterface, PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
@@ -312,7 +322,75 @@ onMounted(async () => {
 const computed_status = computed(() => {
 	return (job.is_available && job.is_active) ? {color: 'green', label: 'Disponible'} :
 		(!job.is_available && job.is_active) ? {color: 'orange', label: 'Ocupado'} :
-			(job.is_available && !job.is_active && job.has_disabled) ? {color: 'red', label: 'Deshabilitado por el administrador'} :
+			(job.is_available && !job.is_active && job.has_disabled) ? {
+					color: 'red',
+					label: 'Deshabilitado por el administrador'
+				} :
 				{color: 'red', label: 'Deshabilitado'};
 })
+
+const modal_data = ref({
+	loading: false,
+	submit: async () => {
+	},
+	body: '',
+	header: undefined as string | undefined
+})
+const is_open_modal_confirmation = ref(false)
+const {
+	mutate: mutate_toggle_availability,
+	loading: loading_toggle_availability,
+	error: error_toggle_availability
+} = useMutation<{ postToggleAvailability: string }>(postToggleAvailability)
+const set_disable_to_modal_data = () => {
+	is_open_modal_confirmation.value = true
+	console.log(is_open_modal_confirmation.value)
+	modal_data.value = {
+		header: `${job.is_available ? 'Llenar vacante' : 'Volver a marcar como disponible'}`,
+		body: `¿Estás seguro de que deseas ${job.is_available ? 'llenar' : 'liberar'} esta vacante?`,
+		loading: loading_toggle_availability.value,
+		submit: async () => {
+			await mutate_toggle_availability({
+				"postToggleAvailabilityId": Number(route.params.id)
+			}).then(async (e) => {
+				useToast().add({title: e?.data?.postToggleAvailability})
+				is_open_modal_confirmation.value = false
+				job.is_available = !job.is_available
+			}).catch((e) => {
+				alert(e.message)
+			});
+		}
+	}
+	console.log(modal_data)
+}
+
+
+const {
+	mutate: mutate_activate_or_deactivate,
+	loading: loading_activate_or_deactivate,
+	error: error_activate_or_deactivate
+} = useMutation<{ "postActivateOrDeactivate": string }>(postActivateOrDeactivate)
+const set_toggle_to_modal_data = () => {
+	is_open_modal_confirmation.value = true
+	modal_data.value = {
+		header: `${!job.is_active ? 'Volver a activar' : 'Deshabilitar'} empleo`,
+		body: `¿Estás seguro de que deseas ${!job.is_active ? 'volver a activar' : 'deshabilitar'} este empleo?`,
+		loading: loading_toggle_availability.value,
+		submit: async () => {
+			await mutate_activate_or_deactivate({
+				"postActivateOrDeactivateId": Number(route.params.id),
+				"messageOptInput": {
+					"message": null
+				}
+			}).then(async (e) => {
+				useToast().add({title: e?.data?.postActivateOrDeactivate})
+				is_open_modal_confirmation.value = false
+				job.is_active = !job.is_active
+			}).catch((e) => {
+				alert(e.message)
+			});
+		}
+	}
+	console.log(modal_data)
+}
 </script>
