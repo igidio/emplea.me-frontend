@@ -59,8 +59,8 @@
 import type {EmployerSocialInterface, PhoneInterface} from "~/interfaces";
 
 const userStore = useUserStore()
+const {is_open_modal_login} = storeToRefs(useUserStore());
 const {user_role} = userStore
-const {is_open_modal_login} = storeToRefs(userStore);
 
 interface Props {
 	phone?: PhoneInterface[]
@@ -72,16 +72,20 @@ interface Props {
 	},
 	is_hidden: boolean;
 	is_available: boolean;
+	register: () => Promise<void>;
+	post: any
 }
 const props = defineProps<Props>();
+const refProps = toRef(props);
 
-const show_info = () => {
-	if (user_role === undefined) is_open_modal_login.value = true;
+const show_info = async () => {
+	if (user_role === undefined) return is_open_modal_login.value = true;
+	await props.register();
 };
 
 const computed_phone = computed(() => {
-	if (!props.phone) return [];
-	return props.phone.map((e) => {
+	if (!refProps.value.phone) return [];
+	return refProps.value.phone.map((e) => {
 		let object: any = {
 			label: e.phone,
 			icon: e.has_whatsapp ? "ri:whatsapp-line" : "ri:phone-line",
@@ -94,8 +98,8 @@ const computed_phone = computed(() => {
 );
 
 const computed_social_media = computed(() => {
-	if (!props.social_media) return [];
-	return props.social_media.map((e) => ({
+	if (!refProps.value.social_media) return [];
+	return refProps.value.social_media.map((e) => ({
 		label: e.name,
 		icon: e.social.icon,
 		link: `${e.social.prefix}${e.identifier}`,

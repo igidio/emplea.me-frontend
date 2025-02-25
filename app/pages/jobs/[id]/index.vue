@@ -195,11 +195,13 @@
 				/>
 
 				<EmployerContactInfo
-					:phone="data?.post.post.employer.phone"
-					:social_media="data?.post.post.employer.employer_social"
-					:info="data?.post.info"
+					:post="post"
+					:phone="post?.employer.phone"
+					:social_media="post?.employer.employer_social"
+					:info="info"
 					:is_hidden="is_hidden"
 					:is_available="!!job.is_available"
+					:register="() => register_interaction(true)"
 				/>
 
 			</div>
@@ -211,7 +213,7 @@
 <script setup lang="ts">
 import {SkillLevelEnum} from "~/enums/skill_level.enum";
 import {
-	gqlFeatured,
+	gqlFeatured, gqlInteraction,
 	gqlPost,
 	postActivateOrDeactivate,
 	postFindOne,
@@ -252,35 +254,35 @@ const {data} = await useAsyncQuery<
 
 useHead({
 	title: data.value?.post.post.name,
-	meta: !!data.value?.post.post.featured ? [{ name: 'description', content: data.value?.post.post.description },
-		{ name: 'robots', content: 'index, follow' },
-		{ property: 'og:title', content: data.value?.post.post.name },
-		{ property: 'og:description', content: data.value?.post.post.description },
-		{ property: 'og:type', content: 'website' },
-		{ property: 'og:url', content: `https://www.emplea.me/jobs/${data.value.post.post.id}` },
-		{ property: 'og:image', content: `https://www.emplea.me/${data.value.post.post.employer.profile_image}` }] : undefined
+	meta: !!data.value?.post.post.featured ? [{name: 'description', content: data.value?.post.post.description},
+		{name: 'robots', content: 'index, follow'},
+		{property: 'og:title', content: data.value?.post.post.name},
+		{property: 'og:description', content: data.value?.post.post.description},
+		{property: 'og:type', content: 'website'},
+		{property: 'og:url', content: `https://www.emplea.me/jobs/${data.value.post.post.id}`},
+		{property: 'og:image', content: `https://www.emplea.me/${data.value.post.post.employer.profile_image}`}] : undefined
 })
 
-const post = data.value?.post.post
-const info = data.value?.post.info
+const post = ref(data.value?.post.post)
+const info = ref(data.value?.post.info)
 
-if (info?.show_employer) is_hidden.value = false;
+if (info.value?.show_employer) is_hidden.value = false;
 
 const job = reactive({
-	id: post?.id,
-	title: post?.name,
-	category: post?.category,
-	location: `${post?.location.department}, ${post?.location.municipality}, ${post?.location.province}`,
-	modality: ModalityEnum[post?.modality as keyof typeof ModalityEnum],
-	modified_at: post?.modified_at,
-	salary: post?.salary,
-	salary_type: SalaryEnum[post?.salary_type as keyof typeof SalaryEnum],
-	description: post?.description,
-	is_available: post?.available,
-	skills: post?.post_skill,
-	is_active: post?.is_active,
-	has_disabled: post?.has_disabled,
-	featured: post?.featured,
+	id: post.value?.id,
+	title: post.value?.name,
+	category: post.value?.category,
+	location: `${post.value?.location.department}, ${post.value?.location.municipality}, ${post.value?.location.province}`,
+	modality: ModalityEnum[post.value?.modality as keyof typeof ModalityEnum],
+	modified_at: post.value?.modified_at,
+	salary: post.value?.salary,
+	salary_type: SalaryEnum[post.value?.salary_type as keyof typeof SalaryEnum],
+	description: post.value?.description,
+	is_available: post.value?.available,
+	skills: post.value?.post_skill,
+	is_active: post.value?.is_active,
+	has_disabled: post.value?.has_disabled,
+	featured: post.value?.featured,
 });
 
 const skillLevelIcon = {
@@ -331,17 +333,9 @@ const reload_interactions = async () => {
 }
 
 const select_interaction = (interaction: interactionInterface) => {
-	console.log(interaction)
 	selected_interaction.value = interaction
 	is_open_modal_interaction.value = true
 }
-
-onMounted(async () => {
-	if (post?.has_disabled && !['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) {
-		if (import.meta.client) useToast().add({title: 'Este empleo ha sido deshabilitado por el administrador, si cree que fue un error contáctese con soporte.'})
-		await router.push(`/employer/${post?.employer.id}`)
-	}
-})
 
 const computed_status = computed(() => {
 	return (job.is_available && job.is_active) ? {color: 'green', label: 'Disponible'} :
@@ -368,7 +362,6 @@ const {
 } = useMutation<{ postToggleAvailability: string }>(postToggleAvailability)
 const set_disable_to_modal_data = () => {
 	is_open_modal_confirmation.value = true
-	console.log(is_open_modal_confirmation.value)
 	modal_data.value = {
 		header: `${job.is_available ? 'Llenar vacante' : 'Volver a marcar como disponible'}`,
 		body: `¿Estás seguro de que deseas ${job.is_available ? 'llenar' : 'liberar'} esta vacante?`,
@@ -385,7 +378,6 @@ const set_disable_to_modal_data = () => {
 			});
 		}
 	}
-	console.log(modal_data)
 }
 
 
@@ -423,7 +415,6 @@ const {
 } = useMutation<{ featuredCreate: FeaturedInterface }>(gqlFeatured.create)
 const {
 	mutate: mutate_delete_feature,
-	loading: loading_delete_feature,
 } = useMutation<{ featuredDelete: string }>(gqlFeatured.delete)
 const set_featured_to_modal_data = () => {
 	is_open_modal_confirmation.value = true
@@ -457,6 +448,49 @@ const set_featured_to_modal_data = () => {
 	}
 }
 
+const {result: result_find_one, refetch: refech_find_one, load: load_find_one} = useLazyQuery<
+	{
+		post: {
+			post: PostInterface,
+			info: {
+				type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
+				can_modify: boolean;
+				show_employer: boolean;
+			}
+		}
+	}
+>(postFindOne(true), {
+	"id": Number(route.params.id),
+}, {prefetch: false})
 
+const {
+	mutate: mutate_register_interaction,
+} = useMutation(gqlInteraction.register)
 
+const register_interaction = async (confirm: boolean | undefined = undefined) => {
+	await mutate_register_interaction({
+		"idPost": +route.params.id!,
+		"confirm": confirm
+	}).then(async () => {
+		if (confirm) {
+			await load_find_one()
+			await refech_find_one()
+			post.value = result_find_one.value?.post.post;
+			info.value = result_find_one.value?.post.info;
+			is_hidden.value = false
+		}
+	}).catch((e) => {
+		alert(e.message)
+	});
+}
+
+onMounted(async () => {
+	if (post.value?.has_disabled && !['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) {
+		if (import.meta.client) useToast().add({title: 'Este empleo ha sido deshabilitado por el administrador, si cree que fue un error contáctese con soporte.'})
+		await router.push(`/employer/${post.value?.employer.id}`)
+	}
+	if (user_role.value as any == 'SEEKER') {
+		await register_interaction()
+	}
+})
 </script>
