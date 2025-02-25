@@ -1,15 +1,33 @@
 <template>
-	<JobPostTable
-		:posts="posts"
-		:reload="fetch"
-		:loading="loading"
-		:options="options"
-	/>
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Mis publicaciones',
+      to: '/my_posts'
+		}]"/>
+		<JobPostTable
+			:posts="posts"
+			:reload="fetch"
+			:loading="loading"
+			:options="options"
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
 import {postActivateOrDeactivate, postMyPosts, postToggleAvailability} from "~/queries";
 import type {PostInterface} from "~/interfaces";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['EMPLOYER']
+})
+useHead({
+	title: 'Mis publicaciones'
+})
 
 const posts: Ref<PostInterface[]> = ref([])
 

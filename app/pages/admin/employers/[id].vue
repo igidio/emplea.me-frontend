@@ -49,6 +49,7 @@ const {data} = await useAsyncQuery<{
 }>(employerFindOne(), {"findOneEmployerId": Number(route.params.id)})
 const {employer} = data.value?.findOneEmployer!
 
+console.log(data)
 
 const confirm = async () => {
 	is_modal_open.value = true

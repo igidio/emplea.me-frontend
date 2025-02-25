@@ -12,17 +12,34 @@
 		:on_close="close_modal"
 		:schema="message_schema"
 	/>
-	
-	<JobUpdate
-		v-model:state="state"
-		:props="{
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Panel',
+      to: '/admin'
+		}, {
+			label: 'Publicaciones',
+      to: '/admin/posts'
+		}, {
+			label: 'Actualizar publicación de trabajo',
+      to: `/admin/posts/${route.params.id}`
+		},
+		]"/>
+		<JobUpdate
+			v-model:state="state"
+			:props="{
 			id: Number(route.params.id),
 			loading,
 			error,
 			update: confirm,
 			cancel: `/admin/posts`
 		}"
-	/>
+		/>
+	</div>
+
 </template>
 
 <script setup lang="ts">

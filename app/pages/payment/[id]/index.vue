@@ -9,7 +9,7 @@
       to: '/payment'
 		}, {
 			label: current_plan?.name,
-			to: `/payment/${current_plan?.name}`
+			to: `/payment/${current_plan?.id!-1}`
 		}]" v-if="current_plan"/>
 
 		<div

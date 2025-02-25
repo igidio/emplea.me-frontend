@@ -9,10 +9,10 @@
       to: '/payment'
 		},{
 			label: plan.name,
-			to: `/payment/${plan.id}`
+			to: `/payment/${plan.id!-1}`
 		}, {
 			label: 'Pagar con tarjeta',
-      to: `/payment/${plan.id}/order`
+      to: `/payment/${plan.id!-1}/order`
 		}]"/>
 
 		<UAlert

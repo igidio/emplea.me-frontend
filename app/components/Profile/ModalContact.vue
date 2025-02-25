@@ -31,10 +31,10 @@
 							size="md"
 							v-model="state.phone"
 							color="gray"
-							:ui="{ leading: { padding: { md: 'pl-[46px]'} } }"
+							:ui="{ leading: { padding: { md: 'pl-[60px]'} } }"
 						>
 							<template #leading>
-								<span class="font-bold dark:text-gray-400 text-xs">+591</span>
+								<span class="font-bold dark:text-gray-400 text-sm">+591</span>
 							</template>
 						</UInput>
 					</UFormGroup>

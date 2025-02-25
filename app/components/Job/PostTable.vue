@@ -96,12 +96,12 @@
 					<div v-else>No especificado</div>
 				</template>
 				<template #expand="{ row }">
-					<div class="flex flex-col p-4 gap-1">
+					<div
+						class="flex flex-col p-4 gap-1"
+						v-if="row.description"
+					>
 						<span class="inline-block font-semibold">Descripción</span>
-						<p class="text-justify">{{ row.message }}</p>
-						<div v-if="row.interaction && row.interaction.length > 0">
-							<span class="font-semibold">Interacciones</span>
-						</div>
+						{{ row.description }}
 					</div>
 				</template>
 				<template #options-data="{row}">
@@ -138,7 +138,7 @@ const props = defineProps<{
 	options: (row: any) => any[]
 }>()
 
-const { user_role } = useUserStore()
+const {user_role} = useUserStore()
 const route = useRoute()
 const page = ref(1)
 const pageCount = 5
@@ -166,7 +166,9 @@ const posts: ComputedRef = computed(() => (props.posts && props.posts.length > 0
 		description: e.description,
 		category: e.category,
 		employer: e.employer,
+		employer_name: e.employer.name,
 		employer_user: e.employer_user,
+		employer_user_name: e.employer_user.user.contact.first_name + ' ' + e.employer_user.user.contact.last_name,
 		interaction: e.interaction,
 		is_active: e.is_active,
 		featured: e.featured,
@@ -175,8 +177,8 @@ const posts: ComputedRef = computed(() => (props.posts && props.posts.length > 0
 		has_disabled: e.has_disabled,
 		status: (e.available && e.is_active) ? {color: 'green', label: 'Disponible'} :
 			(!e.available && e.is_active) ? {color: 'orange', label: 'Ocupado'} :
-			(e.available && !e.is_active && e.has_disabled) ? {color: 'red', label: 'Deshabilitado por el administrador'} :
-			{color: 'red', label: 'Deshabilitado'},
+				(e.available && !e.is_active && e.has_disabled) ? {color: 'red', label: 'Deshabilitado por el administrador'} :
+					{color: 'red', label: 'Deshabilitado'},
 	})) : []
 )
 
