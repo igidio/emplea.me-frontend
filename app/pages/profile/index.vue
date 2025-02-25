@@ -16,7 +16,7 @@
 				v-if="['SEEKER'].includes(user_role)"
 				:can_edit="true"
 			/>
-			<Add
+			<Ad
 				:class="['SEEKER'].includes(user_role)
 				? 'w-full h-32 desktop:h-96 desktop:w-40'
 				: 'w-full h-32'"

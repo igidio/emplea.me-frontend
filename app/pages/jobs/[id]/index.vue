@@ -174,7 +174,7 @@
 						</div>
 					</div>
 				</UCard>
-				<Add class="w-full h-24" v-if="!is_premium"></Add>
+				<Ad class="w-full h-24" v-if="!is_premium"></Ad>
 			</div>
 
 			<div class="flex flex-col w-full desktop:w-[25%] gap-4">

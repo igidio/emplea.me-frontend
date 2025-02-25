@@ -5,12 +5,13 @@
 		</NuxtLink>
 
 		<div class="flex flex-row h-fit gap-2">
+			<NuxtLink v-for="option in computed_navigation_options" :to="{ name: option.name }">
 			<UButton
-				v-for="option in computed_navigation_options"
 				:variant="!option.is_gold ? 'ghost' : undefined"
 				:color="option.is_gold ? 'gold' : undefined"
-				>{{ option.label }}</UButton
-			>
+				:label="option.label"
+				/>
+			</NuxtLink>
 		</div>
 	</div>
 

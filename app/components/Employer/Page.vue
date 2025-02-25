@@ -93,7 +93,7 @@
 					:total="data.employer.post!.length"
 					:created_at="data.employer.created_at"
 				/>
-				<Add class="h-64" v-if="!is_premium"/>
+				<Ad class="h-64" v-if="!is_premium"/>
 			</div>
 		</div>
 	</div>

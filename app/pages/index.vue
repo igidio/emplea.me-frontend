@@ -18,9 +18,9 @@
 		<hr/>
 		<div class="flex flex-col desktop:flex-row gap-4">
 			<LandingFeatured class="grow"/>
-			<Add class="w-40"/>
+			<Ad class="w-40"/>
 		</div>
-		<Add class="h-32"/>
+		<Ad class="h-32"/>
 	</div>
 </template>
 

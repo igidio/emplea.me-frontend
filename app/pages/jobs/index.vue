@@ -59,8 +59,9 @@
 								/>
 							</div>
 							<div class="flex flex-col gap-4">
-								<JobListElement
-									:props="{
+								<template v-for="(e, index) in list" :key="e.id">
+									<JobListElement
+										:props="{
 									id: e.id,
 									title: e.name,
 									description: e.description,
@@ -70,9 +71,10 @@
 									employer_id: e.employer.id,
 									featured: !!e.featured
 								}"
-									v-for="e in list"
-								/>
-								<!--<Add class="h-32"/>-->
+									/>
+									<Ad v-if="(index + 1) % 5 === 0" class="h-32"/>
+
+								</template>
 
 								<UButton block color="black" v-if="!locked && !loading_more"
 								         @click="async () => { current_skip++; await get_job_list(true)}">Cargar más
@@ -125,7 +127,7 @@
 		<div class="flex flex-col" v-else>
 			<UIcon name="ri:loader-4-fill" class="animate-spin bg-primary self-center my-16" size="48"/>
 		</div>
-<!--		<div v-else>Cargando...</div>-->
+		<!--		<div v-else>Cargando...</div>-->
 	</div>
 </template>
 
