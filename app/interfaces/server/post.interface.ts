@@ -2,7 +2,7 @@ import {ModalityEnum, SalaryEnum} from "~/enums";
 import type {
 	CategoryInterface,
 	EmployerInterface,
-	EmployerUserInterface, interactionInterface,
+	EmployerUserInterface, FeaturedInterface, interactionInterface,
 	LocationInterface,
 	postSkillInterface
 } from "~/interfaces";
@@ -13,10 +13,6 @@ export interface PostInterface {
 	description: string;
 	available: boolean;
 	modality: ModalityEnum | string;
-	featured: {
-		id: number;
-		
-	};
 	salary?: number;
 	salary_type?: SalaryEnum | string;
 	is_active: boolean;
@@ -29,4 +25,5 @@ export interface PostInterface {
 	created_at?: Date;
 	modified_at?: Date;
 	has_disabled: boolean;
+	featured: FeaturedInterface;
 }

@@ -72,6 +72,7 @@ import gqlEmployerUser from "./employer_user.query";
 import gqlEmployer from "./employer.query";
 import gqlCommon from "./common.query";
 import gqlPost from "./post.query";
+import gqlFeatured from "./featured.query";
 
 export {
 	plansGet,
@@ -149,5 +150,6 @@ export {
 	gqlNotification,
 	gqlEmployerUser,
 	gqlCommon,
-	gqlPost
+	gqlPost,
+	gqlFeatured
 };

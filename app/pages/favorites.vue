@@ -5,17 +5,17 @@
 			<UCard class="w-full tablet:w-[80%]">
 				<template #header>{{ favorites_count }} favoritos</template>
 				<div class="flex flex-col gap-4">
-					<JobListElement />
-					<JobListElement />
-					<JobListElement />
-					<Add class="h-32" />
-					<JobListElement />
-					<JobListElement />
-					<JobListElement />
-					<Add class="h-32" />
-					<JobListElement />
-					<JobListElement />
-					<JobListElement />
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
+<!--					<Add class="h-32" />-->
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
+<!--					<Add class="h-32" />-->
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
+<!--					<JobListElement />-->
 				</div>
 			</UCard>
 			<div class="flex flex-col w-full tablet:w-[20%]">

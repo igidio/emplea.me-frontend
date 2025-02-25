@@ -30,13 +30,13 @@ const descriptions = {
 		list: [
 			"Crear publicaciones",
 			"Destacar publicaciones. ⭐",
-			"Agregar empleados para administrar.",
-			"Eliminar empleados.",
+			"Agregar asistentes para administrar.  ⭐",
+			"Eliminar asistentes.",
 			"Cambiar la información del negocio.",
 		],
 	},
 	Encargado: {
-		title: "Encargado",
+		title: "Asistente",
 		list: ["Crear y eliminar tus propias publicaciones"],
 	},
 };

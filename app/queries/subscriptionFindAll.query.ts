@@ -11,7 +11,6 @@ export default gql`
                 name
                 id
                 duration
-                max_posts
                 max_featured
                 price
                 benefits

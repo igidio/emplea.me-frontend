@@ -143,6 +143,10 @@ definePageMeta({
 	roles: ['SEEKER']
 })
 
+useHead({
+	title: 'Editar perfil de aplicante'
+})
+
 const seeker: Ref<seekerInterface> = ref({} as seekerInterface)
 const social: Ref<socialInterface[] | undefined> = ref([])
 

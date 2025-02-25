@@ -13,17 +13,35 @@
 		:schema="message_schema"
 	/>
 
-	<EmployerUpdate
-		v-model:state="state"
-		:props="{
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Panel',
+      to: '/admin'
+		}, {
+			label: 'Empleadores',
+      to: '/admin/employers'
+		}, {
+			label: employer.name,
+      to: `/admin/employers/${employer.id}`
+		}
+		]"/>
+
+
+		<EmployerUpdate
+			v-model:state="state"
+			:props="{
 			id: Number(employer.id),
 			loading,
 			error,
 			update: confirm,
 			cancel: `/admin/employers`
 		}"
-	/>
-
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +51,7 @@ definePageMeta({
 	middleware: 'role',
 	roles: ['ADMIN', 'SUPERUSER']
 })
+
 
 import {employerFindOne, employerUpdate} from "~/queries";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
@@ -49,7 +68,9 @@ const {data} = await useAsyncQuery<{
 }>(employerFindOne(), {"findOneEmployerId": Number(route.params.id)})
 const {employer} = data.value?.findOneEmployer!
 
-console.log(data)
+useHead({
+	title: `Editar empleador ${employer.name}`
+})
 
 const confirm = async () => {
 	is_modal_open.value = true
@@ -60,7 +81,7 @@ const close_modal = () => {
 }
 
 const {mutate, loading, error} = useMutation<{ employerUpdate: string }>(employerUpdate(true));
-const submit = async (message:string) => {
+const submit = async (message: string) => {
 	is_modal_open.value = true
 	await mutate({
 		"employerUpdate": {

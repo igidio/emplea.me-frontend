@@ -2,7 +2,6 @@ export interface PlanInterface {
 	id?: number;
 	name: string;
 	duration: number;
-	max_posts: number;
 	max_featured: number;
 	price: number;
 	benefits: string;

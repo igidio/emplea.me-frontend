@@ -7,7 +7,6 @@ export default gql`
             duration
             id
             max_featured
-            max_posts
             name
             price
         }

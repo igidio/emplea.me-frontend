@@ -29,26 +29,41 @@
 				<UCard>
 					<div class="flex flex-row justify-between">
 						<div class="flex flex-col gap-2">
-						<span class="inline-flex gap-2">
+							<div class="inline-flex gap-2 flex-wrap">
+								<UBadge
+									v-if="job.category?.icon"
+									icon="i-heroicons-rocket-launch"
+									variant="soft"
+								>
+									<UIcon :name="job.category.icon" class="mr-1"/>
+									{{ job.category?.name }}
+								</UBadge>
+								<UBadge
+									:color="computed_status.color as BadgeColor"
+									variant="soft"
+								>{{ computed_status.label }}
+								</UBadge>
 
-				<UBadge
-					v-if="job.category?.icon"
-					icon="i-heroicons-rocket-launch"
-					variant="soft"
-				><UIcon :name="job.category.icon" class="mr-1"/>{{ job.category?.name }}</UBadge>
-				<UBadge
-					:color="computed_status.color as BadgeColor"
-					variant="soft"
-				>{{ computed_status.label }}</UBadge>
+								<UBadge
+									color="yellow"
+									variant="soft"
+								>Destacado
+								</UBadge>
+							</div>
 
-			</span>
 							<h4 class="mb-2">{{ job.title }}</h4>
 						</div>
 						<div class="w-24 flex flex-col gap-1" v-if="info?.can_modify">
+							<UButton
+								color="gold"
+								label="Destacar"
+								size="sm"
+								v-if="is_premium"
+								@click="set_featured_to_modal_data"
+							/>
 							<NuxtLink :to="`/jobs/${job.id}/edit`">
 								<UButton label="Editar" size="sm" class="w-full"/>
 							</NuxtLink>
-							<UButton color="gold" label="⭐ Destacar" size="sm" v-if="is_premium"/>
 							<UButton color="black" :label="!job.is_active ? 'Habilitar' : 'Deshabilitar'" size="sm"
 							         @click="set_toggle_to_modal_data"/>
 						</div>
@@ -195,13 +210,13 @@
 <script setup lang="ts">
 import {SkillLevelEnum} from "~/enums/skill_level.enum";
 import {
-	employerActivateOrDeactivate,
+	gqlFeatured,
 	gqlPost,
 	postActivateOrDeactivate,
 	postFindOne,
 	postToggleAvailability
 } from "~/queries";
-import type {interactionInterface, PostInterface} from "~/interfaces";
+import type {FeaturedInterface, interactionInterface, PostInterface} from "~/interfaces";
 import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
 import {definePageMeta} from "#imports";
@@ -257,6 +272,7 @@ const job = reactive({
 	skills: post?.post_skill,
 	is_active: post?.is_active,
 	has_disabled: post?.has_disabled,
+	featured: post?.featured,
 });
 
 const skillLevelIcon = {
@@ -391,6 +407,48 @@ const set_toggle_to_modal_data = () => {
 			});
 		}
 	}
-	console.log(modal_data)
 }
+
+const {
+	mutate: mutate_create_feature,
+	loading: loading_create_feature,
+} = useMutation<{ featuredCreate: FeaturedInterface }>(gqlFeatured.create)
+const {
+	mutate: mutate_delete_feature,
+	loading: loading_delete_feature,
+} = useMutation<{ featuredDelete: string }>(gqlFeatured.delete)
+const set_featured_to_modal_data = () => {
+	is_open_modal_confirmation.value = true
+	modal_data.value = {
+		header: `${job.featured ? 'Dejar de destacar' : 'Destacar'} publicación`,
+		body: `¿Estás seguro de que deseas ${job.featured ? 'dejar de destacar' : 'destacar'} esta publicación?`,
+		loading: loading_create_feature.value,
+		submit: async () => {
+			if (!job.featured) {
+				await mutate_create_feature({
+					"idPost": +route.params.id!
+				}).then(async (e) => {
+					useToast().add({title: `Publicación destacada'}`})
+					is_open_modal_confirmation.value = false
+					job.featured = e?.data?.featuredCreate
+				}).catch((e) => {
+					alert(e.message)
+				});
+			} else {
+				await mutate_delete_feature({
+					"idPost": +route.params.id!
+				}).then(async (e) => {
+					useToast().add({title: `Publicación dejada de destacar'`})
+					is_open_modal_confirmation.value = false
+					job.featured = undefined
+				}).catch((e) => {
+					alert(e.message)
+				});
+			}
+		}
+	}
+}
+
+
+
 </script>

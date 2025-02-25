@@ -4,5 +4,7 @@ import type {PostInterface, UserInterface} from "~/interfaces";
 export interface FeaturedInterface {
 	id: string;
 	user: UserInterface;
-	post: PostInterface
+	post: PostInterface;
+	created_at?: Date;
+	modified_at?: Date;
 }
