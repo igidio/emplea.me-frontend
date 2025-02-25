@@ -31,6 +31,13 @@
 						<div class="flex flex-col gap-2">
 							<div class="inline-flex gap-2 flex-wrap">
 								<UBadge
+									variant="soft"
+									color="gray"
+									v-if="job.featured"
+								>
+									⭐ Destacado
+								</UBadge>
+								<UBadge
 									v-if="job.category?.icon"
 									icon="i-heroicons-rocket-launch"
 									variant="soft"
@@ -43,12 +50,6 @@
 									variant="soft"
 								>{{ computed_status.label }}
 								</UBadge>
-
-								<UBadge
-									color="yellow"
-									variant="soft"
-								>Destacado
-								</UBadge>
 							</div>
 
 							<h4 class="mb-2">{{ job.title }}</h4>
@@ -56,7 +57,7 @@
 						<div class="w-24 flex flex-col gap-1" v-if="info?.can_modify">
 							<UButton
 								color="gold"
-								label="Destacar"
+								:label="!job.featured ? 'Destacar' : 'Dejar de destacar'"
 								size="sm"
 								v-if="is_premium"
 								@click="set_featured_to_modal_data"

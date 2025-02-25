@@ -1,89 +1,104 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');@tailwind base;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-	@apply scrollbar scrollbar-w-[3px] scrollbar-h-[3px] scrollbar-thumb-rounded-large scrollbar-thumb-violet-300;
+    @apply scrollbar scrollbar-w-[3px] scrollbar-h-[3px] scrollbar-thumb-rounded-large scrollbar-thumb-violet-300;
 }
 
 body {
-	@apply bg-violet-50 text-base font-normal font-['Poppins'];
+    @apply bg-violet-50 text-base font-normal font-['Poppins'];
 }
 
 html, #__nuxt {
-	@apply h-full;
+    @apply h-full;
 }
+
 /* body, html, #__nuxt {
 	@apply h-full;
 } */
 
 .text-primary-states {
-	@apply text-violet-600 hover:text-violet-500 active:text-violet-800 disabled:text-violet-200;
+    @apply text-violet-600 hover:text-violet-500 active:text-violet-800 disabled:text-violet-200;
 }
 
 .hyper {
-	@apply text-base font-semibold text-primary-states;
+    @apply text-base font-semibold text-primary-states;
 }
+
 /* a {
 	@apply text-base font-semibold text-primary-states;
 } */
 
 h1 {
-	@apply text-6xl font-extrabold;
+    @apply text-6xl font-extrabold;
 }
+
 h2 {
-	@apply text-5xl font-semibold;
+    @apply text-5xl font-semibold;
 }
+
 h3 {
-	@apply text-4xl font-semibold;
+    @apply text-4xl font-semibold;
 }
+
 h4 {
-	@apply text-3xl font-semibold;
+    @apply text-3xl font-semibold;
 }
+
 h5 {
-	@apply text-2xl font-semibold;
+    @apply text-2xl font-semibold;
 }
+
 h6 {
-	@apply text-xl font-semibold;
+    @apply text-xl font-semibold;
 }
 
 .background {
-	@apply bg-violet-50;
+    @apply bg-violet-50;
 }
 
 input[type="text"] {
-	@apply text-base;
+    @apply text-base;
 }
 
 input[type="password"] {
-	@apply text-base;
+    @apply text-base;
 }
 
 input[type="checkbox"] ~ label {
-	@apply text-base;
+    @apply text-base;
 }
 
 .span-input-large {
-	@apply transition-all duration-500;
+    @apply transition-all duration-500;
 }
 
-header {position: sticky;top: 0;}
+header {
+    position: sticky;
+    top: 0;
+}
 
 .white_states {
-	@apply bg-white hover:bg-gray-100 active:bg-gray-200 disabled:text-gray-500 text-black;
+    @apply bg-white hover:bg-gray-100 active:bg-gray-200 disabled:text-gray-500 text-black;
 }
 
 .center-absolute {
-	@apply  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 right-0
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 right-0
 
 }
 
 .dotted {
-	@apply outline-2 outline-dashed outline-violet-600;
+    @apply outline-2 outline-dashed outline-violet-600;
+}
+.dotted-gold {
+    @apply outline-yellow-600;
 }
 
 span.error {
-	@apply text-pink-700 font-semibold;
+    @apply text-pink-700 font-semibold;
 }
 
 /* span {
@@ -91,66 +106,66 @@ span.error {
 } */
 
 .primary {
-	@apply 	bg-violet-600
-	hover:bg-violet-500
-	active:bg-violet-800
-	disabled:bg-violet-200
-	text-white;
+    @apply bg-violet-600
+    hover:bg-violet-500
+    active:bg-violet-800
+    disabled:bg-violet-200
+    text-white;
 }
 
 .outline-primary {
-	@apply 	border-2
-	border-violet-600
-	hover:bg-violet-100
-	active:bg-violet-200
-	disabled:border-violet-200
-	disabled:text-gray-700
-	text-black;
+    @apply border-2
+    border-violet-600
+    hover:bg-violet-100
+    active:bg-violet-200
+    disabled:border-violet-200
+    disabled:text-gray-700
+    text-black;
 }
 
 .ghost-primary {
-	@apply hover:bg-violet-200 active:bg-violet-100 disabled:text-gray-700;
+    @apply hover:bg-violet-200 active:bg-violet-100 disabled:text-gray-700;
 }
 
 .black {
-	@apply bg-black
-	hover:bg-gray-950
-	active:bg-gray-800
-	disabled:bg-gray-200
-	text-white;
+    @apply bg-black
+    hover:bg-gray-950
+    active:bg-gray-800
+    disabled:bg-gray-200
+    text-white;
 }
 
 .white {
-	@apply bg-white
-	hover:bg-gray-100
-	active:bg-gray-200
-	disabled:text-gray-500
-	text-black;
+    @apply bg-white
+    hover:bg-gray-100
+    active:bg-gray-200
+    disabled:text-gray-500
+    text-black;
 }
 
 .gold {
-	@apply bg-yellow-500
-	hover:bg-yellow-400
-	active:bg-yellow-600
-	disabled:bg-yellow-200
-	text-black
-	transition-all;
+    @apply bg-yellow-500
+    hover:bg-yellow-400
+    active:bg-yellow-600
+    disabled:bg-yellow-200
+    text-black
+    transition-all;
 }
 
 .center-text {
-	@apply text-center justify-center text-base;
+    @apply text-center justify-center text-base;
 }
 
 .full-content {
-	@apply h-[calc(100vh-330px)];
+    @apply h-[calc(100vh-330px)];
 }
 
 .menu-fade {
-	@apply py-0 tablet:py-8 tablet:[mask:var(--mask)];
-	--mask: linear-gradient(to bottom,
-	rgba(0, 0, 0, 0) 0%,
-	rgba(0, 0, 0, 1) 5%,
-	rgba(0, 0, 0, 1) 95%,
-	rgba(0, 0, 0, 0) 100%
-	) 100% 50% / 100% 100% repeat-x;
+    @apply py-0 tablet:py-8 tablet:[mask:var(--mask)];
+    --mask: linear-gradient(to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 5%,
+    rgba(0, 0, 0, 1) 95%,
+    rgba(0, 0, 0, 0) 100%
+    ) 100% 50% / 100% 100% repeat-x;
 }

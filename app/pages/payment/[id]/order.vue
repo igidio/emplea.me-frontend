@@ -242,7 +242,7 @@ const submit_form = async () => {
 	const variables = {
 		"createSubscriptionInput": {
 			"autorenew": state.auto_renew,
-			"id_plan": id
+			"id_plan": id+1
 		},
 		"createPaymentIntentInput": {
 			"token": card_token ? card_token : "tok_visa_chargeDeclined"

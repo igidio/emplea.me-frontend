@@ -67,7 +67,8 @@
 									employer: e.employer.name,
 									image: e.employer.profile_image,
 									location: e.employer.location,
-									employer_id: e.employer.id
+									employer_id: e.employer.id,
+									featured: !!e.featured
 								}"
 									v-for="e in list"
 								/>

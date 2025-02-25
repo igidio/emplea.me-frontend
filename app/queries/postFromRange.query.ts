@@ -12,6 +12,9 @@ export default gql`
                 id
                 name
                 description
+                featured {
+                    id
+                }
                 employer {
                     id
                     name

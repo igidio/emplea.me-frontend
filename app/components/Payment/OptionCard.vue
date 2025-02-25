@@ -13,7 +13,7 @@
 		</div>
 
 		<NuxtLink
-			:to="`/payment/${id-1}`"
+			:to="`/payment/${id!-1}`"
 			v-if="show_select_button"
 		>
 			<UButton

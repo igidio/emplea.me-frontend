@@ -11,7 +11,8 @@
 						employer: data.employer.name,
 						employer_id: data.employer.id,
 						image: data.employer.profile_image,
-						location: data.employer.location
+						location: data.employer.location,
+						featured: !!data.featured
 					}"
 					v-for="data in featured_data"
 				/>

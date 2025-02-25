@@ -23,7 +23,8 @@
 					employer: employerInfo.name,
 					description: post.description,
 					location: post.location,
-					employer_id: employerInfo.id
+					employer_id: employerInfo.id,
+					featured: !!post.featured
 				}"
 			/>
 		</div>
