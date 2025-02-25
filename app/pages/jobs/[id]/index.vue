@@ -252,6 +252,13 @@ const {data} = await useAsyncQuery<
 
 useHead({
 	title: data.value?.post.post.name,
+	meta: !!data.value?.post.post.featured ? [{ name: 'description', content: data.value?.post.post.description },
+		{ name: 'robots', content: 'index, follow' },
+		{ property: 'og:title', content: data.value?.post.post.name },
+		{ property: 'og:description', content: data.value?.post.post.description },
+		{ property: 'og:type', content: 'website' },
+		{ property: 'og:url', content: `https://www.emplea.me/jobs/${data.value.post.post.id}` },
+		{ property: 'og:image', content: `https://www.emplea.me/${data.value.post.post.employer.profile_image}` }] : undefined
 })
 
 const post = data.value?.post.post
