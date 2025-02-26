@@ -51,24 +51,49 @@
 
 			<div class="flex flex-row gap-4 w-full">
 				<div class="flex flex-col gap-4">
+
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Datos sobre publicaciones</span>
 						{{ data?.admin.posts_per_day }}
+
 					</UCard>
+
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Empleadores con más publicaciones</span>
-						{{ data?.admin.posts_per_employer }}
+						<VisSingleContainer :height="200">
+							<VisBulletLegend :items="data_posts_per_employer.legend as BulletLegendItemInterface[]" class="mb-4"/>
+							<VisTooltip :triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
+							<VisDonut
+								:value="(d:any) => d.value"
+								:data="data_posts_per_employer.data"
+								:showEmptySegments="true"
+								:padAngle="0.01"
+								:arcWidth="20"
+							/>
+						</VisSingleContainer>
+
 					</UCard>
+
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Categorías más populares</span>
-						{{ data?.admin.post_per_category }}
+						<VisSingleContainer :height="200">
+							<VisBulletLegend :items="data_posts_per_category.legend as BulletLegendItemInterface[]" class="mb-4"/>
+							<VisTooltip :triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
+							<VisDonut
+								:value="(d:any) => d.value"
+								:data="data_posts_per_category.data"
+								:showEmptySegments="true"
+								:padAngle="0.01"
+								:arcWidth="20"
+							/>
+						</VisSingleContainer>
 					</UCard>
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Alcance de las publicaciones destacadas</span>
 						{{ data?.admin.post_reach }}
 					</UCard>
 				</div>
-				<div class="flex flex-col gap-4">
+				<div class="flex flex-col gap-4 min-w-56">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Habilidades más demandadas</span>
 						<div class="flex flex-col gap-3 text-sm">
@@ -97,7 +122,6 @@
 					</UCard>
 				</div>
 
-
 			</div>
 		</div>
 	</div>
@@ -106,7 +130,40 @@
 <script setup lang="ts">
 import {gqlAdmin} from "~/queries";
 import type {admin_interface} from "~/interfaces/server/admin.interface";
-import "echarts";
+
+definePageMeta({
+	middleware: 'role',
+	roles: ['SUPERUSER', 'ADMIN'],
+	keepalive: false,
+})
+useHead({
+	title: 'Panel de administración'
+})
 
 const {data} = useAsyncQuery<{ admin: admin_interface }>(gqlAdmin.admin)
+
+import {VisSingleContainer, VisDonut, VisBulletLegend, VisTooltip} from '@unovis/vue'
+import {type BulletLegendItemInterface, Donut} from "@unovis/ts";
+
+const data_posts_per_employer = computed(() => ({
+		data: data.value?.admin.posts_per_employer.map((e) => ({
+			name: e.employer,
+			value: e.total
+		})),
+		legend: data.value?.admin.posts_per_employer.map((e) => ({
+			name: e.employer
+		}))
+	})
+)
+
+const data_posts_per_category = computed(() => ({
+		data: data.value?.admin.post_per_category.map((e) => ({
+			name: e.category,
+			value: e.total
+		})),
+		legend: data.value?.admin.post_per_category.map((e) => ({
+			name: e.category
+		}))
+	})
+)
 </script>
