@@ -8,6 +8,7 @@ export interface admin_interface {
 	posts_per_salary_type:      PostsPerSalaryType[];
 	posts_per_skill:            PostsPerSkill[];
 	top_ten_posts_per_location: TopTenPostsPerLocation[];
+	posts_per_employer:         PostsPerEmployer[];
 }
 
 export interface AdminUser {
@@ -22,8 +23,13 @@ export interface LastPosts {
 	average_interactions: number;
 	last_month:           number;
 	last_week:            number;
-	last_year:            number;
+	total_interactions:   number;
 	total:                number;
+}
+
+export interface  PostsPerEmployer {
+	employer: string;
+	total:   string;
 }
 
 export interface PostPerCategory {

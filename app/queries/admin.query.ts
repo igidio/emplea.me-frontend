@@ -13,7 +13,7 @@ export default {
                   average_interactions
                   last_month
                   last_week
-                  last_year
+                  total_interactions
                   total
               }
               post_per_category {
@@ -45,7 +45,13 @@ export default {
                   location
                   total
               }
+              posts_per_employer {
+                  total
+                  employer
+              }
           }
       }
+  	
+	
 	`
 }
