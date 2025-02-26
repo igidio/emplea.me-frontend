@@ -53,16 +53,20 @@
 				<div class="flex flex-col gap-4">
 
 					<UCard class="flex flex-col gap-4">
-						<span class="font-semibold text-xl mb-2 inline-block">Datos sobre publicaciones</span>
-						{{ data?.admin.posts_per_day }}
-
+						<span class="font-semibold text-xl mb-4 inline-block">Publicaciones por día</span>
+						<VisXYContainer :data="data_posts_per_day.data" :height="200">
+							<VisStackedBar :x="data_posts_per_day.x" :y="data_posts_per_day.y" color="#a611a5" />
+							<VisAxis type="x" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)" />
+							<VisAxis type="y" label="Cantidad de publicaciones" />
+						</VisXYContainer>
 					</UCard>
 
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Empleadores con más publicaciones</span>
 						<VisSingleContainer :height="200">
 							<VisBulletLegend :items="data_posts_per_employer.legend as BulletLegendItemInterface[]" class="mb-4"/>
-							<VisTooltip :triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
+							<VisTooltip
+								:triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
 							<VisDonut
 								:value="(d:any) => d.value"
 								:data="data_posts_per_employer.data"
@@ -78,7 +82,8 @@
 						<span class="font-semibold text-xl mb-2 inline-block">Categorías más populares</span>
 						<VisSingleContainer :height="200">
 							<VisBulletLegend :items="data_posts_per_category.legend as BulletLegendItemInterface[]" class="mb-4"/>
-							<VisTooltip :triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
+							<VisTooltip
+								:triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
 							<VisDonut
 								:value="(d:any) => d.value"
 								:data="data_posts_per_category.data"
@@ -90,7 +95,12 @@
 					</UCard>
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Alcance de las publicaciones destacadas</span>
-						{{ data?.admin.post_reach }}
+						<VisBulletLegend :items="data_post_reach.items"/>
+						<VisXYContainer :data="data_post_reach.data" :height="300" :xScale="xScale" >
+							<VisLine :x="info_post_reach.x" :y="info_post_reach.y" :color="data_post_reach.color"/>
+							<VisAxis type="x" label="Fechas" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)"/>
+							<VisAxis type="y" label="Interacciones"/>
+						</VisXYContainer>
 					</UCard>
 				</div>
 				<div class="flex flex-col gap-4 min-w-56">
@@ -142,8 +152,8 @@ useHead({
 
 const {data} = useAsyncQuery<{ admin: admin_interface }>(gqlAdmin.admin)
 
-import {VisSingleContainer, VisDonut, VisBulletLegend, VisTooltip} from '@unovis/vue'
-import {type BulletLegendItemInterface, Donut} from "@unovis/ts";
+import {VisStackedBar, VisSingleContainer, VisDonut, VisBulletLegend, VisTooltip, VisAxis, VisLine, VisXYContainer} from '@unovis/vue'
+import {type BulletLegendItemInterface, Donut, Scale} from "@unovis/ts";
 
 const data_posts_per_employer = computed(() => ({
 		data: data.value?.admin.posts_per_employer.map((e) => ({
@@ -166,4 +176,44 @@ const data_posts_per_category = computed(() => ({
 		}))
 	})
 )
+
+const xScale = Scale.scaleTime()
+
+const info_post_reach = {
+	labels: {
+		featured: 'Destacados',
+		not_featured: 'Posts normales',
+	},
+	colors: {
+		featured: '#a611a5',
+		not_featured: '#F4B83E'
+	},
+	x: (d: { date: string }) => +(new Date(d.date)),
+	y: [
+		(d: any) => +d.featured,
+		(d: any) => +d.not_featured,
+	]
+}
+const data_post_reach = computed(() => ({
+	data: data.value?.admin.post_reach.map((item) => ({
+		date: new Date(new Date().setDate(new Date().getDate() - item.day)),
+		featured: item.featured,
+		not_featured: item.not_featured,
+	})),
+	items: ['featured', 'not_featured'].map(t => ({
+		name: info_post_reach.labels[t as keyof typeof info_post_reach.labels],
+		color: info_post_reach.colors[t as keyof typeof info_post_reach.labels],
+	})),
+	color: (d: any, i: number) => i === 0 ? '#a611a5' : '#F4B83E'
+}))
+
+const data_posts_per_day = computed(() => ({
+	x: (d: { date: string }) => new Date((new Date(d.date))),
+	y: (d: { value: number }) => +d.value,
+	data: data.value?.admin.posts_per_day.map((e) => ({
+		date: new Date(new Date(e.day)),
+		value: e.total
+	}))
+}))
+
 </script>
