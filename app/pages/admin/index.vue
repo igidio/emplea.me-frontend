@@ -71,27 +71,29 @@
 				<div class="flex flex-col gap-4">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Habilidades más demandadas</span>
-						<table class="table-auto">
-							<tr v-for="(e, index) in data?.admin.posts_per_skill">
-								<td>{{ index + 1 }}.</td>
-								<td>{{ e.skill }}</td>
-								<td>{{ e.total }} publ.</td>
-							</tr>
-
-						</table>
+						<div class="flex flex-col gap-3 text-sm">
+							<div v-for="(e, index) in data?.admin.posts_per_skill">
+								<div class="flex flex-row place-content-between">
+									<div class="font-semibold">{{ index + 1 }}.</div>
+									<div>{{ e.total }} publ.</div>
+								</div>
+								<span>{{ e.skill }}</span>
+							</div>
+						</div>
 					</UCard>
 
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Top 10 locaciones</span>
-						<table class="table-auto">
-							<tbody>
-							<tr v-for="(e, index) in data?.admin.top_ten_posts_per_location">
-								<td>{{ index + 1 }}.</td>
-								<td>{{ e.location }}</td>
-								<td>{{ e.total }} publ.</td>
-							</tr>
-							</tbody>
-						</table>
+
+						<div class="flex flex-col gap-3 text-sm">
+							<div v-for="(e, index) in data?.admin.top_ten_posts_per_location">
+								<div class="flex flex-row place-content-between">
+									<div class="font-semibold">{{ index + 1 }}.</div>
+									<div>{{ e.total }} publ.</div>
+								</div>
+								<span>{{ e.location }}</span>
+							</div>
+						</div>
 					</UCard>
 				</div>
 
@@ -104,6 +106,7 @@
 <script setup lang="ts">
 import {gqlAdmin} from "~/queries";
 import type {admin_interface} from "~/interfaces/server/admin.interface";
+import "echarts";
 
 const {data} = useAsyncQuery<{ admin: admin_interface }>(gqlAdmin.admin)
 </script>
