@@ -74,6 +74,7 @@ import gqlCommon from "./common.query";
 import gqlPost from "./post.query";
 import gqlFeatured from "./featured.query";
 import gqlInteraction from "./interaction.query";
+import gqlAdmin from "./admin.query";
 
 export {
 	plansGet,
@@ -153,5 +154,6 @@ export {
 	gqlCommon,
 	gqlPost,
 	gqlFeatured,
-	gqlInteraction
+	gqlInteraction,
+	gqlAdmin
 };

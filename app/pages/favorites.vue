@@ -84,7 +84,7 @@ onMounted(async () => {
 const show_all = async (e: Event) => {
 	console.log(e)
 	await refetch({
-		"showAll": e ? undefined : true
+		"showAll": e ? true : undefined
 	})?.then((res) => {
 		interactions.value = res.data.interactionGet
 	})
