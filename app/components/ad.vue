@@ -1,7 +1,7 @@
 <template>
 	<div
-		class="flex flex-col bg-black text-white rounded-large items-center justify-center"
+		class="flex flex-col bg-slate-200 text-black rounded-large items-center justify-center border"
 	>
-<!--    <Adsbygoogle ad-slot="ad_mobile_2" />-->
+		<span class="font-semibold">PUBLICIDAD</span>
 	</div>
 </template>
