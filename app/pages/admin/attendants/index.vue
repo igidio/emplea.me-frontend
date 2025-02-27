@@ -12,9 +12,17 @@
       to: `/admin/attendants`
 		}]"/>
 		<UCard>
-			<template #header>Asistentes{{
-					router.currentRoute.value.query.q && `: ${router.currentRoute.value.query.q}`
-				}}
+			<template #header>
+				<div class="flex flex-row justify-between">
+					<span>Asistentes{{
+							router.currentRoute.value.query.q && `: ${router.currentRoute.value.query.q}`
+						}}</span>
+					<UButton
+						icon="ri:reset-left-fill"
+						color="gray"
+						@click="refetch()"/>
+				</div>
+
 			</template>
 			<div class="flex flex-col gap-4">
 

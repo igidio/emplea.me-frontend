@@ -1,6 +1,11 @@
 <template>
 	<UCard>
-		<template #header>Historial de pago</template>
+		<template #header>
+			<div class="flex flex-row justify-between">
+				Historial de pago
+				<UButton icon="ri:reset-left-fill" color="gray" @click="reload()" />
+			</div>
+		</template>
 		<UTable
 			:rows="rows"
 			:columns="columns"
@@ -106,7 +111,8 @@ const props = withDefaults(defineProps<{
 	subscriptions: SubscriptionInterface[],
 	loading: boolean,
 	show_users?: boolean,
-	options: (row: any) => any[]
+	options: (row: any) => any[],
+	reload: () => Promise<void>
 }>(), {
 	show_users: false,
 })

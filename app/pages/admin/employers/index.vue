@@ -23,7 +23,10 @@
 		]"/>
 
 		<UCard>
-			<template #header>Empleadores</template>
+			<template #header><div class="flex flex-row gap-4 justify-between">
+				Empleadores
+				<UButton icon="ri:reset-left-fill" color="gray" @click="fetch()" />
+			</div></template>
 			<div class="flex flex-col gap-4">
 
 				<div class="flex flex-row gap-2 justify-end">

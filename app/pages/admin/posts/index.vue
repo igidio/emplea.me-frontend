@@ -49,20 +49,20 @@ useHead({
 	title: 'Publicaciones'
 })
 
+const posts = ref<PostInterface[]>([])
+
 const {result, refetch, loading} = useQuery<{
 	"postFindAll": PostInterface[]
 }>(postFindAll(true), {}, {prefetch: true})
 
-const posts = ref<PostInterface[]>([])
+onMounted(async () => {
+	await fetch();
+})
 
 const fetch = async () => {
 	await refetch()
 	posts.value = result.value?.postFindAll || []
 }
-
-onMounted(async () => {
-	await fetch();
-})
 
 const modal_data = ref({
 	is_open: false,

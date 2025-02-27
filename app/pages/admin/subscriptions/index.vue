@@ -62,6 +62,7 @@
 			:loading="loading"
 			:options="options"
 			show_users
+			:reload="() => reload()"
 		/>
 	</ClientOnly>
 </template>

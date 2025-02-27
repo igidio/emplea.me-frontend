@@ -16,6 +16,7 @@
 			:subscriptions="subscriptions"
 			:loading="loading"
 			:options="options"
+			:reload="() => fetch()"
 		/>
 	</div>
 
@@ -62,9 +63,7 @@ const {
 const submit_toggle_renew = async (id: number) => {
 	await mutate_toggle_renew({
 		"subscriptionToggleRenewId": id,
-		"messageInput": {
-			"message": null
-		}
+		//"messageInput": null
 	})
 		.then(async () => {
 			await fetch()

@@ -77,13 +77,6 @@ const {result: EmploymentData, load, refetch} = useLazyQuery<{
 }>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": 1})
 load()
 
-onMounted(() => {
-	if (useRoute().query.e && employerGetByUserData.value?.employerListByUser[Number(useRoute().query.e)]) {
-		get_employer(Number(useRoute().query.e))
-		console.log(EmploymentData.value)
-	}
-})
-
 const get_employer = async (i: number) => {
 	await useRouter().push({query: {e: i}})
 	loading.value = true
@@ -93,4 +86,11 @@ const get_employer = async (i: number) => {
 	result.value = EmploymentData.value?.findOneEmployer
 	loading.value = false
 }
+
+onMounted(async () => {
+	if (useRoute().query.e && employerGetByUserData.value?.employerListByUser[Number(useRoute().query.e)]) {
+		await get_employer(Number(useRoute().query.e))
+		console.log(EmploymentData.value)
+	}
+})
 </script>

@@ -55,7 +55,12 @@
 			/>
 		</div>
 		<UCard>
-			<template #header>Usuarios</template>
+			<template #header>
+				<div class="flex flex-row justify-between">
+					Usuarios
+					<UButton icon="ri:reset-left-fill" color="gray" @click="refetch()"/>
+				</div>
+			</template>
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-col gap-2 justify-end w-64 self-end">
 					<UInput

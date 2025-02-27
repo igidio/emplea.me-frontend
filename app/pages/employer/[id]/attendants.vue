@@ -13,7 +13,12 @@
       to: `/employer/${route.params.id}/edit`
 		}]"/>
 		<UCard>
-			<template #header>Administrar asistentes</template>
+			<template #header>
+				<div class="flex flex-row justify-between gap-4">
+					Administrar asistentes
+					<UButton icon="ri:reset-left-fill" color="gray" @click="reload()"/>
+				</div>
+			</template>
 			<div class="flex flex-col gap-4">
 				<p>Recuerda que puedes disponer de hasta cuatro empleados en un negocio</p>
 				<AdminAttendantTable

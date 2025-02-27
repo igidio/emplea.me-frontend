@@ -1,6 +1,8 @@
 <template>
 	<UCard>
-		<template #header>Publicaciones</template>
+		<template #header><div class="flex flex-row justify-between">Publicaciones
+			<UButton icon="ri:reset-left-fill" color="gray" @click="reload()" />
+		</div></template>
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-2 justify-end w-64 self-end">
 				<UInput
