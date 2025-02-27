@@ -75,6 +75,7 @@ import gqlPost from "./post.query";
 import gqlFeatured from "./featured.query";
 import gqlInteraction from "./interaction.query";
 import gqlAdmin from "./admin.query";
+import gqlPostSkill from "./post_skill.query";
 
 export {
 	plansGet,
@@ -155,5 +156,6 @@ export {
 	gqlPost,
 	gqlFeatured,
 	gqlInteraction,
-	gqlAdmin
+	gqlAdmin,
+	gqlPostSkill
 };

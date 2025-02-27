@@ -93,7 +93,12 @@
 							<div class="flex flex-col gap-2">
 								<div class="flex flex-row justify-between">
 									<h6>Habilidades necesarias</h6>
-									<UButton label="Editar" size="sm" v-if="info?.can_modify"/>
+									<NuxtLink
+										:to="`/jobs/${job.id}/skills`"
+										v-if="info?.can_modify"
+									>
+										<UButton label="Editar" size="sm" />
+									</NuxtLink>
 								</div>
 								<div class="grid tablet:grid-cols-2 gap-3" v-if="job.skills && job.skills.length > 0">
 
