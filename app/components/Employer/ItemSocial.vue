@@ -129,7 +129,7 @@ const reset = () => {
 
 const schema = yup.object(seeker_social_schema)
 
-const {mutate, error} = useMutation<{ updateEmployerSocialInput: string }>(employerSocialUpdate)
+const {mutate, error} = useMutation<{ employerSocialUpdate: string }>(employerSocialUpdate)
 
 const submit = async () => {
 	loading.value = true;
@@ -144,7 +144,7 @@ const submit = async () => {
 	})
 		.then(async (r) => {
 			is_editable.value = false;
-			useToast().add({title: r?.data?.updateEmployerSocialInput})
+			useToast().add({title: r?.data?.employerSocialUpdate})
 			await p.reload()
 			reset()
 		}).catch((e: Error) => {

@@ -16,27 +16,34 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	}>(employerFindOne(user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(to.params.id)})
 	await refetch()
 	
-	if (levels.length > 0 && !levels.includes(result.value?.findOneEmployer.employerUser.level as string)) {
+	if (!result.value?.findOneEmployer.employer.id) {
 		return navigateTo('/')
-	}
-	
-	if (require_premium && !is_premium.value) {
-		return navigateTo('/payment')
 	}
 	
 	if (!result.value?.findOneEmployer.employerUser) {
 		return navigateTo('/employer')
 	}
 	
-	if (!result.value?.findOneEmployer.employer.id) {
-		return navigateTo('/')
+	if (levels.length > 0 && !levels.includes(result.value?.findOneEmployer.employerUser.level as string)) {
+		return navigateTo('/employer')
+	}
+	
+	if (require_premium && !is_premium.value) {
+		return navigateTo('/payment')
 	}
 	
 	if (!result.value?.findOneEmployer.employer.is_verified) {
 		return navigateTo('/employer')
 	}
 	
+	if (!result.value?.findOneEmployer.employerUser.has_confirm || !result.value?.findOneEmployer.employerUser.is_active) {
+		return navigateTo('/employer')
+	}
+	
+	const refetchh = () => {
+		console.log("dsadasdsad")
+	}
 	
 	to.meta.employer_data = result.value?.findOneEmployer
-	to.meta.refetch = refetch
+	to.meta.refetch = () => refetch()
 })

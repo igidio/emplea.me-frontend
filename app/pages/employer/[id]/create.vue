@@ -8,8 +8,8 @@
 			label: result?.findOneEmployer.employer.name!,
       to: `/employer/${result?.findOneEmployer.employer.id}`
 		}, {
-			label: 'Editar contacto de empleador',
-      to: `/employer/${route.params.id}/edit`
+			label: 'Crear publicación de trabajo',
+      to: `/employer/${result?.findOneEmployer.employer.id}/create`
 		}]"/>
 
 		<UForm class="flex flex-row w-full gap-4"
@@ -179,8 +179,9 @@ import {employerFindOne, postCreate} from "~/queries";
 const user = useUserStore()
 const route = useRoute()
 definePageMeta({
-	middleware: 'role',
+	middleware: ['role', 'employer'],
 	roles: ['EMPLOYER'],
+	levels: ['ADMIN', 'ATTENDANT'],
 	keepalive: false,
 })
 useHead({

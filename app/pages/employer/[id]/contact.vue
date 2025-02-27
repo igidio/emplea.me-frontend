@@ -5,11 +5,11 @@
       icon: 'i-heroicons-home',
       to: '/'
 		}, {
-			label: result?.findOneEmployer.employer.name!,
-      to: `/employer/${result?.findOneEmployer.employer.id}`
+			label: employer.employer.name!,
+      to: `/employer/${employer.employer.id}`
 		}, {
 			label: 'Editar contacto de empleador',
-      to: `/employer/${result?.findOneEmployer.employer.id}/edit`
+      to: `/employer/${employer.employer.id}/edit`
 		}]"/>
 		<UCard>
 			<template #header>Editar contacto de empleador</template>
@@ -18,12 +18,12 @@
 
 					<h6>Teléfono/s</h6>
 					<EmployerItemPhone
-						v-for="e in result?.findOneEmployer.employer.phone"
+						v-for="e in employer.employer.phone"
 						:phone="e"
 						:reload="reload"
 					/>
 					<EmployerAddPhone
-						:data_exists="!!(result?.findOneEmployer.employer.phone && result?.findOneEmployer.employer.phone.length > 0)"
+						:data_exists="!!(employer.employer.phone && employer.employer.phone.length > 0)"
 						:reload="reload"
 					/>
 				</div>
@@ -31,7 +31,7 @@
 				<div class="flex flex-col gap-4">
 					<h6>Redes sociales</h6>
 					<EmployerItemSocial
-						v-for="e in result?.findOneEmployer.employer.employer_social"
+						v-for="e in employer.employer.employer_social"
 						:props="{
 								id: e.id!,
 								name: e.name,
@@ -48,7 +48,7 @@
 						:key="'social'+e.id"
 					/>
 					<EmployerAddSocial
-						:data_exists="!!(result?.findOneEmployer.employer.employer_social && result?.findOneEmployer.employer.employer_social.length > 0)"
+						:data_exists="!!(employer.employer.employer_social && employer.employer.employer_social.length > 0)"
 						:social="social!"
 						:reload="reload"
 					/>
@@ -60,33 +60,31 @@
 <script setup lang="ts">
 import type {EmployerInterface, EmployerUserInterface, socialInterface} from "~/interfaces";
 import {employerFindOne, socialFindAll} from "~/queries";
+import type {ApolloQueryResult} from "@apollo/client";
 
 const route = useRoute()
-const user = useUserStore()
 
 definePageMeta({
-	middleware: 'role',
-	roles: ['EMPLOYER', 'ADMIN', 'SUPEURSER'],
+	middleware: ['role', 'employer'],
+	//roles: ['EMPLOYER', 'ADMIN', 'SUPEURSER'],
+	roles: ['EMPLOYER'],
+	levels: ['ADMIN'],
 	keepalive: false,
 })
 useHead({
 	title: 'Editar contacto de empleador'
 })
 
-const {result, refetch} = useQuery<{
-	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
-}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
+const employer = ref(route.meta.employer_data as { employer: EmployerInterface, employerUser: EmployerUserInterface })
+const refetch_employer = route.meta.refetch as () => Promise<{ data: {
+		findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
+	}}>
 
 const reload = async () => {
-	await refetch()
+	await refetch_employer().then((e) => {
+		employer.value = e.data.findOneEmployer
+	});
 }
-
-onMounted(async () => {
-	if (!result.value?.findOneEmployer.employerUser) {
-		await useRouter().replace(`/employer/${result.value?.findOneEmployer.employer.id}`)
-		if (import.meta.client) useToast().add({title: 'No puedes editar esto.'})
-	}
-})
 
 const social: Ref<socialInterface[] | undefined> = ref([])
 const social_data = await useAsyncQuery<{ socialFindAll: socialInterface[] }>(socialFindAll)

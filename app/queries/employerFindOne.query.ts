@@ -110,6 +110,8 @@ const cases = {
                     id
                     level
                     modified_at
+                    is_active
+                    has_confirm
                 }
             }
         }
@@ -165,6 +167,8 @@ const cases = {
                     id
                     level
                     modified_at
+                    is_active
+                    has_confirm
                 }
             }
         }

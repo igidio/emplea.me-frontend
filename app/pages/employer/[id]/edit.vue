@@ -26,27 +26,22 @@
 </template>
 
 <script setup lang="ts">
-import {employerFindOne, employerUpdate} from "~/queries";
+import {employerUpdate} from "~/queries";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 const route = useRoute()
 const postStore = usePostStore();
 
 definePageMeta({
-	middleware: 'role',
-	roles: ['EMPLOYER']
+	middleware: ['role', 'employer'],
+	roles: ['EMPLOYER'],
+	levels: ['ADMIN']
 })
 useHead({
 	title: 'Editar empleador'
 })
 
-const {data} = await useAsyncQuery<{
-	findOneEmployer: {
-		employer: EmployerInterface,
-		employerUser: EmployerUserInterface
-	}
-}>(employerFindOne(), {"findOneEmployerId": Number(route.params.id)})
-const {employer, employerUser} = data.value?.findOneEmployer!
+const { employer } = route.meta.employer_data as { employer: EmployerInterface, employerUser: EmployerUserInterface }
 
 const {mutate, loading, error} = useMutation<{ employerUpdate: string }>(employerUpdate);
 
@@ -77,9 +72,4 @@ const state = reactive({
 	}) : undefined,
 	phone: employer,
 })
-
-if (employerUser.level !== 'ADMIN') {
-	useRouter().push('/')
-	useToast().add({title: 'No puedes hacer esto'})
-}
 </script>
