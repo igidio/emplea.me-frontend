@@ -49,12 +49,11 @@
 				</div>
 			</div>
 
-			<div class="flex flex-row gap-4 w-full">
-				<div class="flex flex-col gap-4">
-
+			<div class="flex flex-col desktop:flex-row gap-4 w-full">
+				<div class="flex flex-col gap-4 grow-0 desktop:grow">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-4 inline-block">Publicaciones por día</span>
-						<VisXYContainer :data="data_posts_per_day.data" :height="200">
+						<VisXYContainer :data="data_posts_per_day.data" :xScale="xScale">
 							<VisStackedBar :x="data_posts_per_day.x" :y="data_posts_per_day.y" color="#a611a5" />
 							<VisAxis type="x" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)" />
 							<VisAxis type="y" label="Cantidad de publicaciones" />
@@ -96,14 +95,14 @@
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Alcance de las publicaciones destacadas</span>
 						<VisBulletLegend :items="data_post_reach.items"/>
-						<VisXYContainer :data="data_post_reach.data" :height="300" :xScale="xScale" >
+						<VisXYContainer :data="data_post_reach.data" :xScale="xScale" >
 							<VisLine :x="info_post_reach.x" :y="info_post_reach.y" :color="data_post_reach.color"/>
 							<VisAxis type="x" label="Fechas" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)"/>
 							<VisAxis type="y" label="Interacciones"/>
 						</VisXYContainer>
 					</UCard>
 				</div>
-				<div class="flex flex-col gap-4 min-w-56">
+				<div class="flex flex-col gap-4 w-full desktop:w-72">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Habilidades más demandadas</span>
 						<div class="flex flex-col gap-3 text-sm">
@@ -131,7 +130,6 @@
 						</div>
 					</UCard>
 				</div>
-
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,16 @@
 <template>
-	<div class="flex flex-col gap-2">
-		<div class="w-full background sticky top-14 z-50">
+	<div class="flex flex-col gap-4">
+		<UBreadcrumb :links="[{
+      label: 'Inicio',
+      icon: 'i-heroicons-home',
+      to: '/'
+		}, {
+			label: 'Categorías',
+      to: '/categories'
+		}
+		]"/>
+		<hr/>
+		<div class="w-full background sticky top-16 z-50">
 			<NuxtLink to="/">
 				<UButton size="lg" color="black" class="w-full">
 					<UIcon name="ri:arrow-left-circle-fill" />
@@ -16,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import searchOptions from "~/data/search/search-options.data";
+import {usePostStore} from "~/stores/post.pinia";
 
-const categories = ref(searchOptions.categories);
+const categories = usePostStore().categories;
 </script>

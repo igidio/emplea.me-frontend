@@ -3,7 +3,7 @@ import type {navigationOptionsInterface} from "~/interfaces/client.interface";
 
 export const jobs_option: navigationOptionsInterface = {
 	label: "Trabajos",
-	name: 'jobs'
+	name: 'jobs',
 };
 export const favorites_option: navigationOptionsInterface = {
 	label: "Mis Favoritos",

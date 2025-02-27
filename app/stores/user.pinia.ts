@@ -89,8 +89,7 @@ export const useUserStore = defineStore("user", () => {
 		let logout = {
 			label: "Cerrar sesión",
 			shortcuts: ["C"],
-			click: async () => {
-				await logout_user();
+			click: async () => {await logout_user();
 			},
 		};
 		

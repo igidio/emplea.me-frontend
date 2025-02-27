@@ -219,8 +219,11 @@
 
 <script setup lang="ts">
 const activeSection = ref(0)
-
 const route = useRoute()
+
+useHead({
+	title: 'Adicional'
+})
 
 if (route.query.o) {
 	activeSection.value = parseInt(route.query.o as string)

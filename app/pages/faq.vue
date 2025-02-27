@@ -76,3 +76,9 @@
 		</UCard>
 	</div>
 </template>
+
+<script setup lang="ts">
+useHead({
+	title: 'Preguntas Frecuentes (FAQ)'
+})
+</script>
