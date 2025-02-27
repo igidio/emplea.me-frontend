@@ -141,7 +141,6 @@ import type {PostInterface} from "~/interfaces";
 import modalitiesData from "~/data/search/modalities.data";
 import {definePageMeta} from "#imports";
 
-
 const {searchOptions, state, sendSearchQuery} = useSearch();
 
 const route = useRoute();
@@ -259,19 +258,4 @@ watch(state, async () => {
 	list.value = []
 	await get_job_list(true)
 });
-
-// watch( () => useRoute().path,
-// 	(newPath, oldPath) => {
-// 		alert("newPath")
-// 		if (newPath === oldPath) {
-// 			alert("cambio de ruta")
-// 		}
-// 	}
-// );
-
-// watch(useRoute().path, async () => {
-// 	list.value = []
-// 	current_skip.value = 1
-// 	await get_job_list()
-// });
 </script>

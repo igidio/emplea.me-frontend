@@ -64,7 +64,7 @@ const selected_plan = ref<number|undefined>(undefined)
 
 definePageMeta({
 	middleware: 'role',
-	roles: ['SUPERUSER', 'ADMIN'],
+	roles: ['SUPERUSER'],
 	keepalive: false,
 })
 useHead({

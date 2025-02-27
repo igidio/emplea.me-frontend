@@ -15,12 +15,14 @@
 			to: `/jobs/${employer?.post.id}/skills`
 		}]"/>
 		<UCard>
+			<template #header>Editar habilidades</template>
 			<div class="flex flex-col gap-4">
 			<JobAddSkill
 				:data_exists="!!(employer?.post.post_skill && employer?.post.post_skill.length > 0)"
 				:reload="reload"
 			/>
 
+				<div class="grid grid-cols-1 desktop:grid-cols-2 gap-4">
 			<JobItemSkill
 				v-for="e in employer?.post.post_skill"
 				:props="{
@@ -32,40 +34,31 @@
 							}"
 				:key="'skill'+e.id"
 			/>
+				</div>
 			</div>
 		</UCard>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type {PostInterface, seekerInterface} from "~/interfaces";
-import {postFindOne, seekerGetOneByUser} from "~/queries";
-import ItemSkill from "~/components/Job/ItemSkill.vue";
+import type {postInfoInterface} from "~/interfaces/post_info.interface";
+
+definePageMeta({
+	middleware: ['role', 'post'],
+	roles: ['EMPLOYER'],
+	require_modify: true,
+})
+useHead({
+	title: 'Editar habilidades'
+})
 
 const route = useRoute()
-
-interface data_interface {
-	post: PostInterface,
-	info: {
-		type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
-		can_modify: boolean;
-		show_employer: boolean;
-	}
-}
-
-const employer = ref<data_interface>()
-
-const {data} = await useAsyncQuery<{ post: data_interface }>(postFindOne(true), {
-	"id": Number(route.params.id),
-})
-employer.value = data.value?.post
-
-const {result, refetch} = useQuery<{ post: data_interface }>(postFindOne(true), {
-	"id": Number(route.params.id),
-}, {prefetch: false})
+const employer = ref<postInfoInterface>(route.meta.post_data as postInfoInterface);
+const refetch = route.meta.refetch as () => Promise<{ data: { post: postInfoInterface } }>
 
 const reload = async () => {
-	await refetch()
-	employer.value = result.value?.post
+	await refetch().then((result) => {
+		employer.value = result.data.post;
+	})
 }
 </script>

@@ -1,8 +1,6 @@
 <template>
 	<UCard>
 		<h6 class="font-bold inline-block mb-4">Contacto</h6>
-
-
 		<div class="flex flex-col relative overflow-hidden gap-2">
 			<div
 				class="z-[2] absolute center-absolute font-semibold w-[90%] center-text bg-white p-2 rounded-medium border border-slate-200"

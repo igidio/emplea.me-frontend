@@ -88,6 +88,7 @@
 						<hr class="desktop:hidden"/>
 						<div class="flex flex-col desktop:w-[70%] gap-2">
 							<item :label="'Última modificación: ' + es_date(job.modified_at!)" icon="ri:calendar-line"/>
+							<hr/>
 							<p class="text-justify">{{ job.description }}</p>
 							<hr class="desktop:hidden"/>
 							<div class="flex flex-col gap-2">
@@ -229,8 +230,10 @@ import {ModalityEnum, SalaryEnum} from "~/enums";
 import {es_date} from "~/helpers/es_date";
 import {definePageMeta} from "#imports";
 import type {BadgeColor} from "#ui/types";
+import type {postInfoInterface} from "~/interfaces/post_info.interface";
 
 definePageMeta({
+	middleware: ['role', 'post'],
 	keepalive: false
 })
 
@@ -241,35 +244,22 @@ const is_hidden = ref(true);
 const userStore = useUserStore()
 const {is_premium, user_role, is_open_modal_premium} = storeToRefs(userStore);
 
-const {data} = await useAsyncQuery<
-	{
-		post: {
-			post: PostInterface,
-			info: {
-				type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
-				can_modify: boolean;
-				show_employer: boolean;
-			}
-		}
-	}
->(postFindOne(true), {
-	"id": Number(route.params.id),
-	watch: [route.query]
-})
+const data = route.meta.post_data as postInfoInterface;
+const refetch = route.meta.refetch as () => Promise<{ data: { post: postInfoInterface } }>
 
 useHead({
-	title: data.value?.post.post.name,
-	meta: !!data.value?.post.post.featured ? [{name: 'description', content: data.value?.post.post.description},
+	title: data.post.name,
+	meta: !!data.post.featured ? [{name: 'description', content: data.post.description},
 		{name: 'robots', content: 'index, follow'},
-		{property: 'og:title', content: data.value?.post.post.name},
-		{property: 'og:description', content: data.value?.post.post.description},
+		{property: 'og:title', content: data.post.name},
+		{property: 'og:description', content: data.post.description},
 		{property: 'og:type', content: 'website'},
-		{property: 'og:url', content: `https://www.emplea.me/jobs/${data.value.post.post.id}`},
-		{property: 'og:image', content: `https://www.emplea.me/${data.value.post.post.employer.profile_image}`}] : undefined
+		{property: 'og:url', content: `https://www.emplea.me/jobs/${data.post.id}`},
+		{property: 'og:image', content: `https://www.emplea.me/${data.post.employer.profile_image}`}] : undefined
 })
 
-const post = ref(data.value?.post.post)
-const info = ref(data.value?.post.info)
+const post = ref(data.post)
+const info = ref(data.info)
 
 if (info.value?.show_employer) is_hidden.value = false;
 
@@ -287,7 +277,7 @@ const job = reactive({
 	skills: post.value?.post_skill,
 	is_active: post.value?.is_active,
 	has_disabled: post.value?.has_disabled,
-	featured: post.value?.featured,
+	featured: post.value?.featured as FeaturedInterface|undefined,
 });
 
 const skillLevelIcon = {
@@ -320,7 +310,7 @@ const additional_info = computed(() => {
 const is_open_modal_interaction = ref(false)
 const selected_interaction = ref<interactionInterface | undefined>(undefined)
 const interactions = ref<interactionInterface[] | undefined>(undefined)
-const {refetch, result, load, loading, error} = useLazyQuery<{
+const {refetch: refetch_interaction, result, load, loading, error} = useLazyQuery<{
 	interactionLoadByPost: interactionInterface[]
 }>(gqlPost.load_interactions, {
 	idPost: +route.params.id!,
@@ -333,7 +323,7 @@ const load_interactions = async () => {
 }
 
 const reload_interactions = async () => {
-	await refetch({idPost: +route.params.id!})
+	await refetch_interaction({idPost: +route.params.id!})
 	if (result.value?.interactionLoadByPost) interactions.value = result.value?.interactionLoadByPost
 }
 
@@ -432,9 +422,9 @@ const set_featured_to_modal_data = () => {
 				await mutate_create_feature({
 					"idPost": +route.params.id!
 				}).then(async (e) => {
-					useToast().add({title: `Publicación destacada'}`})
+					useToast().add({title: `Publicación destacada.`})
 					is_open_modal_confirmation.value = false
-					job.featured = e?.data?.featuredCreate
+					job.featured = e?.data?.featuredCreate!
 				}).catch((e) => {
 					alert(e.message)
 				});
@@ -442,7 +432,7 @@ const set_featured_to_modal_data = () => {
 				await mutate_delete_feature({
 					"idPost": +route.params.id!
 				}).then(async (e) => {
-					useToast().add({title: `Publicación dejada de destacar'`})
+					useToast().add({title: `Esta publicación ya no se destacará.`})
 					is_open_modal_confirmation.value = false
 					job.featured = undefined
 				}).catch((e) => {
@@ -452,21 +442,6 @@ const set_featured_to_modal_data = () => {
 		}
 	}
 }
-
-const {result: result_find_one, refetch: refech_find_one, load: load_find_one} = useLazyQuery<
-	{
-		post: {
-			post: PostInterface,
-			info: {
-				type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
-				can_modify: boolean;
-				show_employer: boolean;
-			}
-		}
-	}
->(postFindOne(true), {
-	"id": Number(route.params.id),
-}, {prefetch: false})
 
 const {
 	mutate: mutate_register_interaction,
@@ -478,11 +453,11 @@ const register_interaction = async (confirm: boolean | undefined = undefined) =>
 		"confirm": confirm
 	}).then(async () => {
 		if (confirm) {
-			await load_find_one()
-			await refech_find_one()
-			post.value = result_find_one.value?.post.post;
-			info.value = result_find_one.value?.post.info;
-			is_hidden.value = false
+			await refetch().then((result) => {
+				post.value = result.data.post.post;
+				info.value = result.data.post.info;
+				is_hidden.value = false
+			})
 		}
 	}).catch((e) => {
 		alert(e.message)
@@ -490,10 +465,6 @@ const register_interaction = async (confirm: boolean | undefined = undefined) =>
 }
 
 onMounted(async () => {
-	if (post.value?.has_disabled && !['ADMIN', 'SUPERUSER'].includes(userStore.user_role)) {
-		if (import.meta.client) useToast().add({title: 'Este empleo ha sido deshabilitado por el administrador, si cree que fue un error contáctese con soporte.'})
-		await router.push(`/employer/${post.value?.employer.id}`)
-	}
 	if (user_role.value as any == 'SEEKER') {
 		await register_interaction()
 	}

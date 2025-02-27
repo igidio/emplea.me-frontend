@@ -50,20 +50,22 @@
 			</div>
 
 			<div class="flex flex-col desktop:flex-row gap-4 w-full">
-				<div class="flex flex-col gap-4 grow-0 desktop:grow">
+				<div class="flex flex-col gap-4 grow-0 desktop:flex-1">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-4 inline-block">Publicaciones por día</span>
 						<VisXYContainer :data="data_posts_per_day.data" :xScale="xScale">
 							<VisStackedBar :x="data_posts_per_day.x" :y="data_posts_per_day.y" color="#a611a5" />
-							<VisAxis type="x" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)" />
+							<VisAxis type="x" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)" :tickTextHideOverlapping="true" :numTicks="6" />
 							<VisAxis type="y" label="Cantidad de publicaciones" />
 						</VisXYContainer>
 					</UCard>
 
-					<UCard class="flex flex-col gap-4">
+					<div class="flex flex-row gap-4">
+
+					<UCard class="flex flex-col gap-4 w-1/2">
 						<span class="font-semibold text-xl mb-2 inline-block">Empleadores con más publicaciones</span>
-						<VisSingleContainer :height="200">
-							<VisBulletLegend :items="data_posts_per_employer.legend as BulletLegendItemInterface[]" class="mb-4"/>
+						<VisSingleContainer :height="100">
+
 							<VisTooltip
 								:triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
 							<VisDonut
@@ -74,13 +76,14 @@
 								:arcWidth="20"
 							/>
 						</VisSingleContainer>
+							<VisBulletLegend :items="data_posts_per_employer.legend as BulletLegendItemInterface[]" class="mt-6" labelMaxWidth="50px"/>
 
 					</UCard>
 
-					<UCard class="flex flex-col gap-4">
+					<UCard class="flex flex-col gap-4 w-1/2">
 						<span class="font-semibold text-xl mb-2 inline-block">Categorías más populares</span>
 						<VisSingleContainer :height="200">
-							<VisBulletLegend :items="data_posts_per_category.legend as BulletLegendItemInterface[]" class="mb-4"/>
+
 							<VisTooltip
 								:triggers="{ [Donut.selectors.segment]: (d: any) => `${d.data.name}: ${d.data.value} publicaciones.`}"/>
 							<VisDonut
@@ -91,18 +94,20 @@
 								:arcWidth="20"
 							/>
 						</VisSingleContainer>
+							<VisBulletLegend :items="data_posts_per_category.legend as BulletLegendItemInterface[]" class="mt-6"/>
 					</UCard>
+					</div>
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Alcance de las publicaciones destacadas</span>
 						<VisBulletLegend :items="data_post_reach.items"/>
 						<VisXYContainer :data="data_post_reach.data" :xScale="xScale" >
 							<VisLine :x="info_post_reach.x" :y="info_post_reach.y" :color="data_post_reach.color"/>
-							<VisAxis type="x" label="Fechas" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)"/>
+							<VisAxis type="x" :tickTextHideOverlapping="true" :numTicks="6" :tickFormat="(value:any) => Intl.DateTimeFormat().format(value)"/>
 							<VisAxis type="y" label="Interacciones"/>
 						</VisXYContainer>
 					</UCard>
 				</div>
-				<div class="flex flex-col gap-4 w-full desktop:w-72">
+				<div class="flex flex-col gap-4 w-full desktop:min-w-56 desktop:max-w-56">
 					<UCard class="flex flex-col gap-4">
 						<span class="font-semibold text-xl mb-2 inline-block">Habilidades más demandadas</span>
 						<div class="flex flex-col gap-3 text-sm">

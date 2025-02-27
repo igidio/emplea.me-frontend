@@ -45,9 +45,13 @@ import {useMyEmployments} from "~/composables/my_employments.composable";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 definePageMeta({
-	middleware: 'role',
+	middleware: ['role'],
 	roles: ['EMPLOYER'],
 	keepalive: false
+})
+
+useHead({
+	title: 'Mis empleos'
 })
 
 const user = useUserStore()

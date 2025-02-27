@@ -5,14 +5,14 @@
       icon: 'i-heroicons-home',
       to: '/'
 		}, {
-			label: data?.post.post.employer.name!,
-      to: `/employer/${data?.post.post.employer.id}`
+			label: data.post.employer.name!,
+      to: `/employer/${data.post.employer.id}`
 		}, {
-			label: data?.post.post.name!,
-      to: `/jobs/${data?.post.post.id}`
+			label: data.post.name!,
+      to: `/jobs/${data.post.id}`
 		}, {
 			label: 'Actualizar publicación de trabajo',
-      to: `/jobs/${data?.post.post.id}/edit`
+      to: `/jobs/${data.post.id}/edit`
 		}
 		]"/>
 
@@ -31,12 +31,13 @@
 
 <script setup lang="ts">
 import {usePostStore} from "~/stores/post.pinia";
-import type {PostInterface} from "~/interfaces";
-import {postFindOne, postUpdate} from "~/queries";
+import {postUpdate} from "~/queries";
+import type {postInfoInterface} from "~/interfaces/post_info.interface";
 
 definePageMeta({
-	middleware: 'role',
-	roles: ['EMPLOYER']
+	middleware: ['role', 'post'],
+	roles: ['EMPLOYER'],
+	require_modify: true,
 })
 useHead({
 	title: 'Actualizar publicación de trabajo'
@@ -45,24 +46,18 @@ useHead({
 const route = useRoute()
 const {location_options} = usePostStore()
 
-const {data} = await useAsyncQuery<
-	{
-		post: {
-			post: PostInterface,
-			info: {
-				type: "GUEST" | "SUPER" | "EMPLOYER" | "ATTENDANT" | "SEEKER";
-				can_modify: boolean;
-				show_employer: boolean;
-			}
-		}
-	}
->(postFindOne(), {"id": Number(route.params.id)});
+const data = route.meta.post_data as postInfoInterface;
 
-onMounted(() => {
-	if (data.value?.post.info.can_modify === false) {
-		useRouter().push('/')
-		useToast().add({title: 'No puedes hacer esto.'})
-	}
+const state = reactive({
+	location: data?.post.location ? location_options.find((e) => {
+		if (e.id === data.post.location?.id) return e
+	}) : undefined,
+	description: data.post.description,
+	name: data.post.name,
+	salary: data.post.salary,
+	salary_type: data.post.salary_type,
+	modality: data.post.modality,
+	category: data.post.category,
 })
 
 const {mutate, loading, error} = useMutation<{ "postUpdate": string }>(postUpdate)
@@ -77,7 +72,7 @@ const submit = async () => {
 			"salary": Number(state.salary),
 			"salary_type": state.salary_type,
 			"modality": state.modality,
-			"id_employer": Number(data.value?.post.post.employer.id)
+			"id_employer": Number(data.post.employer.id),
 		}
 	}).then((e) => {
 		useToast().add({title: e?.data?.postUpdate})
@@ -86,18 +81,6 @@ const submit = async () => {
 		console.log(e)
 	});
 }
-
-const state = reactive({
-	location: data.value?.post.post.location ? location_options.find((e) => {
-		if (e.id === data.value?.post.post.location?.id) return e
-	}) : undefined,
-	description: data.value?.post.post.description,
-	name: data.value?.post.post.name,
-	salary: data.value?.post.post.salary,
-	salary_type: data.value?.post.post.salary_type,
-	modality: data.value?.post.post.modality,
-	category: data.value?.post.post.category,
-})
 
 // const {data: employer_find_one} = await useAsyncQuery<{
 // 	findOneEmployer: {
