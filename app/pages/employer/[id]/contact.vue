@@ -75,16 +75,18 @@ useHead({
 
 const {result, refetch} = useQuery<{
 	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
-}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
+}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
 
 const reload = async () => {
 	await refetch()
 }
 
-if (!result.value?.findOneEmployer.employer.is_verified) {
-	await useRouter().replace(`/employer/${result.value?.findOneEmployer.employer.id}`)
-	if (import.meta.client) useToast().add({title: 'No puedes editar un empleador no verificado.'})
-}
+onMounted(async () => {
+	if (!result.value?.findOneEmployer.employerUser) {
+		await useRouter().replace(`/employer/${result.value?.findOneEmployer.employer.id}`)
+		if (import.meta.client) useToast().add({title: 'No puedes editar esto.'})
+	}
+})
 
 const social: Ref<socialInterface[] | undefined> = ref([])
 const social_data = await useAsyncQuery<{ socialFindAll: socialInterface[] }>(socialFindAll)

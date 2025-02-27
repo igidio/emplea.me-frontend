@@ -6,8 +6,8 @@
       icon: 'i-heroicons-home',
       to: '/'
 		}, {
-			label: result_employer?.findOneEmployer.employer?.name!,
-      to: `/employer/${result_employer?.findOneEmployer.employer.id}`
+			label: employer.employer?.name!,
+      to: `/employer/${employer.employer.id}`
 		}, {
 			label: 'Administrar asistentes',
       to: `/employer/${route.params.id}/edit`
@@ -40,12 +40,14 @@
 </template>
 
 <script setup lang="ts">
-import {employerFindOne, employerUserFindByEmployer, gqlEmployerUser} from "~/queries";
+import {employerUserFindByEmployer, gqlEmployerUser} from "~/queries";
 import type {EmployerInterface, EmployerUserInterface} from "~/interfaces";
 
 definePageMeta({
-	middleware: 'role',
+	middleware: ['role', 'employer'],
 	roles: ['EMPLOYER'],
+	require_premium: true,
+	levels: ['ADMIN'],
 	keepalive: false,
 })
 useHead({
@@ -53,14 +55,10 @@ useHead({
 })
 
 const attendants = ref<EmployerUserInterface[]>([])
-const user = useUserStore()
 const route = useRoute()
 
-
-const {result: result_employer, refetch: refetch_employer} = useQuery<{
-	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
-}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
-
+const employer = route.meta.employer_data as { employer: EmployerInterface, employerUser: EmployerUserInterface }
+const refetch_employer = route.meta.refetch as any
 
 const {result, refetch, loading} = useQuery<{
 	"employerUserFindByEmployer": EmployerUserInterface[]
@@ -68,20 +66,16 @@ const {result, refetch, loading} = useQuery<{
 	"employerUserFindByEmployerId": Number(useRoute().params.id)
 }, {prefetch: true})
 
-onMounted(async () => {
-	await reload()
-})
-
 const reload = async () => {
-	await refetch()
 	await refetch_employer()
+	await refetch()
 	attendants.value = result.value?.employerUserFindByEmployer || []
 }
 
-if (!result_employer.value?.findOneEmployer.employer.is_verified) {
-	await useRouter().replace(`/employer/${result_employer.value?.findOneEmployer.employer.id}`)
-	if (import.meta.client) useToast().add({title: 'No puedes editar un empleador no verificado.'})
-}
+onMounted(async () => {
+	await refetch()
+	attendants.value = result.value?.employerUserFindByEmployer || []
+})
 
 const { mutate: mutate_toggle_active } = useMutation(gqlEmployerUser.toggle_active)
 const toggle_active = async ( id:number ) => {

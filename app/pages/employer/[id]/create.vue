@@ -189,7 +189,7 @@ useHead({
 
 const {result, refetch} = useQuery<{
 	findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface }
-}>(employerFindOne(user.user_role !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
+}>(employerFindOne(user.user_role as any !== 'SEEKER' ? 'not_seeker' : 'default'), {"findOneEmployerId": Number(route.params.id)})
 
 const {categories, location_options} = usePostStore()
 
@@ -203,6 +203,14 @@ const state = reactive({
 	modality: enum_to_array(ModalityEnum)[0]?.value,
 	category: undefined as CategoryInterface | undefined,
 })
+
+onMounted(async () => {
+	if (!result.value?.findOneEmployer.employerUser) {
+		await useRouter().replace('/')
+		if (import.meta.client) useToast().add({title: 'El usuario no está autorizado para hacer esto.'})
+	}
+})
+
 
 const {mutate, loading, error} = useMutation<{ "postCreate": PostInterface }>(postCreate)
 

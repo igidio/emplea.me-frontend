@@ -38,14 +38,12 @@ definePageMeta({
 	middleware: 'role',
 	roles: ['EMPLOYER']
 })
+useHead({
+	title: 'Actualizar publicación de trabajo'
+})
 
 const route = useRoute()
 const {location_options} = usePostStore()
-
-// if (employerUser.level !== 'ADMIN') {
-// 	useRouter().push('/')
-// 	useToast().add({title: 'No puedes hacer esto'})
-// }
 
 const {data} = await useAsyncQuery<
 	{
@@ -60,10 +58,12 @@ const {data} = await useAsyncQuery<
 	}
 >(postFindOne(), {"id": Number(route.params.id)});
 
-if (data.value?.post.info.can_modify === false) {
-	useRouter().push('/')
-	useToast().add({title: 'No puedes hacer esto'})
-}
+onMounted(() => {
+	if (data.value?.post.info.can_modify === false) {
+		useRouter().push('/')
+		useToast().add({title: 'No puedes hacer esto.'})
+	}
+})
 
 const {mutate, loading, error} = useMutation<{ "postUpdate": string }>(postUpdate)
 const submit = async () => {
