@@ -36,9 +36,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 			return navigateTo('/payment')
 		}
 
-		if (!result.value?.findOneEmployer.employer.is_verified) {
-			return navigateTo('/employer')
-		}
+		// if (!['SUPERUSER', 'ADMIN'].includes(user_role as any) && !result.value?.findOneEmployer.employer.is_verified) {
+		// 	return navigateTo('/employer')
+		// }
 
 		if (require_employer_user && (!result.value?.findOneEmployer.employerUser.has_confirm || !result.value?.findOneEmployer.employerUser.is_active)) {
 			return navigateTo('/employer')

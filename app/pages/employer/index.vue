@@ -9,7 +9,7 @@
       to: `/employer`
 		}]"/>
 
-		<div class="flex flex-row gap-4 h-36 overflow-y-hidden">
+		<div class="flex flex-row gap-4 h-36 overflow-y-hidden py-2">
 			<EmployerCardButton
 				v-for="(employment, i) in employments"
 				@click="get_employer(i)"

@@ -13,6 +13,4 @@ export default defineNuxtRouteMiddleware((to, from) => {
 		useToast().add({title: "No tienes permisos para acceder a esta página"});
 		return navigateTo('/')
 	}
-	
-	
 })

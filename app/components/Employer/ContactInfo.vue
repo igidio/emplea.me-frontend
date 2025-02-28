@@ -3,6 +3,10 @@
 		<h6 class="font-bold inline-block mb-4">Contacto</h6>
 		<div class="flex flex-col relative overflow-hidden gap-2">
 			<div
+				v-if="computed_phone.length === 0 || computed_social_media.length === 0"
+				class="italic"
+			>No hay información de contacto.</div>
+			<div
 				class="z-[2] absolute center-absolute font-semibold w-[90%] center-text bg-white p-2 rounded-medium border border-slate-200"
 				v-if="info?.show_employer === false && info.type == 'EMPLOYER' || (!is_available && ['GUEST','SEEKER'].includes(info?.type as any))"
 			>

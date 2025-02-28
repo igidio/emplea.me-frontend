@@ -22,11 +22,17 @@ definePageMeta({
 	require_employer_user: false
 })
 
+
+
 const route = useRoute()
 const result = ref(route.meta.employer_data as { employer: EmployerInterface, employerUser: EmployerUserInterface })
 const refetch = route.meta.refetch as () => Promise<{
 	data: { findOneEmployer: { employer: EmployerInterface, employerUser: EmployerUserInterface } }
 }>
+
+useHead({
+	title: result.value.employer.name
+})
 
 onMounted(async () => {
 		await refetch().then((e) => {

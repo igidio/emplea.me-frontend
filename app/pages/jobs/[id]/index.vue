@@ -195,7 +195,7 @@
 				</div>
 
 				<EmployerInfo
-					:profile_image="post?.employer.profile_image!"
+					:profile_image="post?.employer.profile_image! || '/images/empleame_employer_silhouette.png'"
 					:name="post?.employer.name!"
 					:id="post?.employer.id.toString()!"
 				/>
@@ -446,7 +446,6 @@ const set_featured_to_modal_data = () => {
 const {
 	mutate: mutate_register_interaction,
 } = useMutation(gqlInteraction.register)
-
 const register_interaction = async (confirm: boolean | undefined = undefined) => {
 	await mutate_register_interaction({
 		"idPost": +route.params.id!,

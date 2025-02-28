@@ -160,10 +160,12 @@ import {employer_schema} from "~/schemas/employer.schema";
 import {employerCreate} from "~/queries";
 import type {EmployerInterface, LocationInterface} from "~/interfaces";
 
-
 definePageMeta({
 	middleware: 'role',
 	roles: ['EMPLOYER']
+})
+useHead({
+	title: 'Crear perfil de empleador'
 })
 
 const postStore = usePostStore();

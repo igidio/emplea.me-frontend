@@ -157,7 +157,7 @@ span.error {
 }
 
 .full-content {
-    @apply h-[calc(100vh-330px)];
+    @apply h-[calc(100vh-335px)];
 }
 
 .menu-fade {

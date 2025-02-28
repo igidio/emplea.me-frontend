@@ -6,7 +6,7 @@
 			@submit="submit"
 		>
 			<UCard>
-				<template #header>{{ is_open.is_active ? 'Volver a habilitar ' : 'Deshabilitar' }} empleador: {{
+				<template #header>{{ !is_open.is_active ? 'Volver a habilitar ' : 'Deshabilitar' }} empleador: {{
 						is_open.name
 					}}
 				</template>
