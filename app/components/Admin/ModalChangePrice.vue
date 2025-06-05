@@ -7,7 +7,6 @@
 		>
 			<!--			:loading="loading"-->
 			<UCard>
-				{{ selected_plan }}
 				<template #header>Cambiar precio</template>
 				<div class="flex flex-col gap-4">
 					<p>El precio se aplicará a todas las transacciones que se realicen de ahora en adelante.</p>

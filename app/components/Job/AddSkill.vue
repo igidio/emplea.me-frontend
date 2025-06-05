@@ -30,7 +30,7 @@
 					label="Nombre de habilidad"
 					class="w-1/2"
 					name="name"
-					:help="(state.skill) ? `Selección: ${state.skill.name}` : 'Selecciona o crea una habilidad'"
+					:help="(state.skill && Object.keys(state.skill).length > 0) ? `Selección: ${state.skill.name}` : 'Selecciona o crea una habilidad'"
 				>
 					<UInputMenu
 						color="gray"

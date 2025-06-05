@@ -3,7 +3,7 @@
 		<h6 class="font-bold inline-block mb-4">Contacto</h6>
 		<div class="flex flex-col relative overflow-hidden gap-2">
 			<div
-				v-if="computed_phone.length === 0 || computed_social_media.length === 0"
+				v-if="computed_phone.length === 0 && computed_social_media.length === 0"
 				class="italic"
 			>No hay información de contacto.</div>
 			<div

@@ -6,7 +6,7 @@
       to: '/'
 		}, {
 			label: 'Mis favoritos',
-      to: `/employer/favorites`
+      to: `/favorites`
 		}]"/>
 
 		<div class="flex flex-col tablet:flex-row gap-4">
