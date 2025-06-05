@@ -28,6 +28,7 @@
 			<div class="flex flex-col gap-4">
 
 				<div class="flex flex-row gap-2">
+					{{ state.institute }}
 					<UFormGroup
 						label="Institución educativa"
 						class="w-full"
@@ -41,7 +42,7 @@
 							:search="search_institute"
 							:loading="loading_find_any_institute"
 							trailing
-							placeholder="Busca una habilidad"
+							placeholder="Busca una institución educativa"
 							option-attribute="name"
 						/>
 					</UFormGroup>
@@ -159,7 +160,8 @@ const submit = async () => {
 			"degree": state.degree,
 			"completion_year": state.completion_year,
 			"starting_year": state.starting_year,
-			"institute": state.institute?.id,
+			//"institute": state.institute?.id,
+			"institute": state.institute?.name,
 			"subtitle": state.subtitle
 		}
 	}).then(async () => {

@@ -1,75 +1,89 @@
-# Nuxt 3 Minimal Starter
+# EMPLEAME Frontend
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+**EMPLEAME** is a web platform that connects employers with job seekers, streamlining the hiring and job search process with modern technology and user-friendly tools.
 
-## Setup
+## Features
 
-Make sure to install the dependencies:
+- User registration and authentication (including social login)
+- User profile management
+- Job search and application
+- Job posting for employers
+- Premium subscriptions for enhanced features
+- Assistant management for business accounts
+- Notifications and alerts
+- Responsive design for mobile and desktop
+- Support and contact options
 
-```bash
-# npm
-npm install
+## Technologies Used
 
-# pnpm
-pnpm install
+- **Nuxt 3** – Main application framework (Vue 3-based)
+- **Vue 3** – Progressive JavaScript framework for building user interfaces
+- **TypeScript** – Typed JavaScript for safer code
+- **Pinia** – State management for Vue
+- **Apollo Client** – GraphQL client for data fetching
+- **Tailwind CSS** – Utility-first CSS framework
+- **@nuxt/ui** – UI components for Nuxt
+- **Socket.IO** – Real-time communication (notifications, chat)
+- **Stripe** – Payment processing for premium subscriptions
+- **Jest** & **Vue Test Utils** – Unit and integration testing
+- **ESLint** & **Prettier** – Code quality and formatting
+- **dotenv** – Environment variable management
+- **Husky** – Git hooks for linting and formatting
 
-# yarn
-yarn install
+> _Note: Please check `package.json` for the full list of dependencies._
 
-# bun
-bun install
-```
+## Getting Started
 
-## Development Server
+### Prerequisites
 
-Start the development server on `http://localhost:3000`:
+- [Node.js](https://nodejs.org/) (v16 or higher recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-```bash
-# npm
-npm run dev
+### Installation
 
-# pnpm
-pnpm run dev
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-org/emplea.me-frontend.git
+   cd emplea.me-frontend
+   ```
 
-# yarn
-yarn dev
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-# bun
-bun run dev
-```
+3. Create a `.env` file based on `.env.example` and configure your environment variables.
 
-## Production
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-Build the application for production:
+5. Visit `http://localhost:3000` in your browser.
 
-```bash
-# npm
-npm run build
+## Project Structure
 
-# pnpm
-pnpm run build
+- `src/` – Main source code (components, pages, services, etc.)
+- `public/` – Static assets
+- `README.md` – Project documentation
 
-# yarn
-yarn build
+## Scripts
 
-# bun
-bun run build
-```
+- `dev` – Start development server
+- `build` – Build for production
+- `start` – Start production server
+- `test` – Run unit tests
 
-Locally preview production build:
+## Contributing
 
-```bash
-# npm
-npm run preview
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-# pnpm
-pnpm run preview
+## License
 
-# yarn
-yarn preview
+This project is licensed under the MIT License.
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+---
