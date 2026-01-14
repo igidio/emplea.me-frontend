@@ -5,7 +5,7 @@
 	>
 		<AdminMenu
 			v-model:is_collapsed="is_collapsed"
-			v-model:collapse="collapse"
+			:collapse="collapse"
 		/>
 	</div>
 </template>

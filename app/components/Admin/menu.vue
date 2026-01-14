@@ -17,7 +17,7 @@
 			:class="is_collapsed ? 'justify-center' : 'justify-start'"
 			block
 			:icon="is_collapsed ? 'ri:layout-column-fill' : 'ri:layout-column-line'"
-			@click="collapse as any"
+			@click="collapse"
 		/>
 	</div>
 
