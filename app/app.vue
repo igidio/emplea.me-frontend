@@ -19,13 +19,13 @@ import ModalPremium from "~/components/modalPremium.vue";
 
 useHead({
 	title: 'Bienvenidos a Empleame',
-	meta: [
-		{name: 'google-adsense-account', content: 'ca-pub-6257864254238276'}
-	],
+	// meta: [
+	// 	{name: 'google-adsense-account', content: 'ca-pub-XXXXXXXXXXXXXXXX'}
+	// ],
 	bodyAttrs: {
 		class: 'test'
 	},
-	script: [{innerHTML: 'console.log(\'Hello world\')'}]
+	script: [{innerHTML: ''}]
 })
 
 const {

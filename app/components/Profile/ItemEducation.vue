@@ -209,7 +209,7 @@ const delete_skill = async () => {
 		await p.reload()
 		useToast().add({title: r?.data?.educationDelete})
 	}).catch((e: Error) => {
-		//console.log(e)
+		console.log(e)
 	})
 }
 </script>

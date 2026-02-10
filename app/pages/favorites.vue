@@ -82,7 +82,6 @@ onMounted(async () => {
 })
 
 const show_all = async (e: Event) => {
-	console.log(e)
 	await refetch({
 		"showAll": e ? true : undefined
 	})?.then((res) => {

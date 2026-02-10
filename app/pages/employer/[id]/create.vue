@@ -233,7 +233,6 @@ const submit = async () => {
 			"id_employer": Number(route.params.id)
 		}
 	}).then(async (e) => {
-		console.log(e)
 		useToast().add({title: 'Publicación creada.'})
 		await useRouter().push(`/jobs/${e?.data?.postCreate.id}`)
 	}).catch((e) => {

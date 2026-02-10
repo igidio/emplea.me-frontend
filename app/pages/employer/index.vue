@@ -94,7 +94,6 @@ const get_employer = async (i: number) => {
 onMounted(async () => {
 	if (useRoute().query.e && employerGetByUserData.value?.employerListByUser[Number(useRoute().query.e)]) {
 		await get_employer(Number(useRoute().query.e))
-		console.log(EmploymentData.value)
 	}
 })
 </script>

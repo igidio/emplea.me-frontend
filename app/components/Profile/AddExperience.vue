@@ -185,7 +185,6 @@ const submit = async () => {
 		}
 	}).then(async (r) => {
 		await p.reload()
-		console.log(r)
 		useToast().add({title: "Experiencia laboral creada exitósamente."})
 		is_editable.value = false
 		reset()

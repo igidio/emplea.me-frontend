@@ -194,7 +194,6 @@ const submit = async () => {
 		}
 	}).then(async (r) => {
 		await p.reload()
-		console.log(r)
 		useToast().add({title: "Experiencia laboral actualizada exitósamente."})
 		is_editable.value = false
 	}).catch((e: Error) => {
@@ -229,7 +228,6 @@ const delete_experience = async () => {
 		"experienceDeleteId": Number(p.props.id)
 	}).then(async (r) => {
 		await p.reload()
-		console.log(r)
 		useToast().add({title: "Experiencia laboral eliminada exitósamente."})
 	}).catch((e: Error) => {
 		console.log(e)

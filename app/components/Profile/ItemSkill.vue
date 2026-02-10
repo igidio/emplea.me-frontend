@@ -174,7 +174,7 @@ const submit = async () => {
 		useToast().add({title: e?.data?.seekerSkillUpdate})
 		is_editable.value = false;
 	}).catch((e: Error) => {
-		//console.log(e)
+		console.log(e)
 	})
 }
 
@@ -190,7 +190,7 @@ const delete_skill = async () => {
 		await p.props.reload()
 		useToast().add({title: r?.data?.seekerSkillDelete})
 	}).catch((e: Error) => {
-		//console.log(e)
+		console.log(e)
 	})
 }
 </script>

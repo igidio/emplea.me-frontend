@@ -107,7 +107,6 @@ const send_image = async () => {
 		isOpen.value = false;
 		props.delete_preview()
 	} catch (err) {
-		console.log(err)
 		error.value = err;
 	}
 

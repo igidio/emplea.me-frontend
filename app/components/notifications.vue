@@ -80,15 +80,4 @@ const mark_as_read = async() => {
 	await mutate()
 	mark_all_as_read()
 };
-
-
-// const send_message = () => {
-// 	$socket.emit('message', {text: '¡Hola desde Nuxt 3!'});
-// 	if (import.meta.client) {
-// 		$socket.on('update', (data) => {
-// 			console.log(data);
-// 			useToast().add({title: data});
-// 		});
-// 	}
-// };
 </script>

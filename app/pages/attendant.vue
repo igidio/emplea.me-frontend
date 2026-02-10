@@ -50,9 +50,7 @@ const confirm = async () => {
 		is_filled.value = true;
 		setTimeout(() => window.location.replace('/'), 2000)
 	})
-		.catch((e) => console.log(e)).then((e) => {
-			console.log(e)
-		})
+		.catch((e) => console.log(e))
 }
 
 onMounted(async () => await confirm())

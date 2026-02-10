@@ -187,7 +187,6 @@ const {
 const schema = external_form_schema
 
 const on_submit = async () => {
-	console.log(state);
 	await signup({
 		createUser: {
 			username: state.username!.trim(),

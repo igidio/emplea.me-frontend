@@ -78,7 +78,6 @@ const reset = () => {
 const {mutate, loading, error} = useMutation<{ "phoneUpdate": string }>(phoneUpdate)
 
 const submit = async () => {
-	console.log(useRoute().params.id)
 	await mutate({
 		"updatePhoneInput": {
 			phone: state.phone,

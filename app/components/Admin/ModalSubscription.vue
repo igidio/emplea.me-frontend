@@ -75,7 +75,7 @@
 						</div>
 						<div class="flex flex-col text-end w-full">
 							<div class="items-center flex flex-row self-end mb-2">
-								<UIcon :name="state.method?.icon" size="14" class="mx-1"/>
+								<UIcon :name="state.method?.icon!" size="14" class="mx-1"/>
 								<span class="font-bold text-sm">{{ state.method?.label }}</span>
 							</div>
 							<span class="font-bold">Plan {{ plans[Number(state.plan) - 2]?.name }}</span>

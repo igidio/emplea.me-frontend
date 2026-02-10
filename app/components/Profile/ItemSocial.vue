@@ -150,7 +150,7 @@ const submit = async () => {
 			await p.reload()
 			reset()
 		}).catch((e: Error) => {
-			//console.log(e)
+			console.log(e)
 		}).finally(() => {
 			loading.value = false;
 		})

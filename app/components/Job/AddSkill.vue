@@ -122,7 +122,6 @@ const submit = async () => {
 		"postId": +(useRoute().params.id!)
 	}).then(async (r) => {
 		await reload()
-		console.log(r)
 		useToast().add({title: "Habilidad creada exitósamente."})
 		is_editable.value = false;
 		reset()
@@ -139,8 +138,6 @@ const {
 }>(seekerFindAny)
 
 const search_skill = async (q: string) => {
-	1
-	console.log(q)
 	const search = await find_any_skill({
 		"findAnySeekerInput": {
 			"filter": q,

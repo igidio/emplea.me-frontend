@@ -25,19 +25,8 @@ export default defineNuxtPlugin(() => {
 			
 		if (['ADMIN', 'SUPERUSER'].includes(user.value.role)) {
 			socket.emit('joinRoom', 'admin');
-			socket.on('chatMessage', (message) => {
-				console.log('Nuevo mensaje:', message);
-			});
 			socket.emit('sendMessage', {room: 'admin', message: "asdsadsadas"});
 		}
-		// if (['ADMIN', 'SUPERUSER'].includes(user.value.role)) {
-		// 	io.on('connection', (socket) => {
-		// 		console.log("sadasdsadsadsadsadsad")
-		// 		socket.join('room1')
-		// 		socket.to('room1').emit('update', { message: 'Hello, room1' })
-		// 	})
-		// }
-		
 		
 		return {
 			provide: {

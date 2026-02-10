@@ -69,11 +69,9 @@ const schema = yup.object({
 		.positive("El precio debe ser mayor a 0")
 })
 
-const {mutate, loading, error} = useMutation<{ planChangePlanPrice: string }>(gqlCommon.change_plan_price)
+const {mutate, error} = useMutation<{ planChangePlanPrice: string }>(gqlCommon.change_plan_price)
 
 const submit = async () => {
-	console.log(selected_plan)
-	console.log(plans.value[selected_plan.value - 1]!.id)
 	await mutate({
 		"planChangePlanPriceId": selected_plan.value,
 		"price": +state.price

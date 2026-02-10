@@ -80,8 +80,6 @@ const confirm = async () => {
 		})
 		state.email = '';
 	})
-	.catch((e) => console.log(e)).then((e) => {
-		console.log(e)
-	})
+	.catch((e) => console.log(e))
 }
 </script>

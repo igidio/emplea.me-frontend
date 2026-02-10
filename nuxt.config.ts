@@ -1,10 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	//ssr: false,
 	devtools: {enabled: true},
 	modules: [
 		"@nuxt/ui",
-		//"@nuxtjs/color-mode",
 		"@nuxtjs/apollo",
 		"@pinia/nuxt",
 		//"@nuxtjs/google-adsense"
@@ -27,9 +25,6 @@ export default defineNuxtConfig({
 		clients: {
 			default: {
 				httpEndpoint: process.env.QGL_HOST!,
-				// httpLinkOptions: {
-				// 	credentials: "include",
-				// },
 				tokenName: "token",
 			},
 		},
@@ -43,9 +38,8 @@ export default defineNuxtConfig({
 	devServer: {
 		port: 5173,
 	},
-	
 	// googleAdsense: {
-	// 	id: 'ca-pub-6257864254238276',
+	// 	id: 'ca-pub-XXXXXXXXXXXXXXXX',
 	// 	onPageLoad: true,
 	// 	pageLevelAds: true,
 	// 	test: true
@@ -91,11 +85,6 @@ export default defineNuxtConfig({
 			path: "~/components/Signup",
 			pathPrefix: true,
 		},
-		// {
-		// 	prefix: "Search",
-		// 	path: "~/components/Search",
-		// 	pathPrefix: true,
-		// },
 		{
 			prefix: "Notifications",
 			path: "~/components/Notifications",

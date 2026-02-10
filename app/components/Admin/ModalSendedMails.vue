@@ -69,7 +69,6 @@ watch(is_open, async (e) => {
 
 const { mutate } = useMutation(gqlConfirmation.read)
 const invalidate = async (id: number) => {
-	console.log(id)
 	await mutate({
 		"confirmationReadOneId": +id
 	}).then(() => {

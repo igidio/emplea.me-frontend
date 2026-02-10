@@ -121,11 +121,6 @@ onDone(async (result) => {
 
 
 const onSubmit = async () => {
-	await login({loginInput: state}).then(
-		(e) => {
-			console.log(e)
-			//toast.success("Inicio de sesión exitoso");
-		},
-	);
+	await login({loginInput: state})
 };
 </script>

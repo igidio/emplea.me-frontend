@@ -99,7 +99,7 @@ const submit = async (message:string) => {
 		useToast().add({title: e?.data?.postUpdate})
 		useRouter().push(`/admin/posts`)
 	}).catch((e) => {
-		console.log(e)
+		//console.log(e)
 	});
 }
 
@@ -114,14 +114,4 @@ const state = reactive({
 	modality: data.value?.post.post.modality,
 	category: data.value?.post.post.category,
 })
-
-// const {data: employer_find_one} = await useAsyncQuery<{
-// 	findOneEmployer: {
-// 		employer: EmployerInterface,
-// 		employerUser: EmployerUserInterface
-// 	}
-// }>(employerFindOne(), {"findOneEmployerId": })
-// const {employer, employerUser} = employer_find_one.value?.findOneEmployer!
-//
-// console.log(employerUser)
 </script>

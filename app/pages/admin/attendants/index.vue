@@ -102,7 +102,7 @@ const {
 }>(employerUserFindByEmployer, {}, {prefetch: false})
 
 const reload = async (id: number) => {
-	await refetch({"employerUserFindByEmployerId": +id})?.then((result) => console.log(result))
+	await refetch({"employerUserFindByEmployerId": +id})
 	attendants.value = result.value?.employerUserFindByEmployer || []
 }
 
