@@ -85,6 +85,33 @@
 - `start` – Start production server
 - `test` – Run unit tests
 
+### Test data
+
+The server includes a set of default data that can be loaded via seeders. These include test users, job posts, applications and other elements needed to test platform features. Some sample users [available in the user seeder](https://github.com/igidio/emplea.me-backend-services/blob/main/database/user-contact/user-contact.default.ts) include:
+
+| Role        | Username | Email               | Password    |
+| ----------- | -------- | ------------------- | ----------- |
+| `SUPERUSER` | salva123 | salva@example.com   | password123 |
+| `ADMIN`     | mariana  | mariana@example.com | passW0RD222 |
+| `EMPLOYER`  | pamela   | pamela@example.com  | passW0RD333 |
+| `SEEKER`    | juan     | juan@example.com    | passW0RD444 |
+
+Some test credit/debit cards for Stripe are:
+
+| Card type          | Card number        |
+| ------------------ | ------------------ |
+| Visa               | 4242424242424242   |
+| Visa (debit)       | 4000056655665556   |
+| Mastercard         | 5555555555554444   |
+| Mastercard (debit) | 5200828282828210   |
+| American Express   | 378282246310005    |
+| UnionPay           | 6200000000000005   |
+| UnionPay           | 6200000000000047   |
+| Discover           | 6011111111111117   |
+| Discover           | 6011981111111113   |
+
+> The test card expiration date can be any future date, and the security code (CVC) can be any three digits (or four digits for American Express).
+
 ## License
 
 This project is licensed under the MIT License.

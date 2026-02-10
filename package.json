@@ -1,7 +1,9 @@
 {
-	"name": "nuxt-app",
-	"private": true,
+	"name": "empleame-frontend",
+	"private": false,
 	"type": "module",
+	"license": "MIT",
+	"author": "igidio",
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev",
