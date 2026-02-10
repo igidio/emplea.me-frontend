@@ -1,6 +1,13 @@
 # EMPLEAME Frontend
 
-**EMPLEAME** is a web platform that connects employers with job seekers, streamlining the hiring and job search process with modern technology and user-friendly tools.
+<p align="center">
+  <img src="https://i.imgur.com/U2uXSqz.png" width="49%" />
+  <img src="https://i.imgur.com/oTmEWXo.png" width="49%" />
+  <img src="https://i.imgur.com/nOjqhmS.png" width="49%" />
+  <img src="https://i.imgur.com/xqa9Yqj.png" width="49%" />
+</p>
+
+**EMPLEAME** is a web platform that connects employers with job seekers, managing job postings, applications, and user profiles. This repository contains the frontend codebase built with Nuxt 3 and Vue 3.
 
 ## Features
 
@@ -78,12 +85,6 @@
 - `start` – Start production server
 - `test` – Run unit tests
 
-## Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
 ## License
 
 This project is licensed under the MIT License.
-
----
